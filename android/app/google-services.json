@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "1013171447198",
+    "project_id": "breathe-b8b94",
+    "storage_bucket": "breathe-b8b94.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1013171447198:android:51cf4198e0310eebc3228f",
+        "android_client_info": {
+          "package_name": "breathe.com"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1013171447198-rkipovn7k1124ldjnbhvjkm4quv2kkr0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYP_--IbYZT4XG-_kJHT5lnCjh8TT_9QU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1013171447198-rkipovn7k1124ldjnbhvjkm4quv2kkr0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1013171447198-2ekdd4e6ldollskspjfefksr516tfolq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.breathe"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1013171447198:android:43f3d12161287606c3228f",
+        "android_client_info": {
+          "package_name": "com.example.breathe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1013171447198-q8vmvj0qpoo4hv0a6v86piq5q3nle3cr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.breathe",
+            "certificate_hash": "eb01587d0022cbdbb57acf7a862cf3eb2f64f5b9"
+          }
+        },
+        {
+          "client_id": "1013171447198-rkipovn7k1124ldjnbhvjkm4quv2kkr0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYP_--IbYZT4XG-_kJHT5lnCjh8TT_9QU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1013171447198-rkipovn7k1124ldjnbhvjkm4quv2kkr0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1013171447198-2ekdd4e6ldollskspjfefksr516tfolq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.breathe"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
