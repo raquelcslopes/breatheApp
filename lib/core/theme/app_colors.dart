@@ -28,5 +28,5 @@ class AppColors {
 
   static const Color danger = Color(0xFFA8362F);
 
-  static const Color border = Color(0x4D979797);
+  static const Color border = Color(0xFF979797);
 }

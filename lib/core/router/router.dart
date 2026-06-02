@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'go_router_refresh_stream.dart';
 
 import 'routes.dart';
+import 'go_router_refresh_stream.dart';
 import '../../features/homescreen/presentation/homescreen.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
+import '../../features/splash/presentation/splash_screen.dart';
 
 class _Placeholder extends StatelessWidget {
   const _Placeholder(this.label);
@@ -23,16 +24,9 @@ class _Placeholder extends StatelessWidget {
   }
 }
 
-final _rootKey = GlobalKey<NavigatorState>(debugLabel: 'root');
-final _homeKey = GlobalKey<NavigatorState>(debugLabel: 'home');
-final _calendarKey = GlobalKey<NavigatorState>(debugLabel: 'calendar');
-final _chatKey = GlobalKey<NavigatorState>(debugLabel: 'chat');
-final _settingsKey = GlobalKey<NavigatorState>(debugLabel: 'settings');
-
-GoRouter createRouter({bool isLoggedIn = false}) {
+GoRouter createRouter() {
   return GoRouter(
-    navigatorKey: _rootKey,
-    initialLocation: AppRoute.loginPath,
+    initialLocation: AppRoute.splashPath,
     debugLogDiagnostics: true,
     refreshListenable: GoRouterRefreshStream(
       FirebaseAuth.instance.authStateChanges(),
@@ -40,7 +34,10 @@ GoRouter createRouter({bool isLoggedIn = false}) {
 
     redirect: (context, state) {
       final loggedIn = FirebaseAuth.instance.currentUser != null;
+      final onSplash = state.matchedLocation == AppRoute.splashPath;
       final loggingIn = state.matchedLocation == AppRoute.loginPath;
+
+      if (onSplash) return null;
 
       if (!loggedIn && !loggingIn) return AppRoute.loginPath;
       if (loggedIn && loggingIn) return AppRoute.homePath;
@@ -49,72 +46,60 @@ GoRouter createRouter({bool isLoggedIn = false}) {
 
     routes: [
       GoRoute(
+        name: AppRoute.splash,
+        path: AppRoute.splashPath,
+        builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
         name: AppRoute.login,
         path: AppRoute.loginPath,
         builder: (context, state) => const LoginScreen(),
       ),
-      GoRoute(
-        name: AppRoute.onboarding,
-        path: AppRoute.onboardingPath,
-        builder: (context, state) => const _Placeholder('Onboarding'),
-      ),
-      GoRoute(
-        name: AppRoute.dailyCheck,
-        path: AppRoute.dailyCheckPath,
-        parentNavigatorKey: _rootKey, // abre por cima da bottom nav
-        builder: (context, state) => const _Placeholder('Daily check'),
-      ),
-      GoRoute(
-        name: AppRoute.emergency,
-        path: AppRoute.emergencyPath,
-        parentNavigatorKey: _rootKey,
-        builder: (context, state) => const _Placeholder('Emergency'),
-      ),
 
-      StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) {
-          return ScaffoldWithNavBar(navigationShell: navigationShell);
-        },
-        branches: [
-          StatefulShellBranch(
-            navigatorKey: _homeKey,
+      GoRoute(
+        name: AppRoute.home,
+        path: AppRoute.homePath,
+        builder: (context, state) => const HomeScreen(),
+        routes: [
+          GoRoute(
+            name: AppRoute.dailyCheck,
+            path: 'daily-check',
+            builder: (context, state) => const _Placeholder('Daily check'),
+          ),
+          GoRoute(
+            name: AppRoute.journal,
+            path: 'journal',
+            builder: (context, state) => const _Placeholder('Journal'),
             routes: [
               GoRoute(
-                name: AppRoute.home,
-                path: AppRoute.homePath,
-                builder: (context, state) => const _Placeholder('Home'),
+                name: AppRoute.journalEntry,
+                path: 'entry/:id',
+                builder: (context, state) {
+                  final id = state.pathParameters['id'] ?? '';
+                  return _Placeholder('Journal entry $id');
+                },
               ),
             ],
           ),
-          StatefulShellBranch(
-            navigatorKey: _calendarKey,
-            routes: [
-              GoRoute(
-                name: AppRoute.calendar,
-                path: AppRoute.calendarPath,
-                builder: (context, state) => const _Placeholder('Calendar'),
-              ),
-            ],
+          GoRoute(
+            name: AppRoute.summary,
+            path: 'summary',
+            builder: (context, state) => const _Placeholder('Weekly summary'),
           ),
-          StatefulShellBranch(
-            navigatorKey: _chatKey,
-            routes: [
-              GoRoute(
-                name: AppRoute.chat,
-                path: AppRoute.chatPath,
-                builder: (context, state) => const _Placeholder('Chat'),
-              ),
-            ],
+          GoRoute(
+            name: AppRoute.careTeam,
+            path: 'care-team',
+            builder: (context, state) => const _Placeholder('Care team'),
           ),
-          StatefulShellBranch(
-            navigatorKey: _settingsKey,
-            routes: [
-              GoRoute(
-                name: AppRoute.settings,
-                path: AppRoute.settingsPath,
-                builder: (context, state) => const SettingsScreen(),
-              ),
-            ],
+          GoRoute(
+            name: AppRoute.emergency,
+            path: 'emergency',
+            builder: (context, state) => const _Placeholder('Emergency'),
+          ),
+          GoRoute(
+            name: AppRoute.settings,
+            path: 'settings',
+            builder: (context, state) => const SettingsScreen(),
           ),
         ],
       ),

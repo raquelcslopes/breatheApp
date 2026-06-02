@@ -90,12 +90,26 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.background,
       textTheme: textTheme,
 
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: AppColors.primary,
+        contentTextStyle: textTheme.bodyMedium?.copyWith(
+          color: AppColors.surface,
+        ),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+        insetPadding: const EdgeInsets.all(10),
+      ),
+
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(foregroundColor: const Color(0xFF102C26)),
+      ),
+
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.onAction,
           textStyle: textTheme.labelLarge,
-          minimumSize: const Size.fromHeight(54),
+          minimumSize: const Size.fromHeight(40),
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(pillRadius),
@@ -130,24 +144,17 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.surface,
-        hintStyle: textTheme.bodyMedium?.copyWith(
-          color: AppColors.textSecondary,
-        ),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 13,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(13),
-          borderSide: const BorderSide(color: AppColors.border, width: 0.5),
-        ),
+        hintStyle: textTheme.bodyMedium?.copyWith(color: AppColors.border),
+        labelStyle: textTheme.bodyMedium?.copyWith(color: AppColors.border),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 13),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(50)),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(13),
-          borderSide: const BorderSide(color: AppColors.border, width: 0.5),
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(13),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide.none,
         ),
       ),
 
