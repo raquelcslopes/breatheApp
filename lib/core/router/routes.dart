@@ -10,8 +10,8 @@ class AppRoute {
   static const onboarding = 'onboarding';
   static const onboardingPath = '/onboarding';
 
-  static const dailyCheck = 'dailyCheck';
-  static const dailyCheckPath = '/daily-check';
+  static const journal = 'journal';
+  static const journalPath = '/journal';
 
   static const journalEntry = 'journalEntry';
   static const journalEntrySubPath = 'entry/:id';
@@ -21,9 +21,6 @@ class AppRoute {
 
   static const home = 'home';
   static const homePath = '/home';
-
-  static const journal = 'journal';
-  static const journalPath = '/journal';
 
   static const summary = 'summary';
   static const summaryPath = '/summary';

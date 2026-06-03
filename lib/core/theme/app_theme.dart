@@ -47,6 +47,12 @@ class AppTheme {
         letterSpacing: 2,
         color: AppColors.textPrimary,
       ),
+      headlineSmall: displayFont(
+        textStyle: baseTextTheme.headlineMedium,
+        fontSize: 16,
+        letterSpacing: 2,
+        color: AppColors.textPrimary,
+      ),
       titleLarge: bodyFont(
         textStyle: baseTextTheme.titleLarge,
         fontSize: 18,
@@ -78,7 +84,13 @@ class AppTheme {
       ),
       labelLarge: bodyFont(
         textStyle: baseTextTheme.labelLarge,
-        fontSize: 15,
+        fontSize: 18,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 0.3,
+      ),
+      labelMedium: bodyFont(
+        textStyle: baseTextTheme.labelLarge,
+        fontSize: 16,
         fontWeight: FontWeight.w700,
         letterSpacing: 0.3,
       ),

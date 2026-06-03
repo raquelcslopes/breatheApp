@@ -65,9 +65,9 @@ class AppDrawer extends StatelessWidget {
 
             // Features
             _DrawerItem(
-              icon: Icons.edit_note,
-              label: 'Daily check',
-              onTap: () => _go(context, AppRoute.dailyCheckPath),
+              icon: Icons.menu_book_outlined,
+              label: 'Home',
+              onTap: () => _go(context, AppRoute.homePath),
             ),
             _DrawerItem(
               icon: Icons.menu_book_outlined,
