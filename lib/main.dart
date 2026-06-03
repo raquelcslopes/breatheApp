@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'core/theme/app_theme.dart';
 import 'core/router/router.dart';
 import 'firebase_options.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const BreatheApp());
+  runApp(const ProviderScope(child: BreatheApp()));
 }
 
 class BreatheApp extends StatelessWidget {

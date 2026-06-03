@@ -1,4 +1,6 @@
 import 'package:breathe/core/theme/app_colors.dart';
+import 'package:breathe/features/profile/data/profile_repository.dart';
+import 'package:breathe/features/profile/data/user_profile.dart';
 import 'package:flutter/material.dart';
 
 import '../data/auth_repository.dart';
@@ -53,9 +55,14 @@ class _LoginScreenState extends State<LoginScreen> {
           password: _passwordController.text,
         );
       } else {
-        await _auth.registerWithEmail(
+        final response = await _auth.registerWithEmail(
           email: _emailController.text,
           password: _passwordController.text,
+        );
+
+        final id = response.user!.uid;
+        await ProfileRepository().saveProfile(
+          UserProfile(uid: id, onboardingComplete: false),
         );
       }
     } catch (e) {
