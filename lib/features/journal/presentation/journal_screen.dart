@@ -1,11 +1,9 @@
+import 'package:breathe/core/router/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/widgets/app_drawer.dart';
 
-/// JOURNAL — ecrã base, ainda por construir.
-///
-/// Já tem o AppBar (com botão de voltar automático, por vir de um push)
-/// e o espaço do body livre para construíres a lista de entradas depois.
 class JournalScreen extends StatelessWidget {
   const JournalScreen({super.key});
 
@@ -17,12 +15,12 @@ class JournalScreen extends StatelessWidget {
       body: const SafeArea(
         child: Padding(
           padding: EdgeInsets.all(18),
-          child: Center(
-            // O teu espaço: aqui vais construir a lista de entradas,
-            // os filtros por humor e o botão de escrever.
-            child: Text('Journal'),
-          ),
+          child: Center(child: Text('Journal')),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => context.go(AppRoute.journalNewPath),
       ),
     );
   }

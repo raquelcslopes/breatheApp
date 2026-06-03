@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType keyboard;
-  final IconData icon;
+  final IconData? icon;
   final String placeholder;
   final bool? obscureText;
 
@@ -12,8 +12,8 @@ class CustomTextField extends StatelessWidget {
     super.key,
     required this.controller,
     required this.keyboard,
-    required this.icon,
     required this.placeholder,
+    this.icon,
     this.obscureText,
   });
 

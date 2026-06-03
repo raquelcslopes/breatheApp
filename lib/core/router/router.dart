@@ -2,7 +2,8 @@ import 'package:breathe/features/care%20team/presentation/care_team_screen.dart'
 import 'package:breathe/features/emergency/presentation/emergency_screen.dart';
 import 'package:breathe/features/journal/presentation/journal_screen.dart';
 import 'package:breathe/features/onboarding/presentation/onboardin_screen.dart';
-import 'package:breathe/features/weekly%20summary/presentation/weekly_summary_screen.dart';
+import 'package:breathe/features/weekly_summary/presentation/screens/new_entry_screen.dart';
+import 'package:breathe/features/weekly_summary/presentation/weekly_summary_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -78,7 +79,7 @@ GoRouter createRouter() {
           GoRoute(
             name: AppRoute.journalNew,
             path: 'new',
-            builder: (context, state) => const _Placeholder('New entry'),
+            builder: (context, state) => const NewEntryScreen(),
           ),
           GoRoute(
             name: AppRoute.journalEntry,

@@ -23,8 +23,13 @@ class AppColors {
   static const Color plum = Color(0xFF5A4256);
 
   static const Color moodGood = primary;
+  static const Color moodGoodBg = Color(0xFFD9E6DC);
+
   static const Color moodOkay = Color(0xFFCF9F63);
+  static const Color moodOkayBg = Color(0xFFF7E8CF);
+
   static const Color moodLow = clay;
+  static const Color moodLowBg = Color(0xFFF6E2E0);
 
   static const Color danger = Color(0xFFA8362F);
 
