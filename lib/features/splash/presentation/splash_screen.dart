@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../core/router/routes.dart';
+import '../../profile/domain/profile_providers.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class _SplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _breath;
@@ -28,15 +30,25 @@ class _SplashScreenState extends State<SplashScreen>
       begin: 0.96,
       end: 1.04,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-    _goNext();
+
+    _decide();
   }
 
-  Future<void> _goNext() async {
-    await Future.delayed(const Duration(milliseconds: 2600));
+  Future<void> _decide() async {
+    await Future.delayed(const Duration(milliseconds: 1500));
     if (!mounted) return;
 
-    final loggedIn = FirebaseAuth.instance.currentUser != null;
-    context.go(loggedIn ? AppRoute.homePath : AppRoute.loginPath);
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      context.go(AppRoute.loginPath);
+      return;
+    }
+
+    final profile = await ref.read(userProfileProvider.future);
+    if (!mounted) return;
+
+    final done = profile?.onboardingComplete ?? false;
+    context.go(done ? AppRoute.homePath : AppRoute.onboardingPath);
   }
 
   @override
@@ -71,6 +83,7 @@ class _SplashScreenState extends State<SplashScreen>
                       letterSpacing: 8,
                     ),
                   ),
+                  const SizedBox(height: 10),
                   Text(
                     'Your safe space for peace',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(

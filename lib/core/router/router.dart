@@ -1,6 +1,7 @@
 import 'package:breathe/features/care%20team/presentation/care_team_screen.dart';
 import 'package:breathe/features/emergency/presentation/emergency_screen.dart';
 import 'package:breathe/features/journal/presentation/journal_screen.dart';
+import 'package:breathe/features/onboarding/presentation/onboardin_screen.dart';
 import 'package:breathe/features/weekly%20summary/presentation/weekly_summary_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -49,6 +50,11 @@ GoRouter createRouter() {
     },
 
     routes: [
+      GoRoute(
+        name: AppRoute.onboarding,
+        path: AppRoute.onboardingPath,
+        builder: (context, state) => const OnboardingScreen(),
+      ),
       GoRoute(
         name: AppRoute.splash,
         path: AppRoute.splashPath,
