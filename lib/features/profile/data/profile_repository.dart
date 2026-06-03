@@ -12,7 +12,9 @@ class ProfileRepository {
       _db.collection('users').doc(uid);
 
   Future<UserProfile?> fetchProfile(String uid) async {
+    print('>>> FETCH uid: $uid');
     final snapshot = await _userDoc(uid).get();
+    print('>>> FETCH existe? ${snapshot.exists} | dados: ${snapshot.data()}');
     if (!snapshot.exists) return null;
     return UserProfile.fromMap(uid, snapshot.data()!);
   }

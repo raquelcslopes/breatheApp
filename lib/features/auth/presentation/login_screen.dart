@@ -1,7 +1,9 @@
+import 'package:breathe/core/router/routes.dart';
 import 'package:breathe/core/theme/app_colors.dart';
 import 'package:breathe/features/profile/data/profile_repository.dart';
 import 'package:breathe/features/profile/data/user_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../data/auth_repository.dart';
 import '../../../core/widgets/text_field.dart';
@@ -54,6 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
           email: _emailController.text,
           password: _passwordController.text,
         );
+        if (mounted) context.go(AppRoute.homePath);
       } else {
         final response = await _auth.registerWithEmail(
           email: _emailController.text,
@@ -64,6 +67,8 @@ class _LoginScreenState extends State<LoginScreen> {
         await ProfileRepository().saveProfile(
           UserProfile(uid: id, onboardingComplete: false),
         );
+
+        if (mounted) context.go(AppRoute.onboardingPath);
       }
     } catch (e) {
       if (!mounted) return;

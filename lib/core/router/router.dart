@@ -45,7 +45,6 @@ GoRouter createRouter() {
       if (onSplash) return null;
 
       if (!loggedIn && !loggingIn) return AppRoute.loginPath;
-      if (loggedIn && loggingIn) return AppRoute.homePath;
       return null;
     },
 
@@ -76,6 +75,11 @@ GoRouter createRouter() {
         path: AppRoute.journalPath,
         builder: (context, state) => const JournalScreen(),
         routes: [
+          GoRoute(
+            name: AppRoute.journalNew,
+            path: 'new',
+            builder: (context, state) => const _Placeholder('New entry'),
+          ),
           GoRoute(
             name: AppRoute.journalEntry,
             path: 'entry/:id',

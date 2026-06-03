@@ -13,6 +13,9 @@ class AppRoute {
   static const journal = 'journal';
   static const journalPath = '/journal';
 
+  static const journalNew = 'journalNew';
+  static const journalNewPath = '/journal/new';
+
   static const journalEntry = 'journalEntry';
   static const journalEntrySubPath = 'entry/:id';
 

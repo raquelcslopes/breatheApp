@@ -38,13 +38,16 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     await Future.delayed(const Duration(milliseconds: 1500));
     if (!mounted) return;
 
-    final user = FirebaseAuth.instance.currentUser;
+    final user = await FirebaseAuth.instance.authStateChanges().first;
+    if (!mounted) return;
     if (user == null) {
       context.go(AppRoute.loginPath);
       return;
     }
 
-    final profile = await ref.read(userProfileProvider.future);
+    final repository = ref.read(profileRepositoryProvider);
+    final profile = await repository.fetchProfile(user.uid);
+
     if (!mounted) return;
 
     final done = profile?.onboardingComplete ?? false;
