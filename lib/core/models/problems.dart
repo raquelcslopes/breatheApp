@@ -52,6 +52,30 @@ List<Problems> problemsList = [
   ),
 
   Problems(
+    key: 'grief',
+    title: 'Grief',
+    icon: Icons.help,
+    bgColor: AppColors.moodOkayBg,
+    borderColor: AppColors.moodOkay,
+  ),
+
+  Problems(
+    key: 'finances',
+    title: 'Finances',
+    icon: Icons.help,
+    bgColor: AppColors.moodOkayBg,
+    borderColor: AppColors.moodOkay,
+  ),
+
+  Problems(
+    key: 'studies',
+    title: 'Studies',
+    icon: Icons.help,
+    bgColor: AppColors.moodOkayBg,
+    borderColor: AppColors.moodOkay,
+  ),
+
+  Problems(
     key: 'other',
     title: 'Other',
     icon: Icons.help,

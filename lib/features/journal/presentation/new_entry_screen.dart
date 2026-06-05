@@ -58,7 +58,9 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     final text = _writtingSpace.text.trim();
 
-    if (uid == null || text.isEmpty) return;
+    final isEmpty =
+        text.isEmpty && _moodSelected == null && _problemsSelected.isEmpty;
+    if (uid == null || isEmpty) return;
 
     final entry = JournalEntry(
       id: '',
@@ -75,7 +77,7 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Couldn\'t save your entry: $e.'),
+          content: const Text("Couldn't save your entry."),
           backgroundColor: AppColors.danger,
         ),
       );
@@ -109,13 +111,18 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
   }
 
   Widget _saveButton() {
-    final hadEntry =
-        _moodSelected != null ||
-        _problemsSelected.isNotEmpty ||
-        _writtingSpace.text.isNotEmpty;
-    return TextButton(
-      onPressed: hadEntry ? _saveEntry : null,
-      child: Text('Save'),
+    return ValueListenableBuilder(
+      valueListenable: _writtingSpace,
+      builder: (context, value, _) {
+        final hasEntry =
+            _moodSelected != null ||
+            _problemsSelected.isNotEmpty ||
+            value.text.trim().isNotEmpty;
+        return TextButton(
+          onPressed: hasEntry ? _saveEntry : null,
+          child: const Text('Save'),
+        );
+      },
     );
   }
 

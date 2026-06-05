@@ -12,6 +12,7 @@ class ProblemPicker extends StatefulWidget {
   }) {
     return showModalBottomSheet<List<Problems>>(
       context: context,
+      isScrollControlled: true,
       backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
@@ -33,52 +34,62 @@ class _ProblemPickerState extends State<ProblemPicker> {
     _current = [...?widget.selected];
   }
 
+  Widget _problemTile(Problems problem) {
+    final isSelected = _current.any((p) => p.key == problem.key);
+    return ListTile(
+      tileColor: isSelected ? problem.bgColor : null,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      title: Text(problem.title),
+      trailing: isSelected
+          ? const Icon(Icons.check_rounded, color: AppColors.forest)
+          : null,
+      onTap: () => setState(() {
+        if (isSelected) {
+          _current.removeWhere((p) => p.key == problem.key);
+        } else {
+          _current.add(problem);
+        }
+      }),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 42,
-            height: 5,
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            decoration: BoxDecoration(
-              color: AppColors.borderSoft,
-              borderRadius: BorderRadius.circular(5),
+      child: Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 42,
+              height: 5,
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                color: AppColors.borderSoft,
+                borderRadius: BorderRadius.circular(5),
+              ),
             ),
-          ),
-          for (final problem in problemsList)
-            Builder(
-              builder: (_) {
-                final isSelected = _current.any((p) => p.key == problem.key);
-                return ListTile(
-                  tileColor: isSelected ? problem.bgColor : null,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  title: Text(problem.title),
-                  trailing: isSelected
-                      ? const Icon(Icons.check_rounded, color: AppColors.forest)
-                      : null,
-                  onTap: () => setState(() {
-                    if (isSelected) {
-                      _current.removeWhere((p) => p.key == problem.key);
-                    } else {
-                      _current.add(problem);
-                    }
-                  }),
-                );
-              },
+            Flexible(
+              child: ListView(
+                shrinkWrap: true,
+                padding: EdgeInsets.zero,
+                children: [
+                  for (final problem in problemsList) _problemTile(problem),
+                ],
+              ),
             ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: ElevatedButton(
-              onPressed: () => Navigator.pop(context, _current),
-              child: const Text('Close'),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: ElevatedButton(
+                onPressed: () => Navigator.pop(context, _current),
+                child: const Text('Confirm'),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
