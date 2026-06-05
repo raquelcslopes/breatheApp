@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/widgets/app_drawer.dart';
+import '../../../../core/widgets/app_drawer.dart';
 
 class JourneyScreen extends StatelessWidget {
   const JourneyScreen({super.key});

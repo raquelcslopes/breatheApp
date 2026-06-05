@@ -1,4 +1,3 @@
-import 'package:breathe/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -31,8 +30,15 @@ class CustomTextField extends StatelessWidget {
           keyboardType: keyboard,
           obscureText: obscureText ?? false,
           decoration: InputDecoration(
+            labelStyle: TextStyle(
+              color: const Color.fromARGB(255, 165, 159, 138),
+            ),
             labelText: placeholder,
-            prefixIcon: Icon(icon, size: 18, color: AppColors.border),
+            prefixIcon: Icon(
+              icon,
+              size: 18,
+              color: const Color.fromARGB(255, 165, 159, 138),
+            ),
             prefixIconConstraints: const BoxConstraints(
               minWidth: 20,
               minHeight: 0,

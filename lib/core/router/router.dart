@@ -1,9 +1,10 @@
+import 'package:breathe/core/widgets/nav_bar.dart';
 import 'package:breathe/features/care%20team/presentation/care_team_screen.dart';
 import 'package:breathe/features/emergency/presentation/emergency_screen.dart';
 import 'package:breathe/features/journal/presentation/journal_screen.dart';
 import 'package:breathe/features/onboarding/presentation/onboardin_screen.dart';
-import 'package:breathe/features/weekly_summary/presentation/screens/new_entry_screen.dart';
-import 'package:breathe/features/weekly_summary/presentation/weekly_summary_screen.dart';
+import 'package:breathe/features/journal/presentation/new_entry_screen.dart';
+import 'package:breathe/features/weekly_summary/presentation/screens/weekly_summary_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,21 +41,21 @@ GoRouter createRouter() {
 
     redirect: (context, state) {
       final loggedIn = FirebaseAuth.instance.currentUser != null;
-      final onSplash = state.matchedLocation == AppRoute.splashPath;
-      final loggingIn = state.matchedLocation == AppRoute.loginPath;
+      final loc = state.matchedLocation;
+      final onSplash = loc == AppRoute.splashPath;
+      final onAuth =
+          loc == AppRoute.loginPath || loc == AppRoute.onboardingPath;
 
       if (onSplash) return null;
 
-      if (!loggedIn && !loggingIn) return AppRoute.loginPath;
+      if (!loggedIn && !onAuth) return AppRoute.loginPath;
+
+      if (loggedIn && loc == AppRoute.loginPath) return AppRoute.homePath;
+
       return null;
     },
 
     routes: [
-      GoRoute(
-        name: AppRoute.onboarding,
-        path: AppRoute.onboardingPath,
-        builder: (context, state) => const OnboardingScreen(),
-      ),
       GoRoute(
         name: AppRoute.splash,
         path: AppRoute.splashPath,
@@ -65,36 +66,72 @@ GoRouter createRouter() {
         path: AppRoute.loginPath,
         builder: (context, state) => const LoginScreen(),
       ),
-
       GoRoute(
-        name: AppRoute.home,
-        path: AppRoute.homePath,
-        builder: (context, state) => const HomeScreen(),
+        name: AppRoute.onboarding,
+        path: AppRoute.onboardingPath,
+        builder: (context, state) => const OnboardingScreen(),
       ),
-      GoRoute(
-        name: AppRoute.journal,
-        path: AppRoute.journalPath,
-        builder: (context, state) => const JournalScreen(),
-        routes: [
-          GoRoute(
-            name: AppRoute.journalNew,
-            path: 'new',
-            builder: (context, state) => const NewEntryScreen(),
+
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) =>
+            HomeShell(shell: navigationShell),
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                name: AppRoute.home,
+                path: AppRoute.homePath,
+                builder: (context, state) => const HomeScreen(),
+              ),
+            ],
           ),
-          GoRoute(
-            name: AppRoute.journalEntry,
-            path: 'entry/:id',
-            builder: (context, state) {
-              final id = state.pathParameters['id'] ?? '';
-              return _Placeholder('Journal entry $id');
-            },
+
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                name: AppRoute.journal,
+                path: AppRoute.journalPath,
+                builder: (context, state) => const JournalScreen(),
+                routes: [
+                  GoRoute(
+                    name: AppRoute.journalEntry,
+                    path: 'entry/:id',
+                    builder: (context, state) {
+                      final id = state.pathParameters['id'] ?? '';
+                      return _Placeholder('Journal entry $id');
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                name: AppRoute.summary,
+                path: AppRoute.summaryPath,
+                builder: (context, state) => const JourneyScreen(),
+              ),
+            ],
+          ),
+
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                name: AppRoute.settings,
+                path: AppRoute.settingsPath,
+                builder: (context, state) => const SettingsScreen(),
+              ),
+            ],
           ),
         ],
       ),
+
       GoRoute(
-        name: AppRoute.summary,
-        path: AppRoute.summaryPath,
-        builder: (context, state) => const JourneyScreen(),
+        name: AppRoute.journalNew,
+        path: AppRoute.journalNewPath,
+        builder: (context, state) => const NewEntryScreen(),
       ),
       GoRoute(
         name: AppRoute.careTeam,
@@ -106,12 +143,8 @@ GoRouter createRouter() {
         path: AppRoute.emergencyPath,
         builder: (context, state) => const EmergencyScreen(),
       ),
-      GoRoute(
-        name: AppRoute.settings,
-        path: AppRoute.settingsPath,
-        builder: (context, state) => const SettingsScreen(),
-      ),
     ],
+
     errorBuilder: (context, state) =>
         Scaffold(body: Center(child: Text('Route not found: ${state.uri}'))),
   );

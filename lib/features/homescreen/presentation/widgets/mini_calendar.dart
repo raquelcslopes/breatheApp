@@ -1,3 +1,4 @@
+import 'package:breathe/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -26,7 +27,7 @@ class _MiniCalendarState extends State<MiniCalendar> {
         formatButtonVisible: false,
         titleCentered: true,
         headerPadding: EdgeInsets.symmetric(vertical: 4),
-        titleTextStyle: TextStyle(fontSize: 14),
+        titleTextStyle: TextStyle(fontSize: 14, color: Colors.white),
         leftChevronVisible: false,
         rightChevronVisible: false,
       ),
@@ -34,17 +35,17 @@ class _MiniCalendarState extends State<MiniCalendar> {
       calendarStyle: const CalendarStyle(
         cellMargin: EdgeInsets.all(2),
         todayDecoration: BoxDecoration(
-          color: Color(0xFF73937E),
+          color: AppColors.textSecondary,
           shape: BoxShape.circle,
         ),
         todayTextStyle: TextStyle(color: Colors.white),
-        defaultTextStyle: TextStyle(fontSize: 12),
-        weekendTextStyle: TextStyle(fontSize: 12),
+        defaultTextStyle: TextStyle(fontSize: 12, color: Colors.white),
+        weekendTextStyle: TextStyle(fontSize: 12, color: Colors.white),
       ),
 
       daysOfWeekStyle: const DaysOfWeekStyle(
-        weekdayStyle: TextStyle(fontSize: 10),
-        weekendStyle: TextStyle(fontSize: 10),
+        weekdayStyle: TextStyle(fontSize: 10, color: Colors.white),
+        weekendStyle: TextStyle(fontSize: 10, color: Colors.white),
       ),
 
       onPageChanged: (focusedDay) => _focusedDay = focusedDay,

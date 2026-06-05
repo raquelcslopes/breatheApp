@@ -1,3 +1,4 @@
+import 'package:breathe/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,90 +15,93 @@ class SplashScreen extends ConsumerStatefulWidget {
 }
 
 class _SplashScreenState extends ConsumerState<SplashScreen>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
+    with TickerProviderStateMixin {
+  late final AnimationController _breathCtrl;
+  late final AnimationController _introCtrl;
   late final Animation<double> _breath;
+  late final Animation<double> _fade;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+
+    _breathCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 2200),
     )..repeat(reverse: true);
-
     _breath = Tween<double>(
       begin: 0.96,
       end: 1.04,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+    ).animate(CurvedAnimation(parent: _breathCtrl, curve: Curves.easeInOut));
+
+    _introCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    )..forward();
+    _fade = CurvedAnimation(parent: _introCtrl, curve: Curves.easeOut);
 
     _decide();
   }
 
   Future<void> _decide() async {
-    await Future.delayed(const Duration(milliseconds: 1500));
-    if (!mounted) return;
+    try {
+      await Future.delayed(const Duration(milliseconds: 1500));
+      if (!mounted) return;
 
-    final user = await FirebaseAuth.instance.authStateChanges().first;
-    if (!mounted) return;
-    if (user == null) {
+      final user =
+          FirebaseAuth.instance.currentUser ??
+          await FirebaseAuth.instance.authStateChanges().first;
+      if (!mounted) return;
+
+      if (user == null) {
+        context.go(AppRoute.loginPath);
+        return;
+      }
+
+      final repository = ref.read(profileRepositoryProvider);
+      final profile = await repository.fetchProfile(user.uid);
+      if (!mounted) return;
+
+      final done = profile?.onboardingComplete ?? false;
+      context.go(done ? AppRoute.homePath : AppRoute.onboardingPath);
+    } catch (_) {
+      if (!mounted) return;
       context.go(AppRoute.loginPath);
-      return;
     }
-
-    final repository = ref.read(profileRepositoryProvider);
-    final profile = await repository.fetchProfile(user.uid);
-
-    if (!mounted) return;
-
-    final done = profile?.onboardingComplete ?? false;
-    context.go(done ? AppRoute.homePath : AppRoute.onboardingPath);
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _breathCtrl.dispose();
+    _introCtrl.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFF102C26), Color(0xFF1C584B)],
-          ),
-        ),
-        child: Center(
-          child: FadeTransition(
-            opacity: _breath,
-            child: ScaleTransition(
-              scale: _breath,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'BREATHE',
-                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                      color: const Color(0xFFE9E0CF),
-                      letterSpacing: 8,
-                    ),
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          const ColoredBox(color: Color(0xFF283618)),
+          Image.asset('lib/assets/bg_splash.png', fit: BoxFit.cover),
+          Center(
+            child: FadeTransition(
+              opacity: _fade,
+              child: ScaleTransition(
+                scale: _breath,
+                child: Text(
+                  'BREATHE',
+                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                    fontSize: 40,
+                    letterSpacing: 8,
+                    color: AppColors.surface,
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Your safe space for peace',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: const Color(0xFFA57548),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

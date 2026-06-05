@@ -26,7 +26,7 @@ class _CalendarCardState extends State<CalendarCard> {
                 width: 10,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Color(0xFFB49082),
+                  color: AppColors.psychology,
                 ),
               ),
               SizedBox(width: 5),
@@ -44,7 +44,7 @@ class _CalendarCardState extends State<CalendarCard> {
                 width: 10,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.moodOkay,
+                  color: AppColors.psychiatrist,
                 ),
               ),
               SizedBox(width: 5),
@@ -62,7 +62,7 @@ class _CalendarCardState extends State<CalendarCard> {
                 width: 10,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.plum,
+                  color: AppColors.gp,
                 ),
               ),
               SizedBox(width: 5),
@@ -92,14 +92,15 @@ class _CalendarCardState extends State<CalendarCard> {
           curve: Curves.easeOut,
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.surface,
-              border: Border.all(color: const Color(0xFFE3E3E3), width: 0.5),
+              color: AppColors.forestDeep,
+              border: Border.all(color: Colors.transparent),
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.25),
-                  blurRadius: 4,
-                  offset: const Offset(0, 4),
+                  color: Color(0x5728281C),
+                  offset: Offset(0, 14),
+                  blurRadius: 30,
+                  spreadRadius: -18,
                 ),
               ],
             ),

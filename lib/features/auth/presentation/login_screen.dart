@@ -93,8 +93,25 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      await _auth.signInWithGoogle();
+      final response = await _auth.signInWithGoogle();
+      final user = response.user;
+      if (user == null) return;
+
+      final repo = ProfileRepository();
+      var profile = await repo.fetchProfile(user.uid);
+      if (profile == null) {
+        profile = UserProfile(uid: user.uid, onboardingComplete: false);
+        await repo.saveProfile(profile);
+      }
+
+      if (!mounted) return;
+      context.go(
+        profile.onboardingComplete
+            ? AppRoute.homePath
+            : AppRoute.onboardingPath,
+      );
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -139,27 +156,28 @@ class _LoginScreenState extends State<LoginScreen> {
 
   //-------------------- WIDGETS --------------------
   Widget _breatheLogo() {
-    return Container(
+    final heroHeight = MediaQuery.sizeOf(context).height * 0.30;
+
+    return SizedBox(
+      height: heroHeight,
       width: double.infinity,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFF102C26), Color(0xFF1C584B)],
-        ),
-      ),
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 60),
-          child: Text(
-            'BREATHE',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-              color: AppColors.surface,
-              fontSize: 40,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset('lib/assets/bg_splash.png', fit: BoxFit.cover),
+          SafeArea(
+            child: Center(
+              child: Text(
+                'BREATHE',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  color: AppColors.surface,
+                  fontSize: 40,
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -172,18 +190,21 @@ class _LoginScreenState extends State<LoginScreen> {
           height: 1.5,
           width: 100,
           decoration: BoxDecoration(
-            color: AppColors.border.withAlpha(80),
+            color: Color.fromARGB(132, 133, 133, 133),
             borderRadius: BorderRadius.circular(5),
           ),
         ),
         SizedBox(width: 10),
-        Text('Or login with', style: TextStyle(color: AppColors.border)),
+        Text(
+          'Or login with',
+          style: TextStyle(color: const Color.fromARGB(255, 133, 133, 133)),
+        ),
         SizedBox(width: 10),
         Container(
           height: 1.5,
           width: 100,
           decoration: BoxDecoration(
-            color: AppColors.border.withAlpha(80),
+            color: Color.fromARGB(132, 133, 133, 133),
             borderRadius: BorderRadius.circular(5),
           ),
         ),
@@ -207,97 +228,101 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _logInContainer() {
-    return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        topLeft: Radius.circular(20),
-        topRight: Radius.circular(20),
-      ),
-      child: Container(
+    return Container(
+      decoration: BoxDecoration(
         color: AppColors.background,
-        padding: const EdgeInsets.fromLTRB(40, 40, 40, 10),
-        margin: EdgeInsets.all(0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              _isRegisted ? 'Login' : 'Sign Up',
-              style: Theme.of(
-                context,
-              ).textTheme.labelLarge?.copyWith(fontSize: 30),
-            ),
-            SizedBox(height: 24),
-            CustomTextField(
-              controller: _emailController,
-              keyboard: TextInputType.emailAddress,
-              icon: Icons.email_outlined,
-              placeholder: 'Email',
-            ),
-            SizedBox(height: 24),
-            CustomTextField(
-              controller: _passwordController,
-              keyboard: TextInputType.text,
-              icon: Icons.key_sharp,
-              placeholder: 'Password',
-              obscureText: true,
-            ),
-            !_isRegisted
-                ? Padding(
-                    padding: const EdgeInsets.only(top: 24.0),
-                    child: CustomTextField(
-                      controller: _confirmPasswordController,
-                      keyboard: TextInputType.text,
-                      icon: Icons.key_sharp,
-                      placeholder: 'Confirm Password',
-                      obscureText: true,
-                    ),
-                  )
-                : SizedBox.shrink(),
-            _isRegisted
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: _forgotPassword,
-                        child: Text(
-                          'Forgot password',
-                          style: TextStyle(fontSize: 12),
-                        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(80),
+            blurRadius: 20,
+            spreadRadius: 0,
+            offset: const Offset(0, -4),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.fromLTRB(20, 30, 20, 5),
+      margin: EdgeInsets.all(0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            _isRegisted ? 'Login' : 'Sign Up',
+            style: Theme.of(
+              context,
+            ).textTheme.labelLarge?.copyWith(fontSize: 30),
+          ),
+          SizedBox(height: 15),
+          CustomTextField(
+            controller: _emailController,
+            keyboard: TextInputType.emailAddress,
+            icon: Icons.email_outlined,
+            placeholder: 'Email',
+          ),
+          SizedBox(height: 15),
+          CustomTextField(
+            controller: _passwordController,
+            keyboard: TextInputType.text,
+            icon: Icons.key_sharp,
+            placeholder: 'Password',
+            obscureText: true,
+          ),
+          !_isRegisted
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 15.0),
+                  child: CustomTextField(
+                    controller: _confirmPasswordController,
+                    keyboard: TextInputType.text,
+                    icon: Icons.key_sharp,
+                    placeholder: 'Confirm Password',
+                    obscureText: true,
+                  ),
+                )
+              : SizedBox.shrink(),
+          _isRegisted
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: _forgotPassword,
+                      child: Text(
+                        'Forgot password',
+                        style: TextStyle(fontSize: 12),
                       ),
-                    ],
-                  )
-                : SizedBox.shrink(),
-            SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: _isLoading ? null : _loginWithEmail,
-              style: ElevatedButton.styleFrom(),
-              child: Text(_isRegisted ? 'Login' : 'Sign Up'),
-            ),
-            SizedBox(height: 20),
-            _divider(),
-            SizedBox(height: 20),
-            _googleButton(context),
-            SizedBox(height: 40),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  _isRegisted
-                      ? "Don't have an account?"
-                      : 'Already have an account?',
-                ),
-                TextButton(
-                  onPressed: _isLoading
-                      ? null
-                      : () => setState(() {
-                          _isRegisted = !_isRegisted;
-                        }),
-                  child: Text(_isRegisted ? 'Sign Up' : 'Login'),
-                ),
-              ],
-            ),
-          ],
-        ),
+                    ),
+                  ],
+                )
+              : SizedBox.shrink(),
+          SizedBox(height: 40),
+          ElevatedButton(
+            onPressed: _isLoading ? null : _loginWithEmail,
+            style: ElevatedButton.styleFrom(),
+            child: Text(_isRegisted ? 'Login' : 'Sign Up'),
+          ),
+          SizedBox(height: 20),
+          _divider(),
+          SizedBox(height: 20),
+          _googleButton(context),
+          SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                _isRegisted
+                    ? "Don't have an account?"
+                    : 'Already have an account?',
+              ),
+              TextButton(
+                onPressed: _isLoading
+                    ? null
+                    : () => setState(() {
+                        _isRegisted = !_isRegisted;
+                      }),
+                child: Text(_isRegisted ? 'Sign Up' : 'Login'),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
