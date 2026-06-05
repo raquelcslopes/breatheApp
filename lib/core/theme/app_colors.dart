@@ -41,7 +41,7 @@ class AppColors {
   static const Color moodGood = forest;
   static const Color moodGoodBg = Color(0xFFE6EAD5);
 
-  static const Color moodOkay = Color(0xFFDDA15E);
+  static const Color moodOkay = Color.fromARGB(255, 221, 208, 94);
   static const Color moodOkayBg = Color(0xFFFBF1D9);
 
   static const Color moodLow = Color(0xFFBC6C25);
@@ -65,7 +65,7 @@ class AppColors {
   );
 
   // --- Appointments ------------------------------------------------------------
-  static const Color psychology = Color(0xFFBC6C25);
-  static const Color psychiatrist = Color(0xFFFEFAE0);
+  static const Color psychology = Color(0xFFC98951);
+  static const Color psychiatrist = Color(0xFF606C38);
   static const Color gp = Color(0xFF866C46);
 }

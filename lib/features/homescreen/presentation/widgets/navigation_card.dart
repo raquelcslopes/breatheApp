@@ -53,12 +53,12 @@ class _AnimatedCardState extends State<AnimatedCard> {
             color: context.colors.surface,
             border: Border.all(color: AppColors.borderSoft, width: 0.5),
             borderRadius: BorderRadius.circular(10),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 color: Color(0x5728281C),
-                offset: Offset(0, 14),
-                blurRadius: 30,
-                spreadRadius: -18,
+                offset: Offset(0, 8),
+                blurRadius: 7,
+                spreadRadius: -9,
               ),
             ],
           ),

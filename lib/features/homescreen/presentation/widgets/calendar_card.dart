@@ -102,12 +102,12 @@ class _CalendarCardState extends State<CalendarCard> {
               color: context.colors.surface,
               border: Border.all(color: Colors.transparent),
               borderRadius: BorderRadius.circular(20),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   color: Color(0x5728281C),
-                  offset: Offset(0, 14),
-                  blurRadius: 30,
-                  spreadRadius: -18,
+                  offset: Offset(0, 8),
+                  blurRadius: 7,
+                  spreadRadius: -9,
                 ),
               ],
             ),

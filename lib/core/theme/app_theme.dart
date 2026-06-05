@@ -120,7 +120,7 @@ class AppTheme {
       bodySmall: base.bodySmall?.copyWith(fontSize: 12, color: textMuted),
       titleMedium: base.bodyLarge?.copyWith(
         fontSize: 14,
-        color: slateBlue,
+        color: textMuted,
         fontWeight: FontWeight.bold,
       ),
     );

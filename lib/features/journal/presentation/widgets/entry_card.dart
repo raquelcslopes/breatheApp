@@ -46,9 +46,9 @@ class EntryCard extends StatelessWidget {
         boxShadow: const [
           BoxShadow(
             color: Color(0x5728281C),
-            offset: Offset(0, 14),
-            blurRadius: 30,
-            spreadRadius: -18,
+            offset: Offset(0, 8),
+            blurRadius: 7,
+            spreadRadius: -9,
           ),
         ],
       ),
