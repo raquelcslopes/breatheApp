@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
 
   // ----------------- FUNCTIONS -----------------
   void _go(BuildContext context, String path) {
-    context.push(path);
+    context.go(path);
   }
 
   // ----------------- WIDGETS -----------------

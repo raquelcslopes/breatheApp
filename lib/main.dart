@@ -18,6 +18,10 @@ class BreatheApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final router = createRouter();
 
-    return MaterialApp.router(theme: AppTheme.light, routerConfig: router);
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.light,
+      routerConfig: router,
+    );
   }
 }

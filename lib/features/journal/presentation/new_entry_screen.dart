@@ -138,7 +138,7 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [_date(context), _saveButton()],
               ),
               const SizedBox(height: 10),
