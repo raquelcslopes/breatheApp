@@ -29,7 +29,7 @@ class EntryCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
       decoration: BoxDecoration(
-        color: AppColors.border,
+        color: context.colors.secondary.withAlpha(80),
         borderRadius: BorderRadius.circular(50),
       ),
       child: Text(problem.title, style: context.textTheme.bodyMedium),
@@ -40,7 +40,7 @@ class EntryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         border: Border.all(color: AppColors.borderSoft),
         borderRadius: BorderRadius.circular(20),
         boxShadow: const [
@@ -91,7 +91,7 @@ class EntryCard extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: context.textTheme.bodyMedium?.copyWith(
-                        color: AppColors.textSecondary.withAlpha(120),
+                        color: context.colors.onSurface.withAlpha(120),
                         height: 1.4,
                       ),
                     ),

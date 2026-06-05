@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
+import 'app_colors_dark.dart';
 
-/// Breathe — theme built on AppColors (earthy palette).
 /// Fonts: Bricolage Grotesque (display & labels) + Hanken Grotesk (body/UI).
-/// pubspec.yaml -> dependencies: google_fonts: ^6.2.1
 
 class AppRadii {
   AppRadii._();
@@ -18,25 +17,85 @@ class AppRadii {
 class AppTheme {
   AppTheme._();
 
-  static ThemeData get light {
-    const scheme = ColorScheme(
-      brightness: Brightness.light,
-      primary: AppColors.forest, // burnt orange — actions, FAB
-      onPrimary: AppColors.onAction,
-      secondary: AppColors.primary, // olive — structural / nav active
-      onSecondary: AppColors.onDark,
-      tertiary: AppColors.sand,
-      onTertiary: AppColors.textPrimary,
-      surface: AppColors.surface,
-      onSurface: AppColors.textPrimary,
-      surfaceContainerHighest: AppColors.surfaceAlt,
-      outline: AppColors.border,
-      outlineVariant: AppColors.borderSoft,
-      error: AppColors.danger,
-      onError: Colors.white,
+  static ThemeData get light => _build(
+    brightness: Brightness.light,
+    background: AppColors.background,
+    surface: AppColors.surface,
+    surfaceAlt: AppColors.surfaceAlt,
+    textPrimary: AppColors.textPrimary,
+    textSecondary: AppColors.textSecondary,
+    textMuted: AppColors.textMuted,
+    onAction: AppColors.onAction,
+    onDark: AppColors.onDark,
+    action: AppColors.forest,
+    secondary: AppColors.primary,
+    sand: AppColors.sand,
+    slateBlue: AppColors.slateBlue,
+    border: AppColors.border,
+    borderSoft: AppColors.borderSoft,
+    danger: AppColors.danger,
+  );
+
+  static ThemeData get dark => _build(
+    brightness: Brightness.dark,
+    background: AppColorsDark.background,
+    surface: AppColorsDark.surface,
+    surfaceAlt: AppColorsDark.surfaceAlt,
+    textPrimary: AppColorsDark.textPrimary,
+    textSecondary: AppColorsDark.textSecondary,
+    textMuted: AppColorsDark.textMuted,
+    onAction: AppColorsDark.onAction,
+    onDark: AppColorsDark.onDark,
+    action: AppColorsDark.primary,
+    secondary: AppColorsDark.forest,
+    sand: AppColorsDark.sand,
+    slateBlue: AppColorsDark.slateBlue,
+    border: AppColorsDark.border,
+    borderSoft: AppColorsDark.borderSoft,
+    danger: AppColorsDark.danger,
+  );
+
+  static ThemeData _build({
+    required Brightness brightness,
+    required Color background,
+    required Color surface,
+    required Color surfaceAlt,
+    required Color textPrimary,
+    required Color textSecondary,
+    required Color textMuted,
+    required Color onAction,
+    required Color onDark,
+    required Color action,
+    required Color secondary,
+    required Color sand,
+    required Color slateBlue,
+    required Color border,
+    required Color borderSoft,
+    required Color danger,
+  }) {
+    final scheme = ColorScheme(
+      brightness: brightness,
+      primary: action,
+      onPrimary: onAction,
+      secondary: secondary,
+      onSecondary: onDark,
+      tertiary: sand,
+      onTertiary: background,
+      surface: surface,
+      onSurface: textPrimary,
+      surfaceContainerHighest: surfaceAlt,
+      outline: border,
+      outlineVariant: borderSoft,
+      error: danger,
+      onError: brightness == Brightness.dark ? background : Colors.white,
     );
 
-    final base = GoogleFonts.hankenGroteskTextTheme();
+    final base = GoogleFonts.hankenGroteskTextTheme(
+      brightness == Brightness.dark
+          ? ThemeData(brightness: Brightness.dark).textTheme
+          : null,
+    );
+
     TextStyle bric(
       double size,
       FontWeight w, {
@@ -48,7 +107,7 @@ class AppTheme {
       fontWeight: w,
       height: height,
       letterSpacing: spacing,
-      color: color ?? AppColors.textPrimary,
+      color: color ?? textPrimary,
     );
 
     final textTheme = base.copyWith(
@@ -56,21 +115,12 @@ class AppTheme {
       headlineMedium: bric(25, FontWeight.w600, height: 1.12, spacing: -0.25),
       titleLarge: bric(19, FontWeight.w600, height: 1.15),
       labelLarge: bric(14, FontWeight.w600, spacing: 1.4),
-      bodyLarge: base.bodyLarge?.copyWith(
-        fontSize: 15,
-        color: AppColors.textPrimary,
-      ),
-      bodyMedium: base.bodyMedium?.copyWith(
-        fontSize: 14,
-        color: AppColors.textPrimary,
-      ),
-      bodySmall: base.bodySmall?.copyWith(
-        fontSize: 12,
-        color: AppColors.textMuted,
-      ),
+      bodyLarge: base.bodyLarge?.copyWith(fontSize: 15, color: textPrimary),
+      bodyMedium: base.bodyMedium?.copyWith(fontSize: 14, color: textPrimary),
+      bodySmall: base.bodySmall?.copyWith(fontSize: 12, color: textMuted),
       titleMedium: base.bodyLarge?.copyWith(
         fontSize: 14,
-        color: AppColors.slateBlue,
+        color: slateBlue,
         fontWeight: FontWeight.bold,
       ),
     );
@@ -78,34 +128,34 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
-      scaffoldBackgroundColor: AppColors.background,
+      scaffoldBackgroundColor: background,
       textTheme: textTheme,
       splashFactory: InkRipple.splashFactory,
-      iconTheme: const IconThemeData(color: AppColors.textSecondary, size: 22),
+      iconTheme: IconThemeData(color: textSecondary, size: 22),
 
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.background,
+        backgroundColor: background,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
         titleTextStyle: bric(20, FontWeight.w700, spacing: -0.2),
-        iconTheme: const IconThemeData(color: AppColors.textPrimary),
+        iconTheme: IconThemeData(color: textPrimary),
       ),
 
       cardTheme: CardThemeData(
-        color: AppColors.surface,
+        color: surface,
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadii.card),
-          side: const BorderSide(color: AppColors.border),
+          side: BorderSide(color: border),
         ),
       ),
 
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.forest,
-          foregroundColor: AppColors.onAction,
+          backgroundColor: action,
+          foregroundColor: onAction,
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
           textStyle: GoogleFonts.hankenGrotesk(
@@ -120,7 +170,7 @@ class AppTheme {
 
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: AppColors.forest,
+          foregroundColor: action,
           textStyle: GoogleFonts.hankenGrotesk(
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -130,8 +180,8 @@ class AppTheme {
 
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.textPrimary,
-          side: const BorderSide(color: AppColors.border),
+          foregroundColor: textPrimary,
+          side: BorderSide(color: border),
           padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 15),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppRadii.button),
@@ -139,9 +189,9 @@ class AppTheme {
         ),
       ),
 
-      floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: AppColors.forest,
-        foregroundColor: AppColors.onAction,
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: action,
+        foregroundColor: onAction,
         elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(AppRadii.tile)),
@@ -150,23 +200,20 @@ class AppTheme {
 
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.surface,
-        hintStyle: GoogleFonts.hankenGrotesk(
-          fontSize: 15,
-          color: AppColors.textMuted,
-        ),
+        fillColor: surface,
+        hintStyle: GoogleFonts.hankenGrotesk(fontSize: 15, color: textMuted),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadii.button),
-          borderSide: BorderSide(color: Colors.transparent),
+          borderSide: const BorderSide(color: Colors.transparent),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadii.button),
-          borderSide: BorderSide(color: Colors.transparent),
+          borderSide: const BorderSide(color: Colors.transparent),
         ),
       ),
 
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: AppColors.background,
+        backgroundColor: background,
         elevation: 0,
         height: 64,
         indicatorColor: Colors.transparent,
@@ -175,41 +222,33 @@ class AppTheme {
             fontSize: 10,
             fontWeight: FontWeight.w700,
             letterSpacing: 0.5,
-            color: AppColors.textMuted,
+            color: textMuted,
           ),
         ),
         iconTheme: WidgetStateProperty.resolveWith(
           (states) => IconThemeData(
             size: 23,
-            color: states.contains(WidgetState.selected)
-                ? AppColors.forest
-                : AppColors.textMuted,
+            color: states.contains(WidgetState.selected) ? action : textMuted,
           ),
         ),
       ),
 
-      dividerTheme: const DividerThemeData(
-        color: Color.fromARGB(75, 94, 112, 102),
-        thickness: 1,
-        space: 1,
-      ),
+      dividerTheme: DividerThemeData(color: borderSoft, thickness: 1, space: 1),
 
       chipTheme: ChipThemeData(
-        backgroundColor: AppColors.surface,
-        side: const BorderSide(color: AppColors.borderSoft),
+        backgroundColor: surface,
+        side: BorderSide(color: borderSoft),
         labelStyle: GoogleFonts.hankenGrotesk(
           fontSize: 13,
           fontWeight: FontWeight.w600,
-          color: AppColors.textSecondary,
+          color: textSecondary,
         ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
       ),
 
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: AppColors.forest,
-        contentTextStyle: textTheme.bodyMedium?.copyWith(
-          color: AppColors.surface,
-        ),
+        backgroundColor: action,
+        contentTextStyle: textTheme.bodyMedium?.copyWith(color: onAction),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
         insetPadding: const EdgeInsets.all(10),

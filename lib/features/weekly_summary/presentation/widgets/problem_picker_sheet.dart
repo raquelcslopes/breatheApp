@@ -1,3 +1,4 @@
+import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/models/problems.dart';
 import 'package:breathe/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class ProblemPicker extends StatefulWidget {
     return showModalBottomSheet<List<Problems>>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
+      backgroundColor: context.colors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
       ),
@@ -37,7 +38,7 @@ class _ProblemPickerState extends State<ProblemPicker> {
   Widget _problemTile(Problems problem) {
     final isSelected = _current.any((p) => p.key == problem.key);
     return ListTile(
-      tileColor: isSelected ? problem.bgColor : null,
+      tileColor: isSelected ? problem.bgColor.withAlpha(40) : null,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       title: Text(problem.title),
       trailing: isSelected

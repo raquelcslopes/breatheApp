@@ -1,3 +1,4 @@
+import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -30,8 +31,8 @@ class HomeShell extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    AppColors.background.withValues(alpha: 0),
-                    AppColors.background,
+                    context.colors.onTertiary.withValues(alpha: 0),
+                    context.colors.onTertiary,
                   ],
                   stops: const [0, 0.5],
                 ),

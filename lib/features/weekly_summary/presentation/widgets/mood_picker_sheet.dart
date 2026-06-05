@@ -1,3 +1,4 @@
+import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/models/moods.dart';
 import 'package:breathe/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ class MoodPickerSheet extends StatefulWidget {
   static Future<Moods?> show(BuildContext context, {Moods? selected}) {
     return showModalBottomSheet<Moods>(
       context: context,
-      backgroundColor: AppColors.surface,
+      backgroundColor: context.colors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
       ),
@@ -52,7 +53,7 @@ class _MoodPickerSheetState extends State<MoodPickerSheet> {
                 for (final mood in moods)
                   ListTile(
                     tileColor: mood.key == _current?.key
-                        ? mood.bgColor.withValues(alpha: 0.25)
+                        ? mood.bgColor.withAlpha(40)
                         : null,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),

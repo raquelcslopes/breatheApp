@@ -1,3 +1,4 @@
+import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/theme/app_colors.dart';
 import 'package:breathe/features/homescreen/presentation/widgets/mini_calendar.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,9 @@ class _CalendarCardState extends State<CalendarCard> {
               SizedBox(width: 5),
               Text(
                 'Psychology appointment',
-                style: Theme.of(context).textTheme.bodySmall,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: context.colors.onSurface,
+                ),
               ),
             ],
           ),
@@ -50,7 +53,9 @@ class _CalendarCardState extends State<CalendarCard> {
               SizedBox(width: 5),
               Text(
                 'Psychiatrist appointment',
-                style: Theme.of(context).textTheme.bodySmall,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: context.colors.onSurface,
+                ),
               ),
             ],
           ),
@@ -68,7 +73,9 @@ class _CalendarCardState extends State<CalendarCard> {
               SizedBox(width: 5),
               Text(
                 'General practitioner appointment',
-                style: Theme.of(context).textTheme.bodySmall,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: context.colors.onSurface,
+                ),
               ),
             ],
           ),
@@ -92,7 +99,7 @@ class _CalendarCardState extends State<CalendarCard> {
           curve: Curves.easeOut,
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.forestDeep,
+              color: context.colors.surface,
               border: Border.all(color: Colors.transparent),
               borderRadius: BorderRadius.circular(20),
               boxShadow: [

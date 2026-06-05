@@ -8,7 +8,7 @@ class AppColors {
   AppColors._();
 
   // --- Surfaces ---------------------------------------------------------
-  static const Color background = Color(0xFFE4E2D9); // cornsilk canvas
+  static const Color background = Color(0xFFFEFAE0); // cornsilk canvas
   static const Color surface = Color(0xFFFFFFFF); // cards
   static const Color surfaceAlt = Color(0xFFF6EFD7); // recessed / tinted cards
 

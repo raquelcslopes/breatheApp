@@ -18,14 +18,10 @@ class _NewEntryCardState extends State<NewEntryCard> {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: AppColors.forestDeep.withAlpha(80),
+        color: AppColors.forest.withAlpha(80),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: const Icon(
-        Icons.edit_outlined,
-        color: AppColors.surface,
-        size: 22,
-      ),
+      child: const Icon(Icons.edit_outlined, color: AppColors.forest, size: 22),
     );
   }
 
@@ -43,7 +39,7 @@ class _NewEntryCardState extends State<NewEntryCard> {
         child: Container(
           padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
-            color: AppColors.surface,
+            color: context.colors.surface,
             border: Border.all(color: AppColors.borderSoft, width: 0.5),
             borderRadius: BorderRadius.circular(15),
             boxShadow: const [

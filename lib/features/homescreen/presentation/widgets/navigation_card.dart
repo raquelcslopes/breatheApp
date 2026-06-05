@@ -1,3 +1,4 @@
+import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -32,7 +33,7 @@ class _AnimatedCardState extends State<AnimatedCard> {
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Icon(widget.icon, color: AppColors.slateBlue, size: 22),
+      child: Icon(widget.icon, color: widget.color, size: 22),
     );
   }
 
@@ -49,7 +50,7 @@ class _AnimatedCardState extends State<AnimatedCard> {
         curve: Curves.easeOut,
         child: Container(
           decoration: BoxDecoration(
-            color: AppColors.surface,
+            color: context.colors.surface,
             border: Border.all(color: AppColors.borderSoft, width: 0.5),
             borderRadius: BorderRadius.circular(10),
             boxShadow: [

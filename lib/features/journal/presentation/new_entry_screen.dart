@@ -129,58 +129,71 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const AppDrawer(),
       appBar: AppBar(
-        title: SizedBox.shrink(),
+        title: Align(alignment: Alignment.centerRight, child: _saveButton()),
         leading: IconButton(
           icon: const Icon(Icons.close_rounded),
           onPressed: () => context.pop(),
         ),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [_date(context), _saveButton()],
+        child: Stack(
+          children: [
+            Positioned(
+              left: 52,
+              top: 0,
+              bottom: 0,
+              child: Container(
+                width: 1.4,
+                color: AppColors.primary.withValues(alpha: 0.22),
               ),
-              const SizedBox(height: 10),
-              Expanded(child: CustomTextArea(controller: _writtingSpace)),
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Wrap(
-                  children: [
-                    ActionChip(
-                      avatar: Icon(
-                        Icons.tag_faces_outlined,
-                        color: _moodSelected?.bgColor ?? AppColors.forest,
-                      ),
-                      label: Text(
-                        _moodSelected == null
-                            ? 'Add mood'
-                            : 'Feeling ${_moodSelected!.title}',
-                        style: TextStyle(
-                          color: _moodSelected?.bgColor ?? AppColors.forest,
+            ),
+
+            Padding(
+              padding: const EdgeInsets.fromLTRB(64, 0, 20, 0),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _date(context),
+                  const SizedBox(height: 10),
+                  Expanded(child: CustomTextArea(controller: _writtingSpace)),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Wrap(
+                      children: [
+                        ActionChip(
+                          avatar: Icon(
+                            Icons.tag_faces_outlined,
+                            color:
+                                _moodSelected?.bgColor ??
+                                context.colors.onSurface,
+                          ),
+                          label: Text(
+                            _moodSelected == null
+                                ? 'Add mood'
+                                : 'Feeling ${_moodSelected!.title}',
+                            style: TextStyle(color: _moodSelected?.bgColor),
+                          ),
+                          onPressed: _pickMood,
                         ),
-                      ),
-                      onPressed: _pickMood,
+                        const SizedBox(width: 10),
+                        ActionChip(
+                          avatar: Icon(
+                            Icons.psychology_alt_outlined,
+                            color: context.colors.onSurface,
+                          ),
+                          label: Text(_showProblems()),
+                          onPressed: _pickProblem,
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 10),
-                    ActionChip(
-                      avatar: Icon(Icons.psychology_alt_outlined),
-                      label: Text(_showProblems()),
-                      onPressed: _pickProblem,
-                    ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
               ),
-              const SizedBox(height: 10),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -115,6 +115,7 @@ class HomeScreen extends StatelessWidget {
                 _exploreSection(context),
                 const SizedBox(height: 20),
                 _peopleSection(context),
+                const SizedBox(height: 60),
               ],
             ),
           ),

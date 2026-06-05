@@ -45,7 +45,7 @@ class _EmergencyPersonState extends State<EmergencyPerson> {
     return Container(
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         border: Border.all(color: AppColors.borderSoft, width: 0.5),
         borderRadius: BorderRadius.circular(10),
       ),
