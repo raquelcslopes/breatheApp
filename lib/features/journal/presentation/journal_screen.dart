@@ -20,7 +20,7 @@ class JournalScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => context.go(AppRoute.journalNewPath),
+        onPressed: () => context.push(AppRoute.journalNewPath),
       ),
     );
   }

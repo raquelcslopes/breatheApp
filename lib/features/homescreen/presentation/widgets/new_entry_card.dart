@@ -35,7 +35,7 @@ class _NewEntryCardState extends State<NewEntryCard> {
       onTapDown: (_) => setState(() => _scale = 0.96),
       onTapUp: (_) => setState(() => _scale = 1.0),
       onTapCancel: () => setState(() => _scale = 1.0),
-      onTap: () => context.go(AppRoute.journalNewPath),
+      onTap: () => context.push(AppRoute.journalNewPath),
       child: AnimatedScale(
         scale: _scale,
         duration: const Duration(milliseconds: 120),

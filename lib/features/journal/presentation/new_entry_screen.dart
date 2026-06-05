@@ -3,8 +3,11 @@ import 'package:breathe/core/models/moods.dart';
 import 'package:breathe/core/models/problems.dart';
 import 'package:breathe/core/theme/app_colors.dart';
 import 'package:breathe/core/widgets/text_area.dart';
+import 'package:breathe/features/journal/data/journal_entry.dart';
+import 'package:breathe/features/journal/domain/journal_provider.dart';
 import 'package:breathe/features/weekly_summary/presentation/widgets/problem_picker_sheet.dart';
 import 'package:breathe/features/weekly_summary/presentation/widgets/mood_picker_sheet.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -51,6 +54,34 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
     return _problemsSelected.map((p) => p.title).join(', ');
   }
 
+  Future<void> _saveEntry() async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    final text = _writtingSpace.text.trim();
+
+    if (uid == null || text.isEmpty) return;
+
+    final entry = JournalEntry(
+      id: '',
+      text: text,
+      moodKey: _moodSelected?.key,
+      problemKeys: _problemsSelected.map((p) => p.key).toList(),
+      createdAt: DateTime.now(),
+    );
+
+    try {
+      await ref.read(journalRepositoryProvider).saveJounalEnrtry(uid, entry);
+      if (mounted) context.pop();
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Couldn\'t save your entry: $e.'),
+          backgroundColor: AppColors.danger,
+        ),
+      );
+    }
+  }
+
   //--------------------- WIDGETS ---------------------
   Widget _date(BuildContext context) {
     final formattedDate = DateFormat(
@@ -77,6 +108,17 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
     );
   }
 
+  Widget _saveButton() {
+    final hadEntry =
+        _moodSelected != null ||
+        _problemsSelected.isNotEmpty ||
+        _writtingSpace.text.isNotEmpty;
+    return TextButton(
+      onPressed: hadEntry ? _saveEntry : null,
+      child: Text('Save'),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,17 +130,22 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
           onPressed: () => context.pop(),
         ),
       ),
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _date(context),
-                const SizedBox(height: 10),
-                CustomTextArea(controller: _writtingSpace),
-                Wrap(
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [_date(context), _saveButton()],
+              ),
+              const SizedBox(height: 10),
+              Expanded(child: CustomTextArea(controller: _writtingSpace)),
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: Wrap(
                   children: [
                     ActionChip(
                       avatar: Icon(
@@ -123,8 +170,9 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 10),
+            ],
           ),
         ),
       ),
