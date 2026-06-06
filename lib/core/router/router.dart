@@ -1,9 +1,10 @@
 import 'package:breathe/core/widgets/nav_bar.dart';
 import 'package:breathe/features/care%20team/presentation/care_team_screen.dart';
 import 'package:breathe/features/emergency/presentation/emergency_screen.dart';
-import 'package:breathe/features/journal/presentation/journal_screen.dart';
+import 'package:breathe/features/journal/presentation/screens/entry_screen.dart';
+import 'package:breathe/features/journal/presentation/screens/journal_screen.dart';
 import 'package:breathe/features/onboarding/presentation/onboardin_screen.dart';
-import 'package:breathe/features/journal/presentation/new_entry_screen.dart';
+import 'package:breathe/features/journal/presentation/screens/new_entry_screen.dart';
 import 'package:breathe/features/weekly_summary/presentation/screens/weekly_summary_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -98,7 +99,7 @@ GoRouter createRouter() {
                     path: 'entry/:id',
                     builder: (context, state) {
                       final id = state.pathParameters['id'] ?? '';
-                      return _Placeholder('Journal entry $id');
+                      return EntryScreen(entryId: id);
                     },
                   ),
                 ],

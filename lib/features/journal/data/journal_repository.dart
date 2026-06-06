@@ -13,11 +13,7 @@ class JournalRepository {
   Future<void> saveJounalEnrtry(String id, JournalEntry entry) async {
     final ref = _entries(id).doc();
 
-    try {
-      await ref.set(entry.toMap());
-    } catch (e) {
-      print('Error saving journal entry: $e');
-    }
+    await ref.set(entry.toMap());
   }
 
   Future<List<JournalEntry>> fetchEntries(String id) async {
@@ -38,5 +34,12 @@ class JournalRepository {
               .map((d) => JournalEntry.fromMap(d.id, d.data()))
               .toList(),
         );
+  }
+
+  Future<JournalEntry?> fetchEntry(String uid, String entryId) async {
+    final doc = await _entries(uid).doc(entryId).get();
+
+    if (!doc.exists) return null;
+    return JournalEntry.fromMap(doc.id, doc.data()!);
   }
 }

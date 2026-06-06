@@ -47,7 +47,7 @@ class JournalScreen extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Journal'),
-            ElevatedButton(
+            TextButton(
               onPressed: () => context.push(AppRoute.journalNewPath),
               child: Icon(Icons.add),
             ),
@@ -128,8 +128,12 @@ class JournalScreen extends ConsumerWidget {
                       color: _moodColor(e.moodKey),
                       mood: _moodTitle(e.moodKey),
                       date: e.createdAt,
-                      text: e.text,
+                      text: e.text.isEmpty ? 'No notes added' : e.text,
                       problems: _problemsFromKeys(e.problemKeys),
+                      onTap: () => context.pushNamed(
+                        AppRoute.journalEntry,
+                        pathParameters: {'id': e.id},
+                      ),
                     ),
                   ],
                 );

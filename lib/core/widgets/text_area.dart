@@ -17,7 +17,7 @@ class CustomTextArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: const RuledPaperPainter(lineHeight: 34),
+      painter: const RuledPaperPainter(lineHeight: 30),
       child: TextField(
         controller: controller,
         autofocus: true,

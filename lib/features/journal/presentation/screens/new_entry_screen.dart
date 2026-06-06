@@ -5,15 +5,13 @@ import 'package:breathe/core/theme/app_colors.dart';
 import 'package:breathe/core/widgets/text_area.dart';
 import 'package:breathe/features/journal/data/journal_entry.dart';
 import 'package:breathe/features/journal/domain/journal_provider.dart';
-import 'package:breathe/features/weekly_summary/presentation/widgets/problem_picker_sheet.dart';
-import 'package:breathe/features/weekly_summary/presentation/widgets/mood_picker_sheet.dart';
+import 'package:breathe/features/journal/presentation/widgets/problem_picker_sheet.dart';
+import 'package:breathe/features/journal/presentation/widgets/mood_picker_sheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-
-import '../../../core/widgets/app_drawer.dart';
 
 class NewEntryScreen extends ConsumerStatefulWidget {
   const NewEntryScreen({super.key});

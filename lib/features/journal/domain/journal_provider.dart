@@ -12,3 +12,12 @@ final entriesProvider = StreamProvider.autoDispose<List<JournalEntry>>((ref) {
   if (uid == null) return Stream.value([]);
   return ref.watch(journalRepositoryProvider).watchEntries(uid);
 });
+
+final entryProvider = FutureProvider.family.autoDispose<JournalEntry?, String>((
+  ref,
+  id,
+) {
+  final uid = FirebaseAuth.instance.currentUser?.uid;
+  if (uid == null) return null;
+  return ref.watch(journalRepositoryProvider).fetchEntry(uid, id);
+});
