@@ -42,4 +42,24 @@ class JournalRepository {
     if (!doc.exists) return null;
     return JournalEntry.fromMap(doc.id, doc.data()!);
   }
+
+  Stream<List<JournalEntry>> watchEntriesBetween(
+    String uid,
+    DateTime start,
+    DateTime end,
+  ) {
+    return _entries(uid)
+        .where(
+          'createdAt',
+          isGreaterThanOrEqualTo: Timestamp.fromDate(start),
+          isLessThanOrEqualTo: Timestamp.fromDate(end),
+        )
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map(
+          (snap) => snap.docs
+              .map((d) => JournalEntry.fromMap(d.id, d.data()))
+              .toList(),
+        );
+  }
 }

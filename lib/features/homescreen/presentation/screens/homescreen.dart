@@ -102,18 +102,18 @@ class HomeScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsets.all(18),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(_greeting(), style: context.textTheme.headlineMedium),
-                const SizedBox(height: 20),
+                const SizedBox(height: 40),
                 const CalendarCard(),
                 const SizedBox(height: 15),
                 const NewEntryCard(),
-                const SizedBox(height: 20),
+                const SizedBox(height: 40),
                 _exploreSection(context),
-                const SizedBox(height: 20),
+                const SizedBox(height: 40),
                 _peopleSection(context),
                 const SizedBox(height: 60),
               ],

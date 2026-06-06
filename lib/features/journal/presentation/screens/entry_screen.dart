@@ -53,12 +53,24 @@ class EntryScreen extends ConsumerWidget {
     if (entry.text.isEmpty) {
       return CustomPaint(
         painter: const RuledPaperPainter(lineHeight: 30),
-        child: Text('No notes added', style: AppTextStyles.diaryBody),
+        child: SizedBox(
+          width: double.infinity,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 30 * 1.5),
+            child: Text('No notes added', style: AppTextStyles.diaryBody),
+          ),
+        ),
       );
     }
     return CustomPaint(
       painter: const RuledPaperPainter(lineHeight: 30),
-      child: Text(entry.text, style: AppTextStyles.diaryBody),
+      child: SizedBox(
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 30 * 1.5),
+          child: Text(entry.text, style: AppTextStyles.diaryBody),
+        ),
+      ),
     );
   }
 
@@ -104,21 +116,25 @@ class EntryScreen extends ConsumerWidget {
                       _date(context, obj),
                       const SizedBox(height: 5),
                       _title(context, obj),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 20),
                       _ruledText(context, obj),
-                      const SizedBox(height: 10),
-                      Text.rich(
-                        TextSpan(
-                          style: context.textTheme.bodySmall,
-                          children: [
-                            const TextSpan(
-                              text: 'On my mind today: ',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+
+                      if (obj.problemKeys.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: Text.rich(
+                            TextSpan(
+                              style: context.textTheme.bodySmall,
+                              children: [
+                                const TextSpan(
+                                  text: 'On my mind today: ',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                TextSpan(text: "${obj.problemKeys.join(', ')}"),
+                              ],
                             ),
-                            TextSpan(text: "${obj.problemKeys.join(', ')}"),
-                          ],
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ),

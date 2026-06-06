@@ -53,6 +53,10 @@ class JournalScreen extends ConsumerWidget {
             ),
           ],
         ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_rounded),
+          onPressed: () => context.pop(),
+        ),
       ),
       body: SafeArea(
         child: entriesAsync.when(
@@ -69,7 +73,7 @@ class JournalScreen extends ConsumerWidget {
                       Icon(
                         Icons.auto_stories_outlined,
                         size: 56,
-                        color: AppColors.forest.withValues(alpha: 0.6),
+                        color: context.colors.primary.withAlpha(120),
                       ),
                       const SizedBox(height: 20),
                       Text(
@@ -83,14 +87,15 @@ class JournalScreen extends ConsumerWidget {
                         'Only you will see them.',
                         textAlign: TextAlign.center,
                         style: context.textTheme.bodyMedium?.copyWith(
-                          color: AppColors.textSecondary,
+                          color: context.colors.primary,
                           height: 1.5,
                         ),
                       ),
                       const SizedBox(height: 24),
-                      ElevatedButton(
+                      ElevatedButton.icon(
                         onPressed: () => context.push(AppRoute.journalNewPath),
-                        child: const Text('Write your first entry'),
+                        icon: Icon(Icons.edit_outlined),
+                        label: const Text('Write your first entry'),
                       ),
                     ],
                   ),

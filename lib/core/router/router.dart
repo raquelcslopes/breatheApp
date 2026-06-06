@@ -5,7 +5,7 @@ import 'package:breathe/features/journal/presentation/screens/entry_screen.dart'
 import 'package:breathe/features/journal/presentation/screens/journal_screen.dart';
 import 'package:breathe/features/onboarding/presentation/onboardin_screen.dart';
 import 'package:breathe/features/journal/presentation/screens/new_entry_screen.dart';
-import 'package:breathe/features/weekly_summary/presentation/screens/weekly_summary_screen.dart';
+import 'package:breathe/features/journey/presentation/screens/journey_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';

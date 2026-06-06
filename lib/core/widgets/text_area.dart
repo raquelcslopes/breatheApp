@@ -1,6 +1,5 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/extensions/text_style.dart';
-import 'package:breathe/core/theme/app_colors.dart';
 import 'package:breathe/core/widgets/ruled_painter.dart';
 import 'package:flutter/material.dart';
 
@@ -21,13 +20,12 @@ class CustomTextArea extends StatelessWidget {
       child: TextField(
         controller: controller,
         autofocus: true,
-        expands: true,
         maxLines: null,
-        minLines: null,
+        minLines: 10,
         textAlignVertical: TextAlignVertical.top,
         cursorColor: context.colors.primary,
         cursorWidth: 2,
-        style: AppTextStyles.diaryBody?.copyWith(
+        style: AppTextStyles.diaryBody.copyWith(
           color: context.colors.onSurface,
         ),
         decoration: InputDecoration(
