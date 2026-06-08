@@ -1,6 +1,5 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/extensions/text_style.dart';
-import 'package:breathe/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -53,7 +52,7 @@ class _NoteCardState extends State<NoteCard> {
       child: Container(
         decoration: BoxDecoration(
           color: context.colors.surface,
-          border: Border.all(color: AppColors.borderSoft),
+          border: Border.all(color: context.colors.outline),
           borderRadius: BorderRadius.circular(20),
           boxShadow: const [
             BoxShadow(

@@ -6,13 +6,13 @@ class AppTextStyles {
   AppTextStyles._();
 
   static TextStyle diaryBody = GoogleFonts.newsreader(
-    fontSize: 19,
-    height: 34 / 19,
+    fontSize: 16,
+    height: 26 / 16,
   );
 
   static TextStyle diaryHint = GoogleFonts.newsreader(
-    fontSize: 19,
-    height: 34 / 19,
+    fontSize: 16,
+    height: 26 / 16,
     fontStyle: FontStyle.italic,
     color: AppColors.textMuted,
   );

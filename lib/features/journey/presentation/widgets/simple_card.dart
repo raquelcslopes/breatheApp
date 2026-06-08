@@ -1,5 +1,4 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
-import 'package:breathe/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class SimpleCard extends StatelessWidget {
@@ -14,7 +13,7 @@ class SimpleCard extends StatelessWidget {
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: context.colors.surface,
-        border: Border.all(color: AppColors.borderSoft, width: 0.5),
+        border: Border.all(color: context.colors.outline, width: 0.5),
         borderRadius: BorderRadius.circular(10),
         boxShadow: const [
           BoxShadow(

@@ -40,7 +40,7 @@ class _NewEntryCardState extends State<NewEntryCard> {
           padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
             color: context.colors.surface,
-            border: Border.all(color: AppColors.borderSoft, width: 0.5),
+            border: Border.all(color: context.colors.outline, width: 0.5),
             borderRadius: BorderRadius.circular(15),
             boxShadow: const [
               BoxShadow(

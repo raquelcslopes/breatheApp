@@ -1,10 +1,7 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
-import 'package:breathe/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-/// Persistent shell with a transparent / fading bottom navigation bar.
-/// `shell` keeps each tab's state (scroll, forms) when switching.
 class HomeShell extends StatelessWidget {
   const HomeShell({super.key, required this.shell});
 
@@ -59,9 +56,14 @@ class HomeShell extends StatelessWidget {
                     label: 'Journey',
                   ),
                   NavigationDestination(
-                    icon: Icon(Icons.person_outline),
-                    selectedIcon: Icon(Icons.person),
-                    label: 'You',
+                    icon: Icon(Icons.groups_outlined),
+                    selectedIcon: Icon(Icons.groups),
+                    label: 'Care Team',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.volunteer_activism_outlined),
+                    selectedIcon: Icon(Icons.volunteer_activism),
+                    label: 'Emergency',
                   ),
                 ],
               ),

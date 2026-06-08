@@ -18,7 +18,7 @@ class FactorsBar extends StatelessWidget {
       padding: EdgeInsets.all(15),
       decoration: BoxDecoration(
         color: context.colors.surface,
-        border: Border.all(color: AppColors.borderSoft),
+        border: Border.all(color: context.colors.outline),
         borderRadius: BorderRadius.circular(20),
         boxShadow: const [
           BoxShadow(
@@ -54,7 +54,9 @@ class FactorsBar extends StatelessWidget {
                     value: fraction,
                     minHeight: 9,
                     backgroundColor: AppColors.surfaceAlt,
-                    valueColor: AlwaysStoppedAnimation(context.colors.primary),
+                    valueColor: AlwaysStoppedAnimation(
+                      context.colors.outlineVariant,
+                    ),
                   ),
                 ),
               ],

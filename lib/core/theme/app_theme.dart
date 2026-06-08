@@ -27,10 +27,10 @@ class AppTheme {
     textMuted: AppColors.textMuted,
     onAction: AppColors.onAction,
     onDark: AppColors.onDark,
-    action: AppColors.forest,
-    secondary: AppColors.primary,
+    action: AppColors.primary, // tan — buttons
+    secondary: AppColors.forest, // olive
+    navIcon: AppColors.brownDark, // dark brown — nav icons
     sand: AppColors.sand,
-    slateBlue: AppColors.slateBlue,
     border: AppColors.border,
     borderSoft: AppColors.borderSoft,
     danger: AppColors.danger,
@@ -46,10 +46,10 @@ class AppTheme {
     textMuted: AppColorsDark.textMuted,
     onAction: AppColorsDark.onAction,
     onDark: AppColorsDark.onDark,
-    action: AppColorsDark.primary,
+    action: AppColorsDark.primary, // light green — buttons
     secondary: AppColorsDark.forest,
+    navIcon: AppColorsDark.brownDark, // lifted brown — nav icons
     sand: AppColorsDark.sand,
-    slateBlue: AppColorsDark.slateBlue,
     border: AppColorsDark.border,
     borderSoft: AppColorsDark.borderSoft,
     danger: AppColorsDark.danger,
@@ -67,8 +67,8 @@ class AppTheme {
     required Color onDark,
     required Color action,
     required Color secondary,
+    required Color navIcon,
     required Color sand,
-    required Color slateBlue,
     required Color border,
     required Color borderSoft,
     required Color danger,
@@ -85,7 +85,7 @@ class AppTheme {
       onSurface: textPrimary,
       surfaceContainerHighest: surfaceAlt,
       outline: border,
-      outlineVariant: borderSoft,
+      outlineVariant: textMuted,
       error: danger,
       onError: brightness == Brightness.dark ? background : Colors.white,
     );
@@ -228,7 +228,8 @@ class AppTheme {
         iconTheme: WidgetStateProperty.resolveWith(
           (states) => IconThemeData(
             size: 23,
-            color: states.contains(WidgetState.selected) ? action : textMuted,
+            // active = dark brown (nav icons); inactive = muted
+            color: states.contains(WidgetState.selected) ? navIcon : textMuted,
           ),
         ),
       ),

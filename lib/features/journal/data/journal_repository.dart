@@ -10,7 +10,7 @@ class JournalRepository {
   CollectionReference<Map<String, dynamic>> _entries(String uid) =>
       _db.collection('users').doc(uid).collection('entries');
 
-  Future<void> saveJounalEnrtry(String id, JournalEntry entry) async {
+  Future<void> saveJounalEntry(String id, JournalEntry entry) async {
     final ref = _entries(id).doc();
 
     await ref.set(entry.toMap());

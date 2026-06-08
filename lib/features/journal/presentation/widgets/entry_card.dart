@@ -1,6 +1,5 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/models/problems.dart';
-import 'package:breathe/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class EntryCard extends StatefulWidget {
@@ -57,7 +56,7 @@ class _EntryCardState extends State<EntryCard> {
       child: Container(
         decoration: BoxDecoration(
           color: context.colors.surface,
-          border: Border.all(color: AppColors.borderSoft),
+          border: Border.all(color: context.colors.outline),
           borderRadius: BorderRadius.circular(20),
           boxShadow: const [
             BoxShadow(

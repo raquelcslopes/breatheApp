@@ -176,7 +176,7 @@ class _JourneyScreenState extends ConsumerState<JourneyScreen> {
                         const SizedBox(width: 10),
                         Expanded(
                           child: SimpleCard(
-                            title: 'Days loggeg',
+                            title: 'Days logged',
                             text: _daysLogged(entriesList),
                           ),
                         ),

@@ -69,7 +69,7 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
     );
 
     try {
-      await ref.read(journalRepositoryProvider).saveJounalEnrtry(uid, entry);
+      await ref.read(journalRepositoryProvider).saveJounalEntry(uid, entry);
       if (mounted) context.pop();
     } catch (e) {
       if (!mounted) return;

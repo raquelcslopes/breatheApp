@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class RuledPaperPainter extends CustomPainter {
   final double lineHeight;
+  final double offset;
   final Color ruleColor;
 
   const RuledPaperPainter({
-    this.lineHeight = 34,
+    this.lineHeight = 26,
+    this.offset = -4,
     this.ruleColor = const Color(0xFFE7DDBD),
   });
 
@@ -15,12 +17,14 @@ class RuledPaperPainter extends CustomPainter {
       ..color = ruleColor
       ..strokeWidth = 1;
 
-    for (double y = lineHeight; y < size.height; y += lineHeight) {
+    for (double y = lineHeight + offset; y <= size.height; y += lineHeight) {
       canvas.drawLine(Offset(0, y), Offset(size.width, y), rule);
     }
   }
 
   @override
   bool shouldRepaint(covariant RuledPaperPainter old) =>
-      old.lineHeight != lineHeight || old.ruleColor != ruleColor;
+      old.lineHeight != lineHeight ||
+      old.offset != offset ||
+      old.ruleColor != ruleColor;
 }

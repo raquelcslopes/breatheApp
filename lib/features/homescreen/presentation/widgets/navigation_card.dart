@@ -51,7 +51,7 @@ class _AnimatedCardState extends State<AnimatedCard> {
         child: Container(
           decoration: BoxDecoration(
             color: context.colors.surface,
-            border: Border.all(color: AppColors.borderSoft, width: 0.5),
+            border: Border.all(color: context.colors.outline, width: 0.5),
             borderRadius: BorderRadius.circular(10),
             boxShadow: const [
               BoxShadow(
