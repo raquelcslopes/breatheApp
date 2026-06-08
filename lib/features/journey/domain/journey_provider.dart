@@ -15,7 +15,8 @@ final watchEntriesProvider = StreamProvider.autoDispose<List<JournalEntry>>((
     now.month,
     now.day,
   ).subtract(const Duration(days: 6));
+  final end = DateTime(now.year, now.month, now.day, 23, 59, 59);
   return ref
       .watch(journalRepositoryProvider)
-      .watchEntriesBetween(uid, start, now);
+      .watchEntriesBetween(uid, start, end);
 });

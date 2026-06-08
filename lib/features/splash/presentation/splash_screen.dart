@@ -83,7 +83,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       body: Stack(
         fit: StackFit.expand,
         children: [
-          const ColoredBox(color: Color(0xFF283618)),
+          const ColoredBox(color: AppColors.forestDeep),
           Image.asset('lib/assets/bg_splash.png', fit: BoxFit.cover),
           Center(
             child: FadeTransition(

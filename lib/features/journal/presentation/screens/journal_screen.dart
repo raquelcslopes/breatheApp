@@ -53,10 +53,6 @@ class JournalScreen extends ConsumerWidget {
             ),
           ],
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
-          onPressed: () => context.pop(),
-        ),
       ),
       body: SafeArea(
         child: entriesAsync.when(

@@ -4,6 +4,7 @@ import 'package:breathe/core/router/routes.dart';
 import 'package:breathe/features/journal/data/journal_entry.dart';
 import 'package:breathe/features/journey/domain/journey_provider.dart';
 import 'package:breathe/features/journey/presentation/widgets/factors_bar.dart';
+import 'package:breathe/features/journey/presentation/widgets/mood_chart_card.dart';
 import 'package:breathe/features/journey/presentation/widgets/note_card.dart';
 import 'package:breathe/features/journey/presentation/widgets/simple_card.dart';
 import 'package:flutter/material.dart';
@@ -159,6 +160,8 @@ class _JourneyScreenState extends ConsumerState<JourneyScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    MoodChartCard(entries: entriesList),
+                    const SizedBox(height: 10),
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
@@ -187,15 +190,30 @@ class _JourneyScreenState extends ConsumerState<JourneyScreen> {
                     const SizedBox(height: 10),
                     FactorsBar(factors: factors, maxCount: maxCount),
                     const SizedBox(height: 40),
-                    Text('YOUR NOTES', style: context.textTheme.titleMedium),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'YOUR NOTES',
+                          style: context.textTheme.titleMedium,
+                        ),
+                        if (entriesList.length > 4)
+                          TextButton(
+                            onPressed: () => context.push(AppRoute.journalPath),
+                            child: Text(
+                              'View all ${entriesList.length} entries',
+                            ),
+                          ),
+                      ],
+                    ),
                     const SizedBox(height: 10),
-                    ...entriesList.map((entry) {
+                    ...entriesList.take(4).map((entry) {
                       return Column(
                         children: [
                           NoteCard(
                             color: _getColorMood(entry),
                             date: entry.createdAt,
-                            mood: entry.moodKey!,
+                            mood: entry.moodKey ?? '',
                             text: entry.text,
                             onTap: () => context.pushNamed(
                               AppRoute.journalEntry,
