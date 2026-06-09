@@ -77,7 +77,7 @@ class AppDrawer extends StatelessWidget {
             _DrawerItem(
               icon: Icons.insights_outlined,
               label: 'Weekly summary',
-              onTap: () => _go(context, AppRoute.summaryPath),
+              onTap: () => _go(context, AppRoute.journeyPath),
             ),
             _DrawerItem(
               icon: Icons.favorite_outline,

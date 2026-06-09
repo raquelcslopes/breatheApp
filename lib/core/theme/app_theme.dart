@@ -48,7 +48,7 @@ class AppTheme {
     onDark: AppColorsDark.onDark,
     action: AppColorsDark.primary, // light green — buttons
     secondary: AppColorsDark.forest,
-    navIcon: AppColorsDark.brownDark, // lifted brown — nav icons
+    navIcon: AppColorsDark.textPrimary, // lifted brown — nav icons
     sand: AppColorsDark.sand,
     border: AppColorsDark.border,
     borderSoft: AppColorsDark.borderSoft,
@@ -102,7 +102,7 @@ class AppTheme {
       double height = 1.1,
       double spacing = 0,
       Color? color,
-    }) => GoogleFonts.bricolageGrotesque(
+    }) => GoogleFonts.manrope(
       fontSize: size,
       fontWeight: w,
       height: height,
@@ -179,12 +179,32 @@ class AppTheme {
       ),
 
       outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          foregroundColor: textPrimary,
-          side: BorderSide(color: border),
-          padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 15),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppRadii.button),
+        style: ButtonStyle(
+          foregroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.disabled)) {
+              return textMuted.withAlpha(40);
+            }
+            return textMuted;
+          }),
+          iconColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.disabled)) {
+              return textMuted.withAlpha(40);
+            }
+            return textMuted;
+          }),
+          side: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.disabled)) {
+              return BorderSide(color: border.withAlpha(40));
+            }
+            return BorderSide(color: border);
+          }),
+          padding: WidgetStatePropertyAll(
+            const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+          ),
+          shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppRadii.button),
+            ),
           ),
         ),
       ),
@@ -204,11 +224,11 @@ class AppTheme {
         hintStyle: GoogleFonts.hankenGrotesk(fontSize: 15, color: textMuted),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadii.button),
-          borderSide: const BorderSide(color: Colors.transparent),
+          borderSide: BorderSide(color: border),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadii.button),
-          borderSide: const BorderSide(color: Colors.transparent),
+          borderSide: BorderSide(color: border),
         ),
       ),
 

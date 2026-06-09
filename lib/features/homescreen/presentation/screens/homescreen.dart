@@ -66,9 +66,9 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(width: 20),
             Expanded(
               child: AnimatedCard(
-                title: 'History',
-                subtitle: 'How you been',
-                onTap: () => _go(context, AppRoute.summaryPath),
+                title: 'Journey',
+                subtitle: 'A week view',
+                onTap: () => _go(context, AppRoute.journeyPath),
                 color: AppColors.clay,
                 icon: Icons.history,
               ),

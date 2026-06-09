@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 /// Breathe — LIGHT palette.
-/// Base: #283618 deep green · #606C38 olive · #FEFAE0 cornsilk
-///       #875C35 tan (action) · #553922 dark brown (nav icons)
-/// Background = soft greenish-white (#EBEFE3).
 class AppColors {
   AppColors._();
 
   // --- Surfaces ---------------------------------------------------------
-  static const Color background = Color(0xFFEBEFE3); // greenish-white canvas
+  static const Color background = Color.fromARGB(
+    255,
+    245,
+    247,
+    243,
+  ); // greenish-white canvas
   static const Color surface = Color(0xFFFFFFFF); // cards
   static const Color surfaceAlt = Color(0xFFF2F5EB); // recessed / tinted
 
@@ -21,16 +23,16 @@ class AppColors {
 
   // --- Brand / action ---------------------------------------------------
   static const Color primary = Color(
-    0xFF875C35,
+    0xFF283618,
   ); // tan — buttons / FAB / action
-  static const Color primarySoft = Color(0xFFA9794D);
+  static const Color primarySoft = Color(0xFF875C35);
 
   // --- Green (structural) ----------------------------------------------
   static const Color forest = Color(0xFF606C38); // olive — secondary
   static const Color forestDeep = Color(0xFF283618);
 
   // --- Browns ----------------------------------------------------------
-  static const Color brownDark = Color(0xFF553922); // dark brown — nav icons
+  static const Color brownDark = Color(0xFF283618); // dark brown — nav icons
 
   // --- Accents ----------------------------------------------------------
   static const Color sand = Color(0xFFA9794D);

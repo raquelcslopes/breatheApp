@@ -1,7 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../core/router/routes.dart';
 import '../../profile/domain/profile_providers.dart';
@@ -21,8 +21,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   Future<void> _complete() async {
     setState(() => _saving = true);
-    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final uid = FirebaseAuth.instance.currentUser?.uid;
     final repository = ref.read(profileRepositoryProvider);
+    if (uid == null) return;
 
     await repository.markOnboardingComplete(uid);
 

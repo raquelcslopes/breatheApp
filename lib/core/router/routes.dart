@@ -25,8 +25,8 @@ class AppRoute {
   static const home = 'home';
   static const homePath = '/home';
 
-  static const summary = 'summary';
-  static const summaryPath = '/summary';
+  static const journey = 'journey';
+  static const journeyPath = '/journey';
 
   static const careTeam = 'careTeam';
   static const careTeamPath = '/care-team';

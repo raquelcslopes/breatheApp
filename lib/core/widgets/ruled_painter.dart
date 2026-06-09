@@ -8,7 +8,7 @@ class RuledPaperPainter extends CustomPainter {
   const RuledPaperPainter({
     this.lineHeight = 26,
     this.offset = -4,
-    this.ruleColor = const Color(0xFFE7DDBD),
+    this.ruleColor = const Color.fromARGB(148, 138, 144, 121),
   });
 
   @override

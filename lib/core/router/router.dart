@@ -1,6 +1,5 @@
 import 'package:breathe/core/widgets/nav_bar.dart';
-import 'package:breathe/features/care%20team/presentation/care_team_screen.dart';
-import 'package:breathe/features/emergency/presentation/emergency_screen.dart';
+import 'package:breathe/features/care_team/presentation/screens/care_team_screen.dart';
 import 'package:breathe/features/journal/presentation/screens/entry_screen.dart';
 import 'package:breathe/features/journal/presentation/screens/journal_screen.dart';
 import 'package:breathe/features/onboarding/presentation/onboardin_screen.dart';
@@ -14,7 +13,6 @@ import 'routes.dart';
 import 'go_router_refresh_stream.dart';
 import '../../features/homescreen/presentation/screens/homescreen.dart';
 import '../../features/auth/presentation/login_screen.dart';
-import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/splash/presentation/splash_screen.dart';
 
 class _Placeholder extends StatelessWidget {
@@ -110,8 +108,8 @@ GoRouter createRouter() {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                name: AppRoute.summary,
-                path: AppRoute.summaryPath,
+                name: AppRoute.journey,
+                path: AppRoute.journeyPath,
                 builder: (context, state) => const JourneyScreen(),
               ),
             ],
@@ -120,9 +118,19 @@ GoRouter createRouter() {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                name: AppRoute.settings,
-                path: AppRoute.settingsPath,
-                builder: (context, state) => const SettingsScreen(),
+                name: AppRoute.careTeam,
+                path: AppRoute.careTeamPath,
+                builder: (context, state) => const CareTeamScreen(),
+              ),
+            ],
+          ),
+
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                name: AppRoute.emergency,
+                path: AppRoute.emergencyPath,
+                builder: (context, state) => const _Placeholder('Emergency'),
               ),
             ],
           ),
@@ -133,16 +141,6 @@ GoRouter createRouter() {
         name: AppRoute.journalNew,
         path: AppRoute.journalNewPath,
         builder: (context, state) => const NewEntryScreen(),
-      ),
-      GoRoute(
-        name: AppRoute.careTeam,
-        path: AppRoute.careTeamPath,
-        builder: (context, state) => const CareTeamScreen(),
-      ),
-      GoRoute(
-        name: AppRoute.emergency,
-        path: AppRoute.emergencyPath,
-        builder: (context, state) => const EmergencyScreen(),
       ),
     ],
 

@@ -1,67 +1,67 @@
 import 'package:flutter/material.dart';
 
 /// Breathe — DARK palette.
-/// Dark brown background (#553922 family); action = lighter green of the palette.
+/// Warm near-black canvas with cream text, beige actions, and earthy accents.
+/// Designed to feel calm and premium on a black background.
 class AppColorsDark {
   AppColorsDark._();
 
-  // --- Surfaces (dark brown base, not black) ----------------------------
-  static const Color background = Color(0xFF2A1E12); // deep brown coffee
-  static const Color surface = Color(0xFF3A2C1D); // raised card
-  static const Color surfaceAlt = Color(0xFF453524); // recessed / tinted
+  // --- Surfaces (warm near-black) ---------------------------------------
+  static const Color background = Color(0xFF0F0F0D); // warm black canvas
+  static const Color surface = Color(0xFF1A1A16); // raised card
+  static const Color surfaceAlt = Color(0xFF24241C); // recessed / tinted
 
   // --- Text -------------------------------------------------------------
-  static const Color textPrimary = Color(0xFFF1ECDA); // warm cream
-  static const Color textSecondary = Color(0xFFCDBEA1);
-  static const Color textMuted = Color(0xFF9A8A6E);
-  static const Color onAction = Color(0xFF20180F); // dark text on light green
-  static const Color onDark = Color(0xFFF1ECDA);
+  static const Color textPrimary = Color(0xFFF2EFE4); // warm white
+  static const Color textSecondary = Color(0xFFC2BDAD);
+  static const Color textMuted = Color(0xFF8C8A7C); // warm grey
+  static const Color onAction = Color(0xFF161611); // dark text on beige
+  static const Color onDark = Color(0xFFF2EFE4);
 
-  // --- Brand / action (lighter olive/green) -----------------------------
-  static const Color primary = Color(
-    0xFF8FA15A,
-  ); // lifted olive — buttons / FAB
-  static const Color primarySoft = Color(0xFFAEBD82);
+  // --- Brand / action (warm beige) --------------------------------------
+  static const Color primary = Color(0xFFD8C29A); // beige — buttons / FAB
+  static const Color primarySoft = Color(0xFFE7D9BC);
 
   // --- Green (structural) ----------------------------------------------
-  static const Color forest = Color(0xFF8FA15A);
-  static const Color forestDeep = Color(0xFF3A4A26);
+  static const Color forest = Color(0xFF9DB06A); // lifted olive
+  static const Color forestDeep = Color(0xFF2A331C);
 
-  // --- Browns ----------------------------------------------------------
-  static const Color brownDark = Color(
-    0xFFC79A6A,
-  ); // lifted brown — nav icons on dark
+  // --- Browns / icons ---------------------------------------------------
+  static const Color brownDark = Color(0xFFD8C29A); // beige — nav icons
 
   // --- Accents ----------------------------------------------------------
-  static const Color sand = Color(0xFFC79A6A);
-  static const Color slateBlue = Color(0xFF7E9085);
-  static const Color clay = Color(0xFFB07C4E);
-  static const Color plum = Color(0xFF9A7A5A);
+  static const Color sand = Color(0xFFD8C29A);
+  static const Color slateBlue = Color(
+    0xFF7E9085,
+  ); // muted teal-green (cool note)
+  static const Color clay = Color(0xFFC98A63); // warm terracotta
+  static const Color plum = Color(0xFFB08C8E);
 
-  // --- Mood (lifted to read on dark) ------------------------------------
-  static const Color moodGood = Color(0xFF8FA15A);
-  static const Color moodGoodBg = Color(0xFF3A4226);
-  static const Color moodOkay = Color(0xFFC79A6A);
-  static const Color moodOkayBg = Color(0xFF45351F);
-  static const Color moodLow = Color(0xFFB07C4E);
-  static const Color moodLowBg = Color(0xFF3F2F1E);
+  // --- Mood (lifted to read on black) -----------------------------------
+  static const Color moodGood = Color(0xFF9DB06A); // olive
+  static const Color moodGoodBg = Color(0xFF1E2616);
+  static const Color moodOkay = Color(0xFFD8C29A); // beige
+  static const Color moodOkayBg = Color(0xFF2A2618);
+  static const Color moodLow = Color(0xFFC98A63); // clay
+  static const Color moodLowBg = Color(0xFF2A2016);
 
   // --- Feedback ---------------------------------------------------------
-  static const Color danger = Color(0xFFD66A60);
+  static const Color danger = Color(0xFFE07A6E); // lifted coral-red
 
   // --- Lines ------------------------------------------------------------
-  static const Color border = Color(0xFF4E3D2A);
-  static const Color borderSoft = Color(0x404E3D2A);
+  static const Color border = Color(0xFF2A2A22); // warm dark hairline
+  static const Color borderSoft = Color(0x402A2A22);
 
+  /// Gradient for the dark hero / check-in card.
   static const LinearGradient heroGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFF4A3A24), Color(0xFF3A4A26), Color(0xFF241B10)],
-    stops: [0.0, 0.5, 1.0],
+    colors: [Color(0xFF2A3319), Color(0xFF1A2010), Color(0xFF0C0C0A)],
+    stops: [0.0, 0.55, 1.0],
   );
 
   // --- Appointments -----------------------------------------------------
-  static const Color psychology = Color(0xFFC79A6A);
-  static const Color psychiatrist = Color(0xFF8FA15A);
-  static const Color gp = Color(0xFFB8916A);
+  static const Color psychology = Color(0xFFD8C29A); // beige
+  static const Color psychiatrist = Color(0xFF9DB06A); // olive
+  static const Color gp = Color(0xFFC98A63); // clay
 }

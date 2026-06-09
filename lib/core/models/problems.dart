@@ -7,14 +7,12 @@ class Problems {
   final String title;
   final IconData icon;
   final Color bgColor;
-  final Color borderColor;
 
   const Problems({
     required this.key,
     required this.title,
     required this.icon,
     required this.bgColor,
-    required this.borderColor,
   });
 }
 
@@ -23,63 +21,55 @@ List<Problems> problemsList = [
     key: 'sleep',
     title: 'Sleep',
     icon: Icons.nightlight,
-    bgColor: AppColors.moodOkayBg,
-    borderColor: AppColors.moodOkay,
+    bgColor: AppColors.textMuted,
   ),
 
   Problems(
     key: 'work',
     title: 'Work',
     icon: Icons.work,
-    bgColor: AppColors.moodOkayBg,
-    borderColor: AppColors.moodOkay,
+    bgColor: AppColors.textMuted,
   ),
 
   Problems(
     key: 'family',
     title: 'Family',
     icon: Icons.family_restroom_outlined,
-    bgColor: AppColors.moodOkayBg,
-    borderColor: AppColors.moodOkay,
+    bgColor: AppColors.textMuted,
   ),
 
   Problems(
     key: 'health',
     title: 'Health',
     icon: Icons.health_and_safety,
-    bgColor: AppColors.moodOkayBg,
-    borderColor: AppColors.moodOkay,
+    bgColor: AppColors.textMuted,
   ),
 
   Problems(
     key: 'grief',
     title: 'Grief',
     icon: Icons.help,
-    bgColor: AppColors.moodOkayBg,
-    borderColor: AppColors.moodOkay,
+    bgColor: AppColors.textMuted,
   ),
 
   Problems(
     key: 'finances',
     title: 'Finances',
     icon: Icons.help,
-    bgColor: AppColors.moodOkayBg,
-    borderColor: AppColors.moodOkay,
+    bgColor: AppColors.textMuted,
   ),
 
   Problems(
     key: 'studies',
     title: 'Studies',
     icon: Icons.help,
-    bgColor: AppColors.moodOkayBg,
-    borderColor: AppColors.moodOkay,
+    bgColor: AppColors.textMuted,
   ),
 
   Problems(
     key: 'other',
     title: 'Other',
     icon: Icons.help,
-    bgColor: AppColors.moodOkayBg,
-    borderColor: AppColors.moodOkay,
+    bgColor: AppColors.textMuted,
   ),
 ];

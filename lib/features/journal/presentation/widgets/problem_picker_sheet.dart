@@ -38,7 +38,7 @@ class _ProblemPickerState extends State<ProblemPicker> {
   Widget _problemTile(Problems problem) {
     final isSelected = _current.any((p) => p.key == problem.key);
     return ListTile(
-      tileColor: isSelected ? problem.bgColor.withAlpha(40) : null,
+      tileColor: isSelected ? problem.bgColor.withAlpha(80) : null,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       title: Text(problem.title),
       trailing: isSelected
