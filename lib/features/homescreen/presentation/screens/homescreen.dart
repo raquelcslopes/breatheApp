@@ -107,7 +107,7 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(_greeting(), style: context.textTheme.headlineMedium),
-                const SizedBox(height: 40),
+                const SizedBox(height: 10),
                 const CalendarCard(),
                 const SizedBox(height: 15),
                 const NewEntryCard(),

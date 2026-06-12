@@ -148,7 +148,6 @@ class AppTheme {
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadii.card),
-          side: BorderSide(color: border),
         ),
       ),
 
@@ -199,7 +198,7 @@ class AppTheme {
             return BorderSide(color: border);
           }),
           padding: WidgetStatePropertyAll(
-            const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+            const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
           ),
           shape: WidgetStatePropertyAll(
             RoundedRectangleBorder(

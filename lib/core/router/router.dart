@@ -1,5 +1,6 @@
 import 'package:breathe/core/widgets/nav_bar.dart';
 import 'package:breathe/features/care_team/presentation/screens/care_team_screen.dart';
+import 'package:breathe/features/emergency/presentation/screens/emergency_screen.dart';
 import 'package:breathe/features/journal/presentation/screens/entry_screen.dart';
 import 'package:breathe/features/journal/presentation/screens/journal_screen.dart';
 import 'package:breathe/features/onboarding/presentation/onboardin_screen.dart';
@@ -14,21 +15,6 @@ import 'go_router_refresh_stream.dart';
 import '../../features/homescreen/presentation/screens/homescreen.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/splash/presentation/splash_screen.dart';
-
-class _Placeholder extends StatelessWidget {
-  const _Placeholder(this.label);
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(label.toUpperCase())),
-      body: Center(
-        child: Text(label, style: Theme.of(context).textTheme.titleLarge),
-      ),
-    );
-  }
-}
 
 GoRouter createRouter() {
   return GoRouter(
@@ -130,7 +116,7 @@ GoRouter createRouter() {
               GoRoute(
                 name: AppRoute.emergency,
                 path: AppRoute.emergencyPath,
-                builder: (context, state) => const _Placeholder('Emergency'),
+                builder: (context, state) => const EmergencyScreen(),
               ),
             ],
           ),

@@ -33,13 +33,24 @@ class CareTeamRepository {
     await _careTeam(uid).doc(contactId).update(contact);
   }
 
-  Stream<List<CareTeamContact>> watchEntries(String uid) {
+  Stream<List<CareTeamContact>> watchContacts(String uid) {
     return _careTeam(uid)
         .orderBy('name', descending: true)
         .snapshots()
         .map(
           (snap) => snap.docs
               .map((d) => CareTeamContact.fromMap(d.id, d.data()))
+              .toList(),
+        );
+  }
+
+  Stream<List<CareTeamContact>> watchTrustedContacts(String uid) {
+    return _careTeam(uid)
+        .where('isTrustedPerson', isEqualTo: true)
+        .snapshots()
+        .map(
+          (snap) => snap.docs
+              .map((e) => CareTeamContact.fromMap(e.id, e.data()))
               .toList(),
         );
   }
