@@ -3,6 +3,7 @@ import 'package:breathe/core/theme/app_colors.dart';
 import 'package:breathe/features/care_team/data/care_team_contact.dart';
 import 'package:breathe/features/care_team/domain/care_team_provider.dart';
 import 'package:breathe/features/emergency/presentation/widgets/add_trusted_person.dart';
+import 'package:breathe/features/emergency/presentation/widgets/send_message.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -105,7 +106,8 @@ class EmergencyScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.watch(trustedPersonsProvider);
+    final trustedContactsProvider = ref.watch(trustedContactProvider);
+    final allContactsProvider = ref.watch(contactsProvider);
     return Scaffold(
       appBar: AppBar(
         title: Column(
@@ -119,12 +121,12 @@ class EmergencyScreen extends ConsumerWidget {
           ],
         ),
       ),
-      body: provider.when(
+      body: trustedContactsProvider.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) =>
             Center(child: Text('Error getting your trusted numbers: $e')),
-        data: (contacts) {
-          if (contacts.isEmpty) {
+        data: (contact) {
+          if (contact == null) {
             return Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(18.0),
@@ -161,11 +163,19 @@ class EmergencyScreen extends ConsumerWidget {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          ElevatedButton.icon(
-                            onPressed: () =>
-                                AddTrustedPerson.show(context, contacts),
-                            icon: Icon(Icons.person_add_alt),
-                            label: const Text('Add someone from care team'),
+                          allContactsProvider.when(
+                            data: (contacts) {
+                              return ElevatedButton.icon(
+                                onPressed: () =>
+                                    AddTrustedPerson.show(context, contacts),
+                                icon: Icon(Icons.person_add_alt),
+                                label: const Text('Add someone from care team'),
+                              );
+                            },
+                            error: (e, _) => Center(child: Text("Error $e")),
+                            loading: () => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
                           ),
                         ],
                       ),
@@ -175,6 +185,7 @@ class EmergencyScreen extends ConsumerWidget {
               ),
             );
           }
+          final hasPhoneNumber = contact.phoneNumber != null;
           return SafeArea(
             child: Padding(
               padding: EdgeInsets.all(18),
@@ -189,13 +200,13 @@ class EmergencyScreen extends ConsumerWidget {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    ...contacts.map((contact) {
-                      final hasPhoneNumber = contact.phoneNumber != null;
+                    hasPhoneNumber
+                        ? _callTrustedPersonWidget(context, contact)
+                        : SizedBox.shrink(),
 
-                      return hasPhoneNumber
-                          ? _callTrustedPersonWidget(context, contact)
-                          : SizedBox.shrink();
-                    }),
+                    const SizedBox(height: 40),
+
+                    SendMessage(contact: contact),
                   ],
                 ),
               ),

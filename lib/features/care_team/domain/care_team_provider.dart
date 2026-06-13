@@ -15,9 +15,10 @@ final contactsProvider = StreamProvider.autoDispose<List<CareTeamContact>>((
   return ref.watch(careTeamProvider).watchContacts(uid);
 });
 
-final trustedPersonsProvider =
-    StreamProvider.autoDispose<List<CareTeamContact>>((ref) {
-      final uid = FirebaseAuth.instance.currentUser?.uid;
-      if (uid == null) return Stream.value([]);
-      return ref.watch(careTeamProvider).watchTrustedContacts(uid);
-    });
+final trustedContactProvider = StreamProvider.autoDispose<CareTeamContact?>((
+  ref,
+) {
+  final uid = FirebaseAuth.instance.currentUser?.uid;
+  if (uid == null) return Stream.value(null);
+  return ref.read(careTeamProvider).watchTrustedContact(uid);
+});

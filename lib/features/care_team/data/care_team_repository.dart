@@ -10,18 +10,37 @@ class CareTeamRepository {
   CollectionReference<Map<String, dynamic>> _careTeam(String uid) =>
       _db.collection('users').doc(uid).collection('careTeam');
 
-  Future<void> saveContact(String uid, CareTeamContact contact) async {
-    final ref = _careTeam(uid).doc();
+  Future<void> _clearTrustedExcept(
+    String uid,
+    String? keepId,
+    WriteBatch batch,
+  ) async {
+    final snap = await _careTeam(
+      uid,
+    ).where('isTrustedPerson', isEqualTo: true).get();
 
-    try {
-      await ref.set(contact.toMap());
-    } catch (e) {
-      throw Exception("Failed to save contact: $e");
+    for (final doc in snap.docs) {
+      if (doc.id != keepId) {
+        batch.update(doc.reference, {'isTrustedPerson': false});
+      }
     }
   }
 
-  Future<void> deleteContact(String uid, String contactId) async {
-    await _careTeam(uid).doc(contactId).delete();
+  Future<void> saveContact(String uid, CareTeamContact contact) async {
+    final ref = _careTeam(uid).doc();
+    final batch = _db.batch();
+
+    if (contact.isTrustedPerson == true) {
+      await _clearTrustedExcept(uid, null, batch);
+    }
+
+    batch.set(ref, contact.toMap());
+
+    try {
+      await batch.commit();
+    } catch (e) {
+      throw Exception("Failed to save contact: $e");
+    }
   }
 
   Future<void> editContact(
@@ -29,8 +48,18 @@ class CareTeamRepository {
     String contactId,
     CareTeamContact newContact,
   ) async {
-    final contact = newContact.toMap();
-    await _careTeam(uid).doc(contactId).update(contact);
+    final batch = _db.batch();
+
+    if (newContact.isTrustedPerson == true) {
+      await _clearTrustedExcept(uid, contactId, batch);
+    }
+
+    batch.update(_careTeam(uid).doc(contactId), newContact.toMap());
+    await batch.commit();
+  }
+
+  Future<void> deleteContact(String uid, String contactId) async {
+    await _careTeam(uid).doc(contactId).delete();
   }
 
   Stream<List<CareTeamContact>> watchContacts(String uid) {
@@ -44,14 +73,18 @@ class CareTeamRepository {
         );
   }
 
-  Stream<List<CareTeamContact>> watchTrustedContacts(String uid) {
+  Stream<CareTeamContact?> watchTrustedContact(String uid) {
     return _careTeam(uid)
         .where('isTrustedPerson', isEqualTo: true)
+        .limit(1)
         .snapshots()
         .map(
-          (snap) => snap.docs
-              .map((e) => CareTeamContact.fromMap(e.id, e.data()))
-              .toList(),
+          (snap) => snap.docs.isEmpty
+              ? null
+              : CareTeamContact.fromMap(
+                  snap.docs.first.id,
+                  snap.docs.first.data(),
+                ),
         );
   }
 }
