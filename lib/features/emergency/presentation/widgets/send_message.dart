@@ -151,7 +151,7 @@ class _SendMessageState extends State<SendMessage> {
                 ),
               ),
               readOnly: isReadOnly,
-              maxLines: 4,
+              maxLines: 3,
               controller: _messageController,
               textAlign: TextAlign.justify,
             ),

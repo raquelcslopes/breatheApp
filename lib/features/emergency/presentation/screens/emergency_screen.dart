@@ -1,113 +1,23 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
-import 'package:breathe/core/theme/app_colors.dart';
-import 'package:breathe/features/care_team/data/care_team_contact.dart';
 import 'package:breathe/features/care_team/domain/care_team_provider.dart';
+import 'package:breathe/features/emergency/domain/emergency_provider.dart';
 import 'package:breathe/features/emergency/presentation/widgets/add_trusted_person.dart';
+import 'package:breathe/features/emergency/presentation/widgets/emergency_contacts.dart';
+import 'package:breathe/features/emergency/presentation/widgets/make_phone_call.dart';
 import 'package:breathe/features/emergency/presentation/widgets/send_message.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class EmergencyScreen extends ConsumerWidget {
   const EmergencyScreen({super.key});
-
-  //--------------------- FUNCTIONS ---------------------
-  String _getFirstLetters(String name) {
-    final cleaned = name.trim().replaceFirst(
-      RegExp(r'^(dr|dra|sr|sra|prof|enf|enfª|enf)\.?\s+', caseSensitive: false),
-      '',
-    );
-
-    final parts = cleaned
-        .split(RegExp(r'\s+'))
-        .where((p) => p.isNotEmpty)
-        .toList();
-    if (parts.isEmpty) return '';
-    if (parts.length == 1) return parts.first[0].toUpperCase();
-    return (parts.first[0] + parts.last[0]).toUpperCase();
-  }
-
-  Future<void> _callTrustedPerson(
-    BuildContext context,
-    String phoneNumber,
-  ) async {
-    try {
-      await launchUrl(Uri(scheme: 'tel', path: '+351$phoneNumber'));
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e'), backgroundColor: AppColors.danger),
-      );
-    }
-  }
-
-  //--------------------- WIDGETS ---------------------
-  Widget _callTrustedPersonWidget(
-    BuildContext context,
-    CareTeamContact contact,
-  ) {
-    return Container(
-      padding: EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: context.colors.primary,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x5728281C),
-            offset: Offset(0, 8),
-            blurRadius: 7,
-            spreadRadius: -9,
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundColor: Colors.white.withAlpha(50),
-            maxRadius: 25,
-            child: Text(
-              _getFirstLetters(contact.name),
-              style: context.textTheme.titleLarge?.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  contact.name,
-                  style: context.textTheme.bodyLarge?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 3),
-                Text('Your trusted person', style: context.textTheme.bodySmall),
-              ],
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () => _callTrustedPerson(context, contact.phoneNumber!),
-            child: Icon(Icons.phone_outlined, size: 24),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: context.colors.outline,
-              iconColor: context.colors.primary,
-              shape: const CircleBorder(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final trustedContactsProvider = ref.watch(trustedContactProvider);
     final allContactsProvider = ref.watch(contactsProvider);
+    final emergencyProvider = ref.watch(emergencyContactsProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: Column(
@@ -186,6 +96,7 @@ class EmergencyScreen extends ConsumerWidget {
             );
           }
           final hasPhoneNumber = contact.phoneNumber != null;
+
           return SafeArea(
             child: Padding(
               padding: EdgeInsets.all(18),
@@ -201,12 +112,57 @@ class EmergencyScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 10),
                     hasPhoneNumber
-                        ? _callTrustedPersonWidget(context, contact)
+                        ? MakePhoneCall(contact: contact)
                         : SizedBox.shrink(),
 
                     const SizedBox(height: 40),
 
+                    Text(
+                      'Or send a message',
+                      style: context.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      'Not sure what to say? This is ready to send',
+                      style: context.textTheme.bodySmall,
+                    ),
+                    const SizedBox(height: 10),
                     SendMessage(contact: contact),
+                    const SizedBox(height: 40),
+
+                    Text(
+                      'Talk to someone now',
+                      style: context.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+
+                    emergencyProvider.when(
+                      data: (emergencyContacts) {
+                        if (emergencyContacts.isEmpty) {
+                          return const Center(
+                            child: Text('An error has occured'),
+                          );
+                        }
+                        return Column(
+                          children: emergencyContacts.map((emergencyContact) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 10.0),
+                              child: EmergencyContactsWidget(
+                                contact: emergencyContact,
+                              ),
+                            );
+                          }).toList(),
+                        );
+                      },
+                      error: (e, _) => Center(child: Text('Error: $e')),
+                      loading: () =>
+                          const Center(child: CircularProgressIndicator()),
+                    ),
+                    const SizedBox(height: 60),
                   ],
                 ),
               ),
