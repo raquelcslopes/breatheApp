@@ -19,7 +19,7 @@ class EmergencyContactsWidget extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('An error has occurred'),
-          backgroundColor: AppColors.danger,
+          backgroundColor: AppColors.errorContainer,
         ),
       );
     }

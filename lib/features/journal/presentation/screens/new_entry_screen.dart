@@ -2,6 +2,8 @@ import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/models/moods.dart';
 import 'package:breathe/core/models/problems.dart';
 import 'package:breathe/core/theme/app_colors.dart';
+import 'package:breathe/core/widgets/custom_elevated_button.dart';
+import 'package:breathe/core/widgets/drawer.dart';
 import 'package:breathe/core/widgets/text_area.dart';
 import 'package:breathe/features/journal/data/journal_entry.dart';
 import 'package:breathe/features/journal/domain/journal_provider.dart';
@@ -48,7 +50,6 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
   }
 
   String _showProblems() {
-    if (_problemsSelected.isEmpty) return "What's making it harder?";
     return _problemsSelected.map((p) => p.title).join(', ');
   }
 
@@ -76,7 +77,7 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text("Couldn't save your entry."),
-          backgroundColor: AppColors.danger,
+          backgroundColor: AppColors.errorContainer,
         ),
       );
     }
@@ -100,99 +101,126 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          formattedDate,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 16),
+          formattedDate.toUpperCase(),
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            fontSize: 12,
+            color: AppColors.textMuted,
+          ),
         ),
-        Text('$weekday, $partOfDay', style: context.textTheme.headlineMedium),
+        Text(
+          '$weekday, $partOfDay',
+          style: context.textTheme.headlineMedium?.copyWith(fontSize: 40),
+        ),
       ],
-    );
-  }
-
-  Widget _saveButton() {
-    return ValueListenableBuilder(
-      valueListenable: _writtingSpace,
-      builder: (context, value, _) {
-        final hasEntry =
-            _moodSelected != null ||
-            _problemsSelected.isNotEmpty ||
-            value.text.trim().isNotEmpty;
-        return TextButton(
-          onPressed: hasEntry ? _saveEntry : null,
-          child: const Text('Save'),
-        );
-      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Align(alignment: Alignment.centerRight, child: _saveButton()),
-        leading: IconButton(
-          icon: const Icon(Icons.close_rounded),
-          onPressed: () => context.pop(),
-        ),
-      ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Positioned(
-              left: 52,
-              top: 0,
-              bottom: 0,
-              child: Container(
-                width: 1.4,
-                color: AppColors.primary.withValues(alpha: 0.22),
+      drawer: CustomDrawer(),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset('lib/assets/journal.png', fit: BoxFit.cover),
+          ),
+
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black26,
+                    Colors.transparent,
+                    AppColors.background,
+                  ],
+                ),
               ),
             ),
+          ),
 
-            Padding(
-              padding: const EdgeInsets.fromLTRB(64, 0, 20, 0),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 35, 24, 24),
               child: Column(
-                mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _date(context),
-                  const SizedBox(height: 10),
-                  Expanded(child: CustomTextArea(controller: _writtingSpace)),
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Wrap(
-                      children: [
-                        ActionChip(
-                          avatar: Icon(
-                            Icons.tag_faces_outlined,
-                            color:
-                                _moodSelected?.bgColor ??
-                                context.colors.onSurface,
-                          ),
-                          label: Text(
-                            _moodSelected == null
-                                ? 'Add mood'
-                                : 'Feeling ${_moodSelected!.title}',
-                            style: TextStyle(color: _moodSelected?.bgColor),
-                          ),
-                          onPressed: _pickMood,
-                        ),
-                        const SizedBox(width: 10),
-                        ActionChip(
-                          avatar: Icon(
-                            Icons.psychology_alt_outlined,
-                            color: context.colors.onSurface,
-                          ),
-                          label: Text(_showProblems()),
-                          onPressed: _pickProblem,
-                        ),
-                      ],
+                  const SizedBox(height: 8),
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      gradient: const LinearGradient(
+                        colors: [
+                          Colors.transparent,
+                          AppColors.outline,
+                          AppColors.outline,
+                          Colors.transparent,
+                        ],
+                        stops: [0.0, 0.2, 0.8, 1.0],
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
+                  Expanded(child: CustomTextArea(controller: _writtingSpace)),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: _pickMood,
+                          child: Text(
+                            _moodSelected?.title ?? 'MOOD',
+                            style: context.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: _pickProblem,
+                          child: Text(
+                            _problemsSelected.isEmpty
+                                ? 'PROBLEMS'
+                                : _showProblems(),
+                            style: context.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: CustomElevatedButton(
+                          label: 'SAVE',
+                          onTap: () => _saveEntry(),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Builder(
+                builder: (context) => IconButton(
+                  icon: const Icon(Icons.menu),
+                  color: AppColors.primary,
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

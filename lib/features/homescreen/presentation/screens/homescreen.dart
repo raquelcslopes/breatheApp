@@ -1,125 +1,152 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
-import 'package:breathe/core/router/routes.dart';
-import 'package:breathe/core/theme/app_colors.dart';
-import 'package:breathe/features/homescreen/presentation/widgets/calendar_card.dart';
-import 'package:breathe/features/homescreen/presentation/widgets/emergency_person.dart';
-import 'package:breathe/features/homescreen/presentation/widgets/navigation_card.dart';
-import 'package:breathe/features/homescreen/presentation/widgets/new_entry_card.dart';
+import 'package:breathe/core/widgets/drawer.dart';
+import 'package:breathe/features/homescreen/presentation/widgets/horizontal_calendar.dart';
+import 'package:breathe/features/homescreen/presentation/widgets/last_entry_card.dart';
+import 'package:breathe/features/homescreen/presentation/widgets/daily_ckecin_card.dart';
+import 'package:breathe/features/homescreen/presentation/widgets/statistics_card.dart';
+import 'package:breathe/features/journey/domain/journey_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
-  // ----------------- FUNCTIONS -----------------
-  void _go(BuildContext context, String path) {
-    context.go(path);
-  }
+  // --------------------- WIDGETS ---------------------
 
-  // ----------------- WIDGETS -----------------
+  Widget _date(BuildContext context) {
+    final now = DateTime.now();
+    final hour = now.hour;
+    final partOfDay = hour < 12
+        ? 'morning'
+        : (hour < 18 ? 'afternoon' : 'evening');
 
-  Widget _myAppBar(BuildContext context) {
-    final formattedDate = DateFormat(
-      'EEEE, d MMMM, HH:mm',
-      'en_US',
-    ).format(DateTime.now());
-
-    return Text(
-      formattedDate,
-      style: Theme.of(
-        context,
-      ).textTheme.bodyLarge?.copyWith(color: AppColors.textMuted),
-    );
-  }
-
-  String _greeting([DateTime? now]) {
-    final hour = (now ?? DateTime.now()).hour;
-    if (hour < 12) return 'Good morning';
-    if (hour < 18) return 'Good afternoon';
-    return 'Good evening';
-  }
-
-  Widget _exploreSection(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text('EXPLORE', style: context.textTheme.titleMedium),
-            const SizedBox(width: 10),
-            Expanded(child: Divider(radius: BorderRadius.circular(5))),
-          ],
+        Text('Good $partOfDay', style: context.textTheme.headlineMedium),
+        Text(
+          'A safe place for your thoughts, feelings, and experiences. Write honestly, reflect gently, and be yourself',
+          style: context.textTheme.bodyLarge,
+          textAlign: TextAlign.justify,
         ),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: AnimatedCard(
-                title: 'Journal',
-                subtitle: 'All your entries',
-                onTap: () => _go(context, AppRoute.journalPath),
-                color: AppColors.slateBlue,
-                icon: Icons.document_scanner_outlined,
-              ),
-            ),
-            const SizedBox(width: 20),
-            Expanded(
-              child: AnimatedCard(
-                title: 'Journey',
-                subtitle: 'A week view',
-                onTap: () => _go(context, AppRoute.journeyPath),
-                color: AppColors.clay,
-                icon: Icons.history,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _peopleSection(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Text('YOUR PEOPLE', style: context.textTheme.titleMedium),
-            const SizedBox(width: 10),
-            Expanded(child: Divider(radius: BorderRadius.circular(5))),
-          ],
-        ),
-        const SizedBox(height: 10),
-        EmergencyPerson(),
       ],
     );
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final providerMood = ref.watch(watchEntriesProvider);
+
     return Scaffold(
-      appBar: AppBar(title: _myAppBar(context)),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(18),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(_greeting(), style: context.textTheme.headlineMedium),
-                const SizedBox(height: 10),
-                const CalendarCard(),
-                const SizedBox(height: 15),
-                const NewEntryCard(),
-                const SizedBox(height: 40),
-                _exploreSection(context),
-                const SizedBox(height: 40),
-                _peopleSection(context),
-                const SizedBox(height: 60),
-              ],
+      drawer: CustomDrawer(),
+      backgroundColor: context.colors.surface,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset('lib/assets/background.png', fit: BoxFit.cover),
+          ),
+
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: const [0.0, 0.22, 0.55, 0.88, 1.0],
+                  colors: [
+                    context.colors.surface.withValues(alpha: 0.55),
+                    context.colors.surface.withValues(alpha: 0.05),
+                    context.colors.surface.withValues(alpha: 0.15),
+                    context.colors.surface.withValues(alpha: 0.60),
+                    context.colors.surface.withValues(alpha: 0.80),
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
+
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 35, 24, 28),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _date(context),
+                          const SizedBox(height: 20),
+                          const HorizontalCalendar(),
+                          SizedBox(
+                            width: double.infinity,
+                            child: const DailyCheckInCard(),
+                          ),
+                          const SizedBox(height: 40),
+                          providerMood.when(
+                            data: (data) {
+                              if (data.isEmpty) {
+                                return Row(
+                                  children: [
+                                    Expanded(
+                                      child: StatisticsCard(records: []),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    const Expanded(
+                                      child: LastEntryCard(
+                                        lastEntry:
+                                            'No records in the last 7 days',
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }
+
+                              return Row(
+                                children: [
+                                  Expanded(
+                                    child: StatisticsCard(records: data),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: LastEntryCard(
+                                      lastEntry: data.last.text,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                            error: (e, _) => Center(child: Text('Error: $e')),
+                            loading: () => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Builder(
+                builder: (context) => IconButton(
+                  icon: const Icon(Icons.menu),
+                  color: context.colors.primary,
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

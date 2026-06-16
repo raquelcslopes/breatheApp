@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Passwords don't match"),
-          backgroundColor: AppColors.danger,
+          backgroundColor: AppColors.errorContainer,
         ),
       );
       return;
@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
             AuthRepository.messageFromError(e),
             textAlign: TextAlign.center,
           ),
-          backgroundColor: AppColors.danger,
+          backgroundColor: AppColors.errorContainer,
           width: 320.0,
         ),
       );
@@ -118,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
             AuthRepository.messageFromError(e),
             textAlign: TextAlign.center,
           ),
-          backgroundColor: AppColors.danger,
+          backgroundColor: AppColors.errorContainer,
           width: 320.0,
         ),
       );

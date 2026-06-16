@@ -37,46 +37,30 @@ class _MoodPickerSheetState extends State<MoodPickerSheet> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 42,
-                  height: 5,
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  decoration: BoxDecoration(
-                    color: AppColors.borderSoft,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
-                for (final mood in moods)
-                  ListTile(
-                    tileColor: mood.key == _current?.key
-                        ? mood.bgColor.withAlpha(40)
-                        : null,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    leading: CircleAvatar(
-                      radius: 9,
-                      backgroundColor: mood.bgColor,
-                    ),
-                    title: Text(mood.title),
-                    trailing: mood.key == _current?.key
-                        ? const Icon(
-                            Icons.check_rounded,
-                            color: AppColors.forest,
-                          )
-                        : null,
-                    onTap: () {
-                      setState(() => _current = mood);
-                      Navigator.pop(context, _current);
-                    },
-                  ),
-              ],
+          Container(
+            width: 42,
+            height: 5,
+            margin: const EdgeInsets.symmetric(vertical: 10),
+            decoration: BoxDecoration(
+              color: AppColors.outline,
+              borderRadius: BorderRadius.circular(5),
             ),
           ),
+          for (final mood in moods)
+            ListTile(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              leading: CircleAvatar(radius: 9),
+              title: Text(mood.title),
+              trailing: mood.key == _current?.key
+                  ? const Icon(Icons.check_rounded, color: AppColors.background)
+                  : null,
+              onTap: () {
+                setState(() => _current = mood);
+                Navigator.pop(context, _current);
+              },
+            ),
         ],
       ),
     );

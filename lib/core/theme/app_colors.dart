@@ -1,72 +1,60 @@
 import 'package:flutter/material.dart';
 
-/// Breathe — LIGHT palette.
-class AppColors {
-  AppColors._();
+abstract final class AppColors {
+  // Backgrounds
+  static const background = Color(0xFF12140E);
 
-  // --- Surfaces ---------------------------------------------------------
-  static const Color background = Color.fromARGB(
-    255,
-    245,
-    247,
-    243,
-  ); // greenish-white canvas
-  static const Color surface = Color(0xFFFFFFFF); // cards
-  static const Color surfaceAlt = Color(0xFFF2F5EB); // recessed / tinted
+  static const surface = Color(0xFF12140E);
+  static const surfaceDim = Color(0xFF12140E);
 
-  // --- Text -------------------------------------------------------------
-  static const Color textPrimary = Color(0xFF283618); // deep green
-  static const Color textSecondary = Color(0xFF5C6347);
-  static const Color textMuted = Color(0xFF8A9079);
-  static const Color onAction = Color(0xFFFEFAE0); // cream text on tan
-  static const Color onDark = Color(0xFFFEFAE0);
+  static const surfaceContainerLowest = Color(0xFF0D0F09);
+  static const surfaceContainerLow = Color(0xFF1A1C16);
+  static const surfaceContainer = Color(0xFF1E201A);
+  static const surfaceContainerHigh = Color(0xFF292B24);
+  static const surfaceContainerHighest = Color(0xFF34362F);
 
-  // --- Brand / action ---------------------------------------------------
-  static const Color primary = Color(
-    0xFF283618,
-  ); // tan — buttons / FAB / action
-  static const Color primarySoft = Color(0xFF875C35);
+  static const surfaceBright = Color(0xFF383A33);
 
-  // --- Green (structural) ----------------------------------------------
-  static const Color forest = Color(0xFF606C38); // olive — secondary
-  static const Color forestDeep = Color(0xFF283618);
+  // Primary
+  static const primary = Color(0xFFC3C9B1);
+  static const primaryContainer = Color(0xFF2D3322);
 
-  // --- Browns ----------------------------------------------------------
-  static const Color brownDark = Color(0xFF283618); // dark brown — nav icons
+  static const primaryFixed = Color(0xFFDFe5CC);
+  static const primaryFixedDim = Color(0xFFC3C9B1);
 
-  // --- Accents ----------------------------------------------------------
-  static const Color sand = Color(0xFFA9794D);
-  static const Color slateBlue = Color(0xFF5E7066);
-  static const Color clay = Color(0xFF875C35);
-  static const Color plum = Color(0xFF553922);
+  static const onPrimary = Color(0xFF2D3322);
+  static const onPrimaryContainer = Color(0xFF959B85);
 
-  // --- Mood scale (good -> okay -> low) ---------------------------------
-  static const Color moodGood = forest;
-  static const Color moodGoodBg = Color(0xFFE6EAD5);
+  // Secondary
+  static const secondary = Color(0xFFD0C5B7);
+  static const secondaryContainer = Color(0xFF4D463B);
 
-  static const Color moodOkay = Color.fromARGB(255, 221, 208, 94);
-  static const Color moodOkayBg = Color(0xFFFBF1D9);
+  static const onSecondary = Color(0xFF362F26);
+  static const onSecondaryContainer = Color(0xFFBFB3A6);
 
-  static const Color moodLow = Color(0xFFBC6C25);
-  static const Color moodLowBg = Color(0xFFF6E6D5);
+  // Tertiary
+  static const tertiary = Color(0xFFC5CAA6);
+  static const tertiaryContainer = Color(0xFF2E331A);
 
-  // --- Feedback ---------------------------------------------------------
-  static const Color danger = Color(0xFFA8362F);
+  static const onTertiary = Color(0xFF2E331A);
+  static const onTertiaryContainer = Color(0xFF969C7B);
 
-  // --- Lines ------------------------------------------------------------
-  static const Color border = Color(0xFFDBE1CD); // soft sage hairline
-  static const Color borderSoft = Color(0xFFE3E8D8);
+  // Text
+  static const textPrimary = Color(0xFFE3E3D9);
+  static const textSecondary = Color(0xFFC7C7BD);
+  static const textMuted = Color(0xFF909188);
 
-  /// Gradient for the dark hero / check-in card.
-  static const LinearGradient heroGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [Color(0xFF606C38), Color(0xFF3D4D26), Color(0xFF283618)],
-    stops: [0.0, 0.5, 1.0],
-  );
+  // Borders
+  static const outline = Color(0xFF909188);
+  static const outlineVariant = Color(0xFF464840);
 
-  // --- Appointments -----------------------------------------------------
-  static const Color psychology = Color(0xFF875C35); // tan
-  static const Color psychiatrist = Color(0xFF606C38); // olive
-  static const Color gp = Color(0xFF553922); // dark brown
+  // States
+  static const error = Color(0xFFFFB4AB);
+  static const errorContainer = Color(0xFF93000A);
+
+  // Extras
+  static const inverseSurface = Color(0xFFE3E3D9);
+  static const inversePrimary = Color(0xFF5A614D);
+
+  static const shadow = Color(0x99000000);
 }

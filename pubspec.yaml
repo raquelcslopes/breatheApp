@@ -74,6 +74,9 @@ flutter:
   assets:
     - lib/assets/google_logo.png
     - lib/assets/bg_splash.png
+    - lib/assets/background.png
+    - lib/assets/log.png
+    - lib/assets/journal.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

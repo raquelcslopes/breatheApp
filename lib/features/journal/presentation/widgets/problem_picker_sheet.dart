@@ -42,7 +42,7 @@ class _ProblemPickerState extends State<ProblemPicker> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       title: Text(problem.title),
       trailing: isSelected
-          ? const Icon(Icons.check_rounded, color: AppColors.forest)
+          ? const Icon(Icons.check_rounded, color: AppColors.background)
           : null,
       onTap: () => setState(() {
         if (isSelected) {
@@ -69,7 +69,7 @@ class _ProblemPickerState extends State<ProblemPicker> {
               height: 5,
               margin: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
-                color: AppColors.borderSoft,
+                color: AppColors.outline,
                 borderRadius: BorderRadius.circular(5),
               ),
             ),

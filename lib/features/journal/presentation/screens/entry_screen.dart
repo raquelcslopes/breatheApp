@@ -1,147 +1,300 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
-import 'package:breathe/core/extensions/text_style.dart';
-import 'package:breathe/core/models/moods.dart';
 import 'package:breathe/core/theme/app_colors.dart';
-import 'package:breathe/core/widgets/ruled_painter.dart';
+import 'package:breathe/core/utils/capitalize.dart';
+import 'package:breathe/core/widgets/custom_elevated_button.dart';
+import 'package:breathe/core/widgets/drawer.dart';
 import 'package:breathe/features/journal/data/journal_entry.dart';
 import 'package:breathe/features/journal/domain/journal_provider.dart';
+import 'package:breathe/features/journal/presentation/widgets/entry_preview.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-class EntryScreen extends ConsumerWidget {
+class EntryScreen extends ConsumerStatefulWidget {
   final String entryId;
 
   const EntryScreen({super.key, required this.entryId});
 
-  Color _convertMoodToColor(BuildContext context, String? moodKey) {
-    final m = moods.where((m) => m.key == moodKey);
+  @override
+  ConsumerState<EntryScreen> createState() => _EntryScreenState();
+}
 
-    return m.isEmpty ? context.colors.surface : m.first.bgColor;
+class _EntryScreenState extends ConsumerState<EntryScreen> {
+  bool isReadOnly = true;
+  final _writtingSpace = TextEditingController();
+  bool _prefilled = false;
+
+  //--------------------- FUNCTIONS -------------------
+
+  @override
+  void dispose() {
+    _writtingSpace.dispose();
+    super.dispose();
   }
 
+  Future<void> _deleteEntry(String entryId) async {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Delete entry?'),
+          content: const Text(
+            'This action cannot be undone. Do you want to continue?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text(
+                'Delete',
+                style: TextStyle(color: AppColors.errorContainer),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldDelete != true) return;
+
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+
+    if (uid == null) return;
+
+    try {
+      await ref.read(journalRepositoryProvider).deleteEntry(uid, entryId);
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Entry deleted successfully')),
+      );
+
+      context.pop();
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+    }
+  }
+
+  Future<void> _saveChanges(JournalEntry originalEntry) async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+
+    if (uid == null) return;
+
+    final newEntry = JournalEntry(
+      id: originalEntry.id,
+      text: _writtingSpace.text,
+      moodKey: originalEntry.moodKey,
+      problemKeys: originalEntry.problemKeys,
+      createdAt: DateTime.now(),
+    );
+
+    try {
+      await ref
+          .read(journalRepositoryProvider)
+          .editEntry(uid, originalEntry.id, newEntry);
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Entry changed succssefully')));
+        context.pop();
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+    }
+  }
+
+  //--------------------- WIDGETS ---------------------
   Widget _date(BuildContext context, JournalEntry entry) {
     final formattedDate = DateFormat(
       'EEEE, d MMMM, HH:mm',
       'en_US',
     ).format(entry.createdAt);
 
-    return Row(
-      children: [
-        CircleAvatar(
-          backgroundColor: _convertMoodToColor(context, entry.moodKey),
-          minRadius: 6,
-        ),
-        const SizedBox(width: 5),
-        Text(formattedDate, style: context.textTheme.bodySmall),
-      ],
+    return Text(
+      formattedDate.toUpperCase(),
+      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+        fontSize: 12,
+        color: AppColors.textMuted,
+      ),
     );
   }
 
   Widget _title(BuildContext context, JournalEntry entry) {
-    final hour = entry.createdAt.hour;
-    final partOfDay = hour < 12
-        ? 'morning'
-        : (hour < 18 ? 'afternoon' : 'evening');
-
-    final day = DateFormat('EEEE').format(entry.createdAt);
-    return Text('$day, $partOfDay', style: context.textTheme.titleLarge);
-  }
-
-  Widget _ruledText(BuildContext context, JournalEntry entry) {
-    if (entry.text.isEmpty) {
-      return CustomPaint(
-        painter: const RuledPaperPainter(lineHeight: 26),
-        child: SizedBox(
-          width: double.infinity,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 26 * 1.5),
-            child: Text('No notes added', style: AppTextStyles.diaryBody),
-          ),
-        ),
-      );
-    }
-    return CustomPaint(
-      painter: const RuledPaperPainter(lineHeight: 26),
-      child: SizedBox(
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 26 * 1.5),
-          child: Text(entry.text, style: AppTextStyles.diaryBody),
-        ),
-      ),
+    return Text(
+      'Feeling ${capitalize(entry.moodKey ?? '-')}',
+      style: context.textTheme.headlineMedium?.copyWith(fontSize: 40),
     );
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final entry = ref.watch(entryProvider(entryId));
+  Widget build(BuildContext context) {
+    final entryAsync = ref.watch(entryProvider(widget.entryId));
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Entry'),
-        leading: IconButton(
-          icon: const Icon(Icons.close_rounded),
-          onPressed: () => context.pop(),
-        ),
-      ),
-      body: SafeArea(
-        child: entry.when(
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, _) =>
-              const Center(child: Text("Could't load entry, please try agian")),
-          data: (obj) {
-            if (obj == null) {
-              return Center(child: Text('Entry not found'));
-            }
-            return Stack(
-              children: [
-                Positioned(
-                  left: 52,
-                  top: 0,
-                  bottom: 0,
-                  child: Container(
-                    width: 1.4,
-                    color: AppColors.primary.withValues(alpha: 0.22),
-                  ),
+      drawer: CustomDrawer(),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset('lib/assets/journal.png', fit: BoxFit.cover),
+          ),
+
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black26,
+                    Colors.transparent,
+                    AppColors.background,
+                  ],
                 ),
+              ),
+            ),
+          ),
 
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(64, 0, 20, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      _date(context, obj),
-                      const SizedBox(height: 5),
-                      _title(context, obj),
-                      const SizedBox(height: 20),
-                      _ruledText(context, obj),
-
-                      if (obj.problemKeys.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0),
-                          child: Text.rich(
-                            TextSpan(
-                              style: context.textTheme.bodySmall,
-                              children: [
-                                const TextSpan(
-                                  text: 'On my mind today: ',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+          SafeArea(
+            child: SizedBox.expand(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(24, 35, 24, 24),
+                child: entryAsync.when(
+                  data: (data) {
+                    if (data == null) {
+                      return Center(child: Text('isempty'));
+                    }
+                    if (!_prefilled) {
+                      _writtingSpace.text = data.text;
+                      _prefilled = true;
+                    }
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _date(context, data),
+                        _title(context, data),
+                        const SizedBox(height: 20),
+                        Expanded(
+                          child: EntryPreview(
+                            entry: data,
+                            isReadOnly: isReadOnly,
+                            controller: _writtingSpace,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        RichText(
+                          text: TextSpan(
+                            text: 'On my mind this day: ',
+                            style: context.textTheme.bodySmall?.copyWith(
+                              color: AppColors.textMuted,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: data.problemKeys.join('• '),
+                                style: context.textTheme.bodySmall?.copyWith(
+                                  color: AppColors.textMuted,
+                                  fontSize: 14,
                                 ),
-                                TextSpan(text: "${obj.problemKeys.join(', ')}"),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 0.5,
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            gradient: const LinearGradient(
+                              colors: [
+                                Colors.transparent,
+                                AppColors.outline,
+                                AppColors.outline,
+                                Colors.transparent,
                               ],
+                              stops: [0.0, 0.2, 0.8, 1.0],
                             ),
                           ),
                         ),
-                    ],
-                  ),
+
+                        Center(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              isReadOnly
+                                  ? TextButton(
+                                      onPressed: () => setState(() {
+                                        isReadOnly = false;
+                                      }),
+                                      child: Text(
+                                        'Edit'.toUpperCase(),
+                                        style: context.textTheme.bodyMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.normal,
+                                              letterSpacing: 1.4,
+                                            ),
+                                      ),
+                                    )
+                                  : SizedBox.shrink(),
+                              const SizedBox(width: 20),
+                              TextButton(
+                                onPressed: () => _deleteEntry(widget.entryId),
+                                child: Text(
+                                  'Delete'.toUpperCase(),
+                                  style: context.textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.normal,
+                                    letterSpacing: 1.4,
+                                    color: AppColors.errorContainer,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 20),
+
+                              isReadOnly
+                                  ? SizedBox.shrink()
+                                  : CustomElevatedButton(
+                                      label: 'Save'.toUpperCase(),
+                                      onTap: () => _saveChanges(data),
+                                    ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                  error: (e, _) => Center(child: Text('Error: $e')),
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
                 ),
-              ],
-            );
-          },
-        ),
+              ),
+            ),
+          ),
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Builder(
+                builder: (context) => IconButton(
+                  icon: const Icon(Icons.arrow_back_rounded),
+                  color: AppColors.primary,
+                  onPressed: () => context.pop(),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

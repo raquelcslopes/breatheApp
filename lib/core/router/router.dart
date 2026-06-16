@@ -1,4 +1,3 @@
-import 'package:breathe/core/widgets/nav_bar.dart';
 import 'package:breathe/features/care_team/presentation/screens/care_team_screen.dart';
 import 'package:breathe/features/emergency/presentation/screens/emergency_screen.dart';
 import 'package:breathe/features/journal/presentation/screens/entry_screen.dart';
@@ -17,6 +16,7 @@ import '../../features/auth/presentation/login_screen.dart';
 import '../../features/splash/presentation/splash_screen.dart';
 
 GoRouter createRouter() {
+  final _rootNavigatorKey = GlobalKey<NavigatorState>();
   return GoRouter(
     initialLocation: AppRoute.splashPath,
     debugLogDiagnostics: true,
@@ -57,79 +57,52 @@ GoRouter createRouter() {
         builder: (context, state) => const OnboardingScreen(),
       ),
 
-      StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) =>
-            HomeShell(shell: navigationShell),
-        branches: [
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                name: AppRoute.home,
-                path: AppRoute.homePath,
-                builder: (context, state) => const HomeScreen(),
-              ),
-            ],
-          ),
+      GoRoute(
+        name: AppRoute.home,
+        path: AppRoute.homePath,
+        builder: (context, state) => const HomeScreen(),
+      ),
 
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                name: AppRoute.journal,
-                path: AppRoute.journalPath,
-                builder: (context, state) => const JournalScreen(),
-                routes: [
-                  GoRoute(
-                    name: AppRoute.journalEntry,
-                    path: 'entry/:id',
-                    builder: (context, state) {
-                      final id = state.pathParameters['id'] ?? '';
-                      return EntryScreen(entryId: id);
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
+      GoRoute(
+        name: AppRoute.journal,
+        path: AppRoute.journalPath,
+        builder: (context, state) => const JournalScreen(),
+        routes: [
+          GoRoute(
+            name: AppRoute.journalEntry,
 
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                name: AppRoute.journey,
-                path: AppRoute.journeyPath,
-                builder: (context, state) => const JourneyScreen(),
-              ),
-            ],
-          ),
-
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                name: AppRoute.careTeam,
-                path: AppRoute.careTeamPath,
-                builder: (context, state) => const CareTeamScreen(),
-              ),
-            ],
-          ),
-
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                name: AppRoute.emergency,
-                path: AppRoute.emergencyPath,
-                builder: (context, state) => const EmergencyScreen(),
-              ),
-            ],
+            path: 'entry/:id',
+            builder: (context, state) {
+              final id = state.pathParameters['id'] ?? '';
+              return EntryScreen(entryId: id);
+            },
           ),
         ],
       ),
-
       GoRoute(
         name: AppRoute.journalNew,
         path: AppRoute.journalNewPath,
         builder: (context, state) => const NewEntryScreen(),
       ),
-    ],
 
+      GoRoute(
+        name: AppRoute.journey,
+        path: AppRoute.journeyPath,
+        builder: (context, state) => const JourneyScreen(),
+      ),
+
+      GoRoute(
+        name: AppRoute.careTeam,
+        path: AppRoute.careTeamPath,
+        builder: (context, state) => const CareTeamScreen(),
+      ),
+
+      GoRoute(
+        name: AppRoute.emergency,
+        path: AppRoute.emergencyPath,
+        builder: (context, state) => const EmergencyScreen(),
+      ),
+    ],
     errorBuilder: (context, state) =>
         Scaffold(body: Center(child: Text('Route not found: ${state.uri}'))),
   );

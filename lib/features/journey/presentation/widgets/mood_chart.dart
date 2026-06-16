@@ -52,11 +52,11 @@ class MoodChart extends StatelessWidget {
   Color _dotColor(double y) {
     switch (y.toInt()) {
       case 0:
-        return AppColors.moodLow;
+        return AppColors.background;
       case 1:
-        return AppColors.moodOkay;
+        return AppColors.background;
       default:
-        return AppColors.moodGood;
+        return AppColors.background;
     }
   }
 

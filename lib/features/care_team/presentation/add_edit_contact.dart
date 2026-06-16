@@ -108,7 +108,7 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Contact created successfully"),
-            backgroundColor: AppColors.moodGood,
+            backgroundColor: AppColors.primary,
             showCloseIcon: true,
           ),
         );
@@ -119,7 +119,7 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Couldn't save the contact: $e"),
-          backgroundColor: AppColors.danger,
+          backgroundColor: AppColors.errorContainer,
         ),
       );
     }
@@ -149,7 +149,7 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Contact changed successfully"),
-            backgroundColor: AppColors.moodGood,
+            backgroundColor: AppColors.primary,
             showCloseIcon: true,
           ),
         );
@@ -160,7 +160,7 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Couldn't save changes: $e"),
-          backgroundColor: AppColors.danger,
+          backgroundColor: AppColors.errorContainer,
         ),
       );
     }
@@ -184,7 +184,7 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
               onPressed: () => Navigator.of(context).pop(true),
               child: const Text(
                 'Delete',
-                style: TextStyle(color: AppColors.danger),
+                style: TextStyle(color: AppColors.errorContainer),
               ),
             ),
           ],
@@ -262,13 +262,13 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
       padding: EdgeInsets.all(15),
       decoration: BoxDecoration(
         color: context.colors.secondary.withAlpha(40),
-        border: Border.all(color: AppColors.forest),
+        border: Border.all(color: AppColors.background),
         borderRadius: BorderRadius.circular(15),
       ),
 
       child: Row(
         children: [
-          Icon(Icons.share, color: AppColors.forest),
+          Icon(Icons.share, color: AppColors.background),
           const SizedBox(width: 7),
           Expanded(
             child: Column(
@@ -439,11 +439,11 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
                             _deleteContact(widget.contact?.id ?? ''),
                         label: Text(
                           'Remove from care team',
-                          style: TextStyle(color: AppColors.danger),
+                          style: TextStyle(color: AppColors.errorContainer),
                         ),
                         icon: Icon(
                           Icons.delete_forever_outlined,
-                          color: AppColors.danger,
+                          color: AppColors.errorContainer,
                         ),
                       ),
                     ),

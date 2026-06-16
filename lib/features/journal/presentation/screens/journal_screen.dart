@@ -1,8 +1,7 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
-import 'package:breathe/core/models/moods.dart';
-import 'package:breathe/core/models/problems.dart';
 import 'package:breathe/core/router/routes.dart';
 import 'package:breathe/core/theme/app_colors.dart';
+import 'package:breathe/core/widgets/drawer.dart';
 import 'package:breathe/features/journal/domain/journal_provider.dart';
 import 'package:breathe/features/journal/presentation/widgets/entry_card.dart';
 import 'package:flutter/material.dart';
@@ -11,20 +10,6 @@ import 'package:go_router/go_router.dart';
 
 class JournalScreen extends ConsumerWidget {
   const JournalScreen({super.key});
-
-  Color _moodColor(String? key) {
-    final m = moods.where((m) => m.key == key);
-    return m.isEmpty ? AppColors.border : m.first.bgColor;
-  }
-
-  String _moodTitle(String? key) {
-    final m = moods.where((m) => m.key == key);
-    return m.isEmpty ? '—' : m.first.title;
-  }
-
-  List<Problems> _problemsFromKeys(List<String> keys) {
-    return problemsList.where((p) => keys.contains(p.key)).toList();
-  }
 
   bool _isSameDay(DateTime a, DateTime b) =>
       a.year == b.year && a.month == b.month && a.day == b.day;
@@ -42,106 +27,112 @@ class JournalScreen extends ConsumerWidget {
     final entriesAsync = ref.watch(entriesProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Journal'),
-            TextButton(
-              onPressed: () => context.push(AppRoute.journalNewPath),
-              child: Icon(Icons.add),
-            ),
-          ],
-        ),
-      ),
-      body: SafeArea(
-        child: entriesAsync.when(
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, _) => const Center(child: Text("Couldn't load entries")),
-          data: (entries) {
-            if (entries.isEmpty) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(40),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.auto_stories_outlined,
-                        size: 56,
-                        color: context.colors.primary.withAlpha(120),
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        'Your journal will live here',
-                        textAlign: TextAlign.center,
-                        style: context.textTheme.titleLarge,
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        'Write a few words about your day, whenever it feels right. '
-                        'Only you will see them.',
-                        textAlign: TextAlign.center,
-                        style: context.textTheme.bodyMedium?.copyWith(
-                          color: context.colors.primary,
-                          height: 1.5,
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      ElevatedButton.icon(
-                        onPressed: () => context.push(AppRoute.journalNewPath),
-                        icon: Icon(Icons.edit_outlined),
-                        label: const Text('Write your first entry'),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }
-            return ListView.separated(
-              padding: const EdgeInsets.fromLTRB(18, 18, 18, 100),
-              itemCount: entries.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
-              itemBuilder: (context, i) {
-                final e = entries[i];
-                final label = _dayLabel(e.createdAt);
-                final showHeader =
-                    i == 0 || _dayLabel(entries[i - 1].createdAt) != label;
+      drawer: CustomDrawer(),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset('lib/assets/background.png', fit: BoxFit.cover),
+          ),
 
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (showHeader)
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 8,
-                          bottom: 10,
-                          left: 4,
-                        ),
-                        child: Text(
-                          label.toUpperCase(),
-                          style: context.textTheme.labelLarge?.copyWith(
-                            color: AppColors.textMuted,
-                          ),
-                        ),
-                      ),
-                    EntryCard(
-                      color: _moodColor(e.moodKey),
-                      mood: _moodTitle(e.moodKey),
-                      date: e.createdAt,
-                      text: e.text.isEmpty ? 'No notes added' : e.text,
-                      problems: _problemsFromKeys(e.problemKeys),
-                      onTap: () => context.pushNamed(
-                        AppRoute.journalEntry,
-                        pathParameters: {'id': e.id},
-                      ),
-                    ),
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  center: Alignment.center,
+                  radius: 1.0,
+                  colors: [
+                    const Color(0xFF12140E).withAlpha(100),
+                    const Color(0xFF12140E).withAlpha(200),
                   ],
-                );
-              },
-            );
-          },
-        ),
+                  stops: const [0.0, 1.0],
+                ),
+              ),
+            ),
+          ),
+
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 35, 24, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 8),
+                  Text('Journal', style: context.textTheme.headlineLarge),
+                  const SizedBox(height: 5),
+                  Text(
+                    'Reflect on your journey',
+                    style: context.textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  entriesAsync.when(
+                    data: (data) {
+                      return Expanded(
+                        child: ListView.separated(
+                          itemCount: data.length,
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(height: 12),
+                          itemBuilder: (context, i) {
+                            final e = data[i];
+                            final label = _dayLabel(e.createdAt);
+                            final showHeader =
+                                i == 0 ||
+                                _dayLabel(data[i - 1].createdAt) != label;
+
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (showHeader)
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: 8,
+                                      bottom: 10,
+                                      left: 4,
+                                    ),
+                                    child: Text(
+                                      label.toUpperCase(),
+                                      style: context.textTheme.labelLarge
+                                          ?.copyWith(
+                                            color: AppColors.textMuted,
+                                          ),
+                                    ),
+                                  ),
+                                EntryCard(
+                                  entry: e,
+                                  onTap: () => context.pushNamed(
+                                    AppRoute.journalEntry,
+                                    pathParameters: {'id': e.id},
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    error: (e, _) => Center(child: Text('Error: $e')),
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Builder(
+                builder: (context) => IconButton(
+                  icon: const Icon(Icons.menu),
+                  color: AppColors.primary,
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

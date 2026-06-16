@@ -62,4 +62,16 @@ class JournalRepository {
               .toList(),
         );
   }
+
+  Future<void> deleteEntry(String uid, String entryId) async {
+    await _entries(uid).doc(entryId).delete();
+  }
+
+  Future<void> editEntry(
+    String uid,
+    String entryId,
+    JournalEntry newEntry,
+  ) async {
+    _entries(uid).doc(entryId).update(newEntry.toMap());
+  }
 }

@@ -1,32 +1,44 @@
-import 'package:breathe/core/extensions/context_extensions.dart';
-import 'package:breathe/core/theme/app_colors.dart';
-import 'package:flutter/material.dart';
 import 'dart:ui';
 
-class CustomTextArea extends StatelessWidget {
-  final TextEditingController controller;
-  final String hint;
-  final EdgeInsetsGeometry padding;
-  final double borderRadius;
-  final double blur;
-  final Color tint;
-  final int fillAlpha;
+import 'package:breathe/core/extensions/context_extensions.dart';
+import 'package:breathe/core/theme/app_colors.dart';
+import 'package:breathe/features/journal/data/journal_entry.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-  const CustomTextArea({
+class EntryPreview extends ConsumerStatefulWidget {
+  final JournalEntry entry;
+  final bool isReadOnly;
+  final TextEditingController controller;
+
+  const EntryPreview({
     super.key,
+    required this.entry,
+    required this.isReadOnly,
     required this.controller,
-    this.hint = 'Write freely about today…',
-    this.padding = const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-    this.borderRadius = 20,
-    this.blur = 12,
-    this.tint = AppColors.background,
-    this.fillAlpha = 80,
   });
+
+  @override
+  ConsumerState<EntryPreview> createState() => _EntryPreviewState();
+}
+
+class _EntryPreviewState extends ConsumerState<EntryPreview> {
+  final EdgeInsetsGeometry padding = const EdgeInsets.symmetric(
+    horizontal: 10,
+    vertical: 15,
+  );
+  final double borderRadius = 20;
+  final double blur = 12;
+  final Color tint = AppColors.background;
+  final int fillAlpha = 80;
+
+  //--------------------- FUNCTIONS ---------------------
+
+  //--------------------- WIDGETS ---------------------
 
   @override
   Widget build(BuildContext context) {
     final radius = BorderRadius.circular(borderRadius);
-
     return ClipRRect(
       borderRadius: radius,
       child: BackdropFilter(
@@ -56,8 +68,10 @@ class CustomTextArea extends StatelessWidget {
                   fontWeight: FontWeight.w300,
                 ),
                 child: TextFormField(
-                  controller: controller,
-                  expands: true,
+                  readOnly: widget.isReadOnly,
+                  controller: widget.controller,
+                  autofocus: true,
+                  minLines: 1,
                   maxLines: null,
                   keyboardType: TextInputType.multiline,
                   textAlignVertical: TextAlignVertical.top,
@@ -66,11 +80,6 @@ class CustomTextArea extends StatelessWidget {
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     fillColor: Colors.transparent,
-                    hintText: hint,
-                    hintStyle: context.textTheme.headlineMedium?.copyWith(
-                      color: AppColors.outline,
-                      fontSize: 16,
-                    ),
                   ),
                 ),
               ),

@@ -16,7 +16,10 @@ class CareTeamScreen extends ConsumerWidget {
       await launchUrl(Uri(scheme: 'tel', path: '+351$contact'));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e'), backgroundColor: AppColors.danger),
+        SnackBar(
+          content: Text('Error: $e'),
+          backgroundColor: AppColors.errorContainer,
+        ),
       );
     }
   }
@@ -26,7 +29,10 @@ class CareTeamScreen extends ConsumerWidget {
       await launchUrl(Uri(scheme: 'sms', path: '+351$phoneNumber'));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e'), backgroundColor: AppColors.danger),
+        SnackBar(
+          content: Text('Error: $e'),
+          backgroundColor: AppColors.errorContainer,
+        ),
       );
     }
   }
@@ -36,7 +42,10 @@ class CareTeamScreen extends ConsumerWidget {
       await launchUrl(Uri(scheme: 'mailto', path: email));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e'), backgroundColor: AppColors.danger),
+        SnackBar(
+          content: Text('Error: $e'),
+          backgroundColor: AppColors.errorContainer,
+        ),
       );
     }
   }

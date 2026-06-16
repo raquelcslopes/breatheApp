@@ -34,7 +34,7 @@ class CustomChip extends StatelessWidget {
             width: isSelected ? 1.5 : 0.5,
             color: isSelected
                 ? borderColor ?? Colors.white
-                : AppColors.border.withAlpha(20),
+                : AppColors.outline.withAlpha(20),
           ),
         ),
         child: Row(

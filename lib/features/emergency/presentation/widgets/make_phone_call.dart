@@ -43,7 +43,10 @@ class _MakePhoneCallState extends State<MakePhoneCall>
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e'), backgroundColor: AppColors.danger),
+        SnackBar(
+          content: Text('Error: $e'),
+          backgroundColor: AppColors.errorContainer,
+        ),
       );
     }
   }

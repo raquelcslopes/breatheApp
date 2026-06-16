@@ -53,7 +53,7 @@ class FactorsBar extends StatelessWidget {
                   child: LinearProgressIndicator(
                     value: fraction,
                     minHeight: 9,
-                    backgroundColor: AppColors.surfaceAlt,
+                    backgroundColor: AppColors.outlineVariant,
                     valueColor: AlwaysStoppedAnimation(
                       context.colors.outlineVariant,
                     ),

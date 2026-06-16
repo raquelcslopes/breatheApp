@@ -1,6 +1,7 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/models/moods.dart';
 import 'package:breathe/core/router/routes.dart';
+import 'package:breathe/core/theme/app_colors.dart';
 import 'package:breathe/features/journal/data/journal_entry.dart';
 import 'package:breathe/features/journey/domain/journey_provider.dart';
 import 'package:breathe/features/journey/presentation/widgets/factors_bar.dart';
@@ -81,7 +82,7 @@ class _JourneyScreenState extends ConsumerState<JourneyScreen> {
 
   Color _getColorMood(JournalEntry entry) {
     final match = moods.where((m) => m.key == entry.moodKey);
-    return match.isEmpty ? context.colors.tertiary : match.first.bgColor;
+    return match.isEmpty ? context.colors.tertiary : AppColors.background;
   }
 
   //--------------------- WIDGETS ---------------------
