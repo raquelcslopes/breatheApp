@@ -67,7 +67,7 @@ class HomeScreen extends ConsumerWidget {
 
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 35, 24, 28),
+              padding: const EdgeInsets.fromLTRB(20, 35, 20, 28),
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   return SingleChildScrollView(
@@ -82,6 +82,7 @@ class HomeScreen extends ConsumerWidget {
                           _date(context),
                           const SizedBox(height: 20),
                           const HorizontalCalendar(),
+                          const SizedBox(height: 40),
                           SizedBox(
                             width: double.infinity,
                             child: const DailyCheckInCard(),

@@ -1,5 +1,4 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
-import 'package:breathe/core/theme/app_colors.dart';
 import 'package:breathe/features/auth/data/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -16,8 +15,8 @@ class _DrawerHeader extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 26,
-            backgroundColor: AppColors.primary.withAlpha(40),
-            child: Icon(Icons.spa, color: AppColors.primary),
+            backgroundColor: context.colors.primary.withAlpha(40),
+            child: Icon(Icons.spa, color: context.colors.primary),
           ),
           const SizedBox(width: 14),
           Expanded(
@@ -33,7 +32,7 @@ class _DrawerHeader extends StatelessWidget {
                 Text(
                   'Como te sentes hoje?',
                   style: context.textTheme.bodySmall?.copyWith(
-                    color: AppColors.surfaceContainerHighest,
+                    color: context.colors.surfaceContainerHighest,
                   ),
                 ),
               ],
@@ -86,7 +85,7 @@ class _DrawerFooter extends StatelessWidget {
           Icon(
             Icons.logout,
             size: 20,
-            color: AppColors.surfaceContainerHighest,
+            color: context.colors.surfaceContainerHighest,
           ),
           const SizedBox(width: 12),
           TextButton(
@@ -94,7 +93,7 @@ class _DrawerFooter extends StatelessWidget {
             child: Text(
               'Log out',
               style: context.textTheme.bodyMedium?.copyWith(
-                color: AppColors.surfaceContainerHighest,
+                color: context.colors.surfaceContainerHighest,
               ),
             ),
           ),
@@ -122,8 +121,8 @@ class _DrawerItem extends StatelessWidget {
     final selected =
         currentLocation == path || currentLocation.startsWith('$path/');
 
-    final activeColor = AppColors.primary;
-    final inactiveColor = AppColors.surfaceContainerHighest;
+    final activeColor = context.colors.onPrimaryContainer;
+    final inactiveColor = context.colors.surfaceContainerHighest;
     final color = selected ? activeColor : inactiveColor;
 
     return Padding(
@@ -168,15 +167,9 @@ class _DrawerItem extends StatelessWidget {
 
 class CustomDrawer extends StatelessWidget {
   final double blur;
-  final Color tint;
   final int fillAlpha;
 
-  const CustomDrawer({
-    super.key,
-    this.blur = 12,
-    this.tint = AppColors.background,
-    this.fillAlpha = 31,
-  });
+  const CustomDrawer({super.key, this.blur = 12, this.fillAlpha = 31});
 
   @override
   Widget build(BuildContext context) {
@@ -198,11 +191,14 @@ class CustomDrawer extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  tint.withAlpha(fillAlpha + 13),
-                  tint.withAlpha((fillAlpha * 0.5).round()),
+                  context.colors.surface.withAlpha(fillAlpha + 13),
+                  context.colors.surface.withAlpha((fillAlpha * 0.5).round()),
                 ],
               ),
-              border: Border.all(color: tint.withAlpha(64), width: 1),
+              border: Border.all(
+                color: context.colors.surface.withAlpha(64),
+                width: 1,
+              ),
             ),
             child: SafeArea(
               child: Column(
@@ -211,7 +207,7 @@ class CustomDrawer extends StatelessWidget {
 
                   Divider(
                     height: 1,
-                    color: AppColors.surfaceContainerHighest.withAlpha(40),
+                    color: context.colors.surfaceContainerHighest.withAlpha(40),
                   ),
 
                   Expanded(
@@ -260,7 +256,7 @@ class CustomDrawer extends StatelessWidget {
 
                   Divider(
                     height: 1,
-                    color: AppColors.surfaceContainerHighest.withAlpha(40),
+                    color: context.colors.surfaceContainerHighest.withAlpha(40),
                   ),
                   const _DrawerFooter(),
                 ],

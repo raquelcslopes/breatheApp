@@ -48,7 +48,7 @@ class DayCard extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: selected
                   ? context.colors.onPrimary
-                  : context.colors.onPrimary,
+                  : context.colors.inversePrimary,
               fontWeight: FontWeight.w600,
               fontSize: 14,
             ),

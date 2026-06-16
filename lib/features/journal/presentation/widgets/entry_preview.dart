@@ -1,12 +1,11 @@
 import 'dart:ui';
 
 import 'package:breathe/core/extensions/context_extensions.dart';
-import 'package:breathe/core/theme/app_colors.dart';
 import 'package:breathe/features/journal/data/journal_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class EntryPreview extends ConsumerStatefulWidget {
+class EntryPreview extends ConsumerWidget {
   final JournalEntry entry;
   final bool isReadOnly;
   final TextEditingController controller;
@@ -18,26 +17,18 @@ class EntryPreview extends ConsumerStatefulWidget {
     required this.controller,
   });
 
-  @override
-  ConsumerState<EntryPreview> createState() => _EntryPreviewState();
-}
-
-class _EntryPreviewState extends ConsumerState<EntryPreview> {
   final EdgeInsetsGeometry padding = const EdgeInsets.symmetric(
     horizontal: 10,
     vertical: 15,
   );
   final double borderRadius = 20;
   final double blur = 12;
-  final Color tint = AppColors.background;
   final int fillAlpha = 80;
-
-  //--------------------- FUNCTIONS ---------------------
 
   //--------------------- WIDGETS ---------------------
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final radius = BorderRadius.circular(borderRadius);
     return ClipRRect(
       borderRadius: radius,
@@ -47,8 +38,8 @@ class _EntryPreviewState extends ConsumerState<EntryPreview> {
           color: Colors.transparent,
           child: InkWell(
             borderRadius: radius,
-            splashColor: tint.withAlpha(26),
-            highlightColor: tint.withAlpha(13),
+            splashColor: context.colors.surface.withAlpha(26),
+            highlightColor: context.colors.surface.withAlpha(13),
             child: Container(
               padding: padding,
               decoration: BoxDecoration(
@@ -57,19 +48,22 @@ class _EntryPreviewState extends ConsumerState<EntryPreview> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    tint.withAlpha(fillAlpha + 13),
-                    tint.withAlpha((fillAlpha * 0.5).round()),
+                    context.colors.surface.withAlpha(fillAlpha + 13),
+                    context.colors.surface.withAlpha((fillAlpha * 0.5).round()),
                   ],
                 ),
-                border: Border.all(color: tint.withAlpha(64), width: 1),
+                border: Border.all(
+                  color: context.colors.surface.withAlpha(64),
+                  width: 1,
+                ),
               ),
               child: DefaultTextStyle.merge(
                 style: context.textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w300,
                 ),
                 child: TextFormField(
-                  readOnly: widget.isReadOnly,
-                  controller: widget.controller,
+                  readOnly: isReadOnly,
+                  controller: controller,
                   autofocus: true,
                   minLines: 1,
                   maxLines: null,

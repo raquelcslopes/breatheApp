@@ -127,7 +127,7 @@ class _EntryScreenState extends ConsumerState<EntryScreen> {
       formattedDate.toUpperCase(),
       style: Theme.of(context).textTheme.titleMedium?.copyWith(
         fontSize: 12,
-        color: AppColors.textMuted,
+        color: context.colors.surfaceDim,
       ),
     );
   }
@@ -157,10 +157,13 @@ class _EntryScreenState extends ConsumerState<EntryScreen> {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
+                  stops: const [0.0, 0.22, 0.55, 0.88, 1.0],
                   colors: [
-                    Colors.black26,
-                    Colors.transparent,
-                    AppColors.background,
+                    context.colors.surface.withValues(alpha: 0.55),
+                    context.colors.surface.withValues(alpha: 0.05),
+                    context.colors.surface.withValues(alpha: 0.15),
+                    context.colors.surface.withValues(alpha: 0.60),
+                    context.colors.surface.withValues(alpha: 0.80),
                   ],
                 ),
               ),
@@ -198,7 +201,7 @@ class _EntryScreenState extends ConsumerState<EntryScreen> {
                           text: TextSpan(
                             text: 'On my mind this day: ',
                             style: context.textTheme.bodySmall?.copyWith(
-                              color: AppColors.textMuted,
+                              color: context.colors.surfaceDim,
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
                             ),
@@ -206,7 +209,7 @@ class _EntryScreenState extends ConsumerState<EntryScreen> {
                               TextSpan(
                                 text: data.problemKeys.join('• '),
                                 style: context.textTheme.bodySmall?.copyWith(
-                                  color: AppColors.textMuted,
+                                  color: context.colors.surfaceDim,
                                   fontSize: 14,
                                 ),
                               ),
@@ -218,11 +221,11 @@ class _EntryScreenState extends ConsumerState<EntryScreen> {
                           margin: const EdgeInsets.symmetric(vertical: 8),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(50),
-                            gradient: const LinearGradient(
+                            gradient: LinearGradient(
                               colors: [
                                 Colors.transparent,
-                                AppColors.outline,
-                                AppColors.outline,
+                                context.colors.outline,
+                                context.colors.outline,
                                 Colors.transparent,
                               ],
                               stops: [0.0, 0.2, 0.8, 1.0],
@@ -288,7 +291,7 @@ class _EntryScreenState extends ConsumerState<EntryScreen> {
               child: Builder(
                 builder: (context) => IconButton(
                   icon: const Icon(Icons.arrow_back_rounded),
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                   onPressed: () => context.pop(),
                 ),
               ),

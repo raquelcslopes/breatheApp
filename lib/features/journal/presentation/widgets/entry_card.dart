@@ -1,5 +1,4 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
-import 'package:breathe/core/theme/app_colors.dart';
 import 'package:breathe/core/utils/capitalize.dart';
 import 'package:breathe/features/journal/data/journal_entry.dart';
 import 'package:flutter/material.dart';
@@ -79,13 +78,13 @@ class _EntryCardState extends State<EntryCard> {
                   Text(
                     'Feeling ${capitalize(widget.entry.moodKey ?? '-')}',
                     style: context.textTheme.headlineSmall?.copyWith(
-                      fontSize: 28,
+                      fontSize: 24,
                     ),
                   ),
                   Text(
                     _getHour(widget.entry.createdAt),
                     style: context.textTheme.bodySmall?.copyWith(
-                      color: AppColors.textSecondary.withValues(alpha: 0.6),
+                      color: context.colors.secondary.withValues(alpha: 0.6),
                     ),
                   ),
                 ],

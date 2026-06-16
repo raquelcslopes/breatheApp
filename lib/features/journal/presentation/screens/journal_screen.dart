@@ -41,8 +41,8 @@ class JournalScreen extends ConsumerWidget {
                   center: Alignment.center,
                   radius: 1.0,
                   colors: [
-                    const Color(0xFF12140E).withAlpha(100),
-                    const Color(0xFF12140E).withAlpha(200),
+                    context.colors.surface.withAlpha(100),
+                    context.colors.surface.withAlpha(200),
                   ],
                   stops: const [0.0, 1.0],
                 ),
@@ -95,7 +95,7 @@ class JournalScreen extends ConsumerWidget {
                                       label.toUpperCase(),
                                       style: context.textTheme.labelLarge
                                           ?.copyWith(
-                                            color: AppColors.textMuted,
+                                            color: context.colors.surfaceDim,
                                           ),
                                     ),
                                   ),
@@ -126,7 +126,7 @@ class JournalScreen extends ConsumerWidget {
               child: Builder(
                 builder: (context) => IconButton(
                   icon: const Icon(Icons.menu),
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                   onPressed: () => Scaffold.of(context).openDrawer(),
                 ),
               ),

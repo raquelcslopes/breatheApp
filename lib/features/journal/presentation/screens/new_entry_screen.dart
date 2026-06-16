@@ -131,10 +131,13 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
+                  stops: const [0.0, 0.22, 0.55, 0.88, 1.0],
                   colors: [
-                    Colors.black26,
-                    Colors.transparent,
-                    AppColors.background,
+                    context.colors.surface.withValues(alpha: 0.55),
+                    context.colors.surface.withValues(alpha: 0.05),
+                    context.colors.surface.withValues(alpha: 0.15),
+                    context.colors.surface.withValues(alpha: 0.60),
+                    context.colors.surface.withValues(alpha: 0.80),
                   ],
                 ),
               ),
@@ -150,14 +153,15 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
                   _date(context),
                   const SizedBox(height: 8),
                   Container(
+                    height: 0.5,
                     margin: const EdgeInsets.symmetric(vertical: 8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
-                      gradient: const LinearGradient(
+                      gradient: LinearGradient(
                         colors: [
                           Colors.transparent,
-                          AppColors.outline,
-                          AppColors.outline,
+                          context.colors.outline,
+                          context.colors.outline,
                           Colors.transparent,
                         ],
                         stops: [0.0, 0.2, 0.8, 1.0],
@@ -166,6 +170,7 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
                   ),
                   const SizedBox(height: 20),
                   Expanded(child: CustomTextArea(controller: _writtingSpace)),
+                  const SizedBox(height: 20),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -214,7 +219,7 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
               child: Builder(
                 builder: (context) => IconButton(
                   icon: const Icon(Icons.menu),
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                   onPressed: () => Scaffold.of(context).openDrawer(),
                 ),
               ),

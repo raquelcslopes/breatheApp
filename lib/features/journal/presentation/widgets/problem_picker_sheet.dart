@@ -1,6 +1,5 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/models/problems.dart';
-import 'package:breathe/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class ProblemPicker extends StatefulWidget {
@@ -38,12 +37,10 @@ class _ProblemPickerState extends State<ProblemPicker> {
   Widget _problemTile(Problems problem) {
     final isSelected = _current.any((p) => p.key == problem.key);
     return ListTile(
-      tileColor: isSelected ? problem.bgColor.withAlpha(80) : null,
+      tileColor: isSelected ? context.colors.primary.withAlpha(80) : null,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       title: Text(problem.title),
-      trailing: isSelected
-          ? const Icon(Icons.check_rounded, color: AppColors.background)
-          : null,
+      trailing: isSelected ? const Icon(Icons.check_rounded) : null,
       onTap: () => setState(() {
         if (isSelected) {
           _current.removeWhere((p) => p.key == problem.key);
@@ -69,7 +66,7 @@ class _ProblemPickerState extends State<ProblemPicker> {
               height: 5,
               margin: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
-                color: AppColors.outline,
+                color: context.colors.outline,
                 borderRadius: BorderRadius.circular(5),
               ),
             ),

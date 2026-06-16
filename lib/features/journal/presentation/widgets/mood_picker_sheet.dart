@@ -1,6 +1,5 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/models/moods.dart';
-import 'package:breathe/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class MoodPickerSheet extends StatefulWidget {
@@ -42,19 +41,21 @@ class _MoodPickerSheetState extends State<MoodPickerSheet> {
             height: 5,
             margin: const EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
-              color: AppColors.outline,
+              color: context.colors.outline,
               borderRadius: BorderRadius.circular(5),
             ),
           ),
           for (final mood in moods)
             ListTile(
+              tileColor: mood.key == _current?.key
+                  ? context.colors.primary.withAlpha(80)
+                  : null,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              leading: CircleAvatar(radius: 9),
               title: Text(mood.title),
               trailing: mood.key == _current?.key
-                  ? const Icon(Icons.check_rounded, color: AppColors.background)
+                  ? Icon(Icons.check_rounded)
                   : null,
               onTap: () {
                 setState(() => _current = mood);

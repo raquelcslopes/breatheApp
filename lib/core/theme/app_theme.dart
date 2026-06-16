@@ -165,6 +165,7 @@ abstract final class AppTheme {
 
       primary: AppColors.primary,
       onPrimary: AppColors.onPrimary,
+      onPrimaryContainer: AppColors.primary,
 
       secondary: AppColors.secondary,
       onSecondary: AppColors.onSecondary,
@@ -177,6 +178,7 @@ abstract final class AppTheme {
       surface: AppColors.surface,
       onSurface: AppColors.textPrimary,
       surfaceDim: AppColors.textMuted,
+      inversePrimary: AppColors.primary,
 
       outline: AppColors.outline,
     );

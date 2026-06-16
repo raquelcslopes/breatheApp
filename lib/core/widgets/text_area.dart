@@ -1,5 +1,4 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
-import 'package:breathe/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
@@ -9,7 +8,6 @@ class CustomTextArea extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final double borderRadius;
   final double blur;
-  final Color tint;
   final int fillAlpha;
 
   const CustomTextArea({
@@ -19,7 +17,6 @@ class CustomTextArea extends StatelessWidget {
     this.padding = const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
     this.borderRadius = 20,
     this.blur = 12,
-    this.tint = AppColors.background,
     this.fillAlpha = 80,
   });
 
@@ -35,8 +32,8 @@ class CustomTextArea extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             borderRadius: radius,
-            splashColor: tint.withAlpha(26),
-            highlightColor: tint.withAlpha(13),
+            splashColor: context.colors.surface.withAlpha(26),
+            highlightColor: context.colors.surface.withAlpha(13),
             child: Container(
               padding: padding,
               decoration: BoxDecoration(
@@ -45,11 +42,14 @@ class CustomTextArea extends StatelessWidget {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    tint.withAlpha(fillAlpha + 13),
-                    tint.withAlpha((fillAlpha * 0.5).round()),
+                    context.colors.surface.withAlpha(fillAlpha + 13),
+                    context.colors.surface.withAlpha((fillAlpha * 0.5).round()),
                   ],
                 ),
-                border: Border.all(color: tint.withAlpha(64), width: 1),
+                border: Border.all(
+                  color: context.colors.surface.withAlpha(64),
+                  width: 1,
+                ),
               ),
               child: DefaultTextStyle.merge(
                 style: context.textTheme.bodyLarge?.copyWith(
@@ -68,7 +68,7 @@ class CustomTextArea extends StatelessWidget {
                     fillColor: Colors.transparent,
                     hintText: hint,
                     hintStyle: context.textTheme.headlineMedium?.copyWith(
-                      color: AppColors.outline,
+                      color: context.colors.outline,
                       fontSize: 16,
                     ),
                   ),
