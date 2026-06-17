@@ -1,5 +1,4 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
-import 'package:breathe/core/theme/app_colors.dart';
 import 'package:breathe/features/journal/data/journal_entry.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -49,20 +48,11 @@ class MoodChart extends StatelessWidget {
     return spots;
   }
 
-  Color _dotColor(double y) {
-    switch (y.toInt()) {
-      case 0:
-        return AppColors.background;
-      case 1:
-        return AppColors.background;
-      default:
-        return AppColors.background;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final spots = _buildSpots();
+
+    final gradientColors = [context.colors.primary, context.colors.tertiary];
 
     return SizedBox(
       height: 200,
@@ -74,7 +64,8 @@ class MoodChart extends StatelessWidget {
           maxY: 2,
           gridData: FlGridData(
             show: true,
-            drawVerticalLine: false,
+            drawVerticalLine:
+                false, // muda para true para ficar igual ao sample
             horizontalInterval: 1,
             getDrawingHorizontalLine: (_) =>
                 FlLine(color: context.colors.outline, strokeWidth: 1),
@@ -134,14 +125,24 @@ class MoodChart extends StatelessWidget {
               spots: spots,
               isCurved: true,
               preventCurveOverShooting: true,
-              color: context.colors.outline,
-              barWidth: 1,
+              gradient: LinearGradient(colors: gradientColors),
+              barWidth: 4,
+              isStrokeCapRound: true,
               dotData: FlDotData(
-                show: true,
+                show: false,
                 getDotPainter: (spot, _, __, ___) => FlDotCirclePainter(
-                  radius: 5,
-                  color: _dotColor(spot.y),
-                  strokeWidth: 0,
+                  radius: 4,
+                  color: context.colors.surface,
+                  strokeWidth: 2,
+                  strokeColor: context.colors.primary,
+                ),
+              ),
+              belowBarData: BarAreaData(
+                show: true,
+                gradient: LinearGradient(
+                  colors: gradientColors
+                      .map((c) => c.withValues(alpha: 0.25))
+                      .toList(),
                 ),
               ),
             ),

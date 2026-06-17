@@ -2,7 +2,7 @@ import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/theme/app_colors.dart';
 import 'package:breathe/features/care_team/data/care_team_contact.dart';
 import 'package:breathe/features/care_team/domain/care_team_provider.dart';
-import 'package:breathe/features/care_team/presentation/add_edit_contact.dart';
+import 'package:breathe/features/care_team/presentation/widgets/add_edit_contact.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

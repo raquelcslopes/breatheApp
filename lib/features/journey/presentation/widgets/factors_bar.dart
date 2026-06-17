@@ -1,6 +1,5 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/models/problems.dart';
-import 'package:breathe/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class FactorsBar extends StatelessWidget {
@@ -17,17 +16,11 @@ class FactorsBar extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: context.colors.surface,
-        border: Border.all(color: context.colors.outline),
+        color: context.colors.surfaceContainer,
+        border: Border.all(
+          color: context.colors.outline.withValues(alpha: 0.05),
+        ),
         borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x5728281C),
-            offset: Offset(0, 8),
-            blurRadius: 7,
-            spreadRadius: -9,
-          ),
-        ],
       ),
       child: Column(
         children: factors.map((f) {
@@ -43,7 +36,7 @@ class FactorsBar extends StatelessWidget {
                     Text(_title(f.key)),
                     Text(
                       '${f.value}',
-                      style: TextStyle(color: AppColors.textMuted),
+                      style: TextStyle(color: context.colors.surfaceDim),
                     ),
                   ],
                 ),
@@ -53,10 +46,8 @@ class FactorsBar extends StatelessWidget {
                   child: LinearProgressIndicator(
                     value: fraction,
                     minHeight: 9,
-                    backgroundColor: AppColors.outlineVariant,
-                    valueColor: AlwaysStoppedAnimation(
-                      context.colors.outlineVariant,
-                    ),
+                    backgroundColor: context.colors.primary,
+                    valueColor: AlwaysStoppedAnimation(context.colors.primary),
                   ),
                 ),
               ],

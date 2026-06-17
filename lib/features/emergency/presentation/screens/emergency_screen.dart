@@ -1,4 +1,5 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
+import 'package:breathe/core/widgets/drawer.dart';
 import 'package:breathe/features/care_team/domain/care_team_provider.dart';
 import 'package:breathe/features/emergency/domain/emergency_provider.dart';
 import 'package:breathe/features/emergency/presentation/widgets/add_trusted_person.dart';
@@ -19,18 +20,7 @@ class EmergencyScreen extends ConsumerWidget {
     final emergencyProvider = ref.watch(emergencyContactsProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('EMERGENCY'),
-            Text(
-              "You don't have to face this alone",
-              style: context.textTheme.bodySmall,
-            ),
-          ],
-        ),
-      ),
+      drawer: CustomDrawer(),
       body: trustedContactsProvider.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) =>
@@ -97,76 +87,129 @@ class EmergencyScreen extends ConsumerWidget {
           }
           final hasPhoneNumber = contact.phoneNumber != null;
 
-          return SafeArea(
-            child: Padding(
-              padding: EdgeInsets.all(18),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Reach your trusted person',
-                      style: context.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    hasPhoneNumber
-                        ? MakePhoneCall(contact: contact)
-                        : SizedBox.shrink(),
+          return Stack(
+            children: [
+              SafeArea(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(18, 35, 18, 18),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'EMERGENCY',
+                          style: context.textTheme.headlineSmall?.copyWith(
+                            fontSize: 22,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          "You don't have to face this alone",
+                          style: context.textTheme.bodySmall?.copyWith(
+                            fontSize: 16,
+                          ),
+                        ),
+                        const SizedBox(height: 40),
 
-                    const SizedBox(height: 40),
+                        Text(
+                          'Reach your trusted person'.toUpperCase(),
+                          style: context.textTheme.labelMedium?.copyWith(
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        hasPhoneNumber
+                            ? MakePhoneCall(contact: contact)
+                            : SizedBox.shrink(),
 
-                    Text(
-                      'Or send a message',
-                      style: context.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      'Not sure what to say? This is ready to send',
-                      style: context.textTheme.bodySmall,
-                    ),
-                    const SizedBox(height: 10),
-                    SendMessage(contact: contact),
-                    const SizedBox(height: 40),
+                        const SizedBox(height: 40),
 
-                    Text(
-                      'Talk to someone now',
-                      style: context.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
+                        Text(
+                          'Or send a message'.toUpperCase(),
+                          style: context.textTheme.labelMedium?.copyWith(
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          'Not sure what to say? This is ready to send',
+                          style: context.textTheme.bodySmall,
+                        ),
+                        const SizedBox(height: 10),
+                        SendMessage(contact: contact),
 
-                    emergencyProvider.when(
-                      data: (emergencyContacts) {
-                        if (emergencyContacts.isEmpty) {
-                          return const Center(
-                            child: Text('An error has occured'),
-                          );
-                        }
-                        return Column(
-                          children: emergencyContacts.map((emergencyContact) {
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0),
-                              child: EmergencyContactsWidget(
-                                contact: emergencyContact,
-                              ),
+                        const SizedBox(height: 40),
+                        Container(
+                          height: 0.5,
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.transparent,
+                                context.colors.outline,
+                                context.colors.outline,
+                                Colors.transparent,
+                              ],
+                              stops: [0.0, 0.2, 0.8, 1.0],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+
+                        Text(
+                          'Talk to someone now',
+                          style: context.textTheme.labelMedium?.copyWith(
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        emergencyProvider.when(
+                          data: (emergencyContacts) {
+                            if (emergencyContacts.isEmpty) {
+                              return const Center(
+                                child: Text('An error has occured'),
+                              );
+                            }
+                            return Column(
+                              children: emergencyContacts.map((
+                                emergencyContact,
+                              ) {
+                                final isINEM =
+                                    emergencyContact.phoneNumber == '112';
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 16.0),
+                                  child: EmergencyContactsWidget(
+                                    contact: emergencyContact,
+                                    isINEM: isINEM,
+                                  ),
+                                );
+                              }).toList(),
                             );
-                          }).toList(),
-                        );
-                      },
-                      error: (e, _) => Center(child: Text('Error: $e')),
-                      loading: () =>
-                          const Center(child: CircularProgressIndicator()),
+                          },
+                          error: (e, _) => Center(child: Text('Error: $e')),
+                          loading: () =>
+                              const Center(child: CircularProgressIndicator()),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 60),
-                  ],
+                  ),
                 ),
               ),
-            ),
+
+              SafeArea(
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Builder(
+                    builder: (context) => IconButton(
+                      icon: const Icon(Icons.menu),
+                      color: context.colors.primary,
+                      onPressed: () => Scaffold.of(context).openDrawer(),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           );
         },
       ),

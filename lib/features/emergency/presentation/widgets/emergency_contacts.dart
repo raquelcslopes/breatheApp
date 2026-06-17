@@ -6,8 +6,13 @@ import 'package:url_launcher/url_launcher.dart';
 
 class EmergencyContactsWidget extends StatelessWidget {
   final EmergencyContact contact;
+  final bool isINEM;
 
-  const EmergencyContactsWidget({super.key, required this.contact});
+  const EmergencyContactsWidget({
+    super.key,
+    required this.contact,
+    required this.isINEM,
+  });
 
   Future<void> _makePhoneCall(
     BuildContext context,
@@ -29,50 +34,54 @@ class EmergencyContactsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        boxShadow: const [
+        color: context.colors.surfaceContainer,
+        border: Border.all(
+          color: context.colors.outlineVariant,
+          strokeAlign: BorderSide.strokeAlignInside,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
           BoxShadow(
-            color: Color(0x5728281C),
-            offset: Offset(0, 8),
-            blurRadius: 5,
-            spreadRadius: -9,
+            color: context.colors.surface.withValues(alpha: 0.09),
+            blurRadius: 60,
+            spreadRadius: -8,
+            offset: const Offset(0, 10),
           ),
         ],
-        color: context.colors.surface,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: context.colors.outline, width: 0.5),
       ),
+
       child: Padding(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(20),
         child: Row(
           children: [
             CircleAvatar(
-              backgroundColor: context.colors.primary.withAlpha(40),
-              child: Icon(Icons.favorite_border, color: context.colors.primary),
+              backgroundColor: isINEM
+                  ? context.colors.error
+                  : context.colors.primary.withAlpha(40),
+              child: isINEM
+                  ? Icon(
+                      Icons.sos_rounded,
+                      color: context.colors.errorContainer,
+                    )
+                  : Icon(Icons.favorite_border, color: context.colors.primary),
             ),
             const SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    contact.name,
-                    style: context.textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  Text(contact.name, style: context.textTheme.bodyLarge),
                   const SizedBox(height: 5),
                   Text(contact.description, style: context.textTheme.bodySmall),
                 ],
               ),
             ),
-            CircleAvatar(
-              backgroundColor: context.colors.primary.withAlpha(40),
-              child: TextButton.icon(
-                onPressed: () => _makePhoneCall(context, contact),
-                label: Icon(
-                  Icons.phone_outlined,
-                  color: context.colors.primary,
-                ),
+            TextButton.icon(
+              onPressed: () => _makePhoneCall(context, contact),
+              label: Icon(
+                Icons.phone_outlined,
+                color: isINEM ? context.colors.error : context.colors.primary,
+                size: 25,
               ),
             ),
           ],

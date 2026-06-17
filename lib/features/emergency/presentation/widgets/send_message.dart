@@ -97,10 +97,8 @@ class _SendMessageState extends State<SendMessage> {
         Row(
           children: [
             const Icon(Icons.location_on_outlined),
-            const Text(
-              'Share my location',
-              style: TextStyle(fontWeight: FontWeight.w600),
-            ),
+            const SizedBox(width: 10),
+            Text('Share my location', style: context.textTheme.bodyMedium),
           ],
         ),
 
@@ -118,28 +116,32 @@ class _SendMessageState extends State<SendMessage> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: context.colors.surface,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: context.colors.outline, width: 0.5),
-        boxShadow: const [
+        color: context.colors.surfaceContainer,
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(
+          color: context.colors.outlineVariant,
+          strokeAlign: BorderSide.strokeAlignInside,
+        ),
+        boxShadow: [
           BoxShadow(
-            color: Color(0x5728281C),
-            offset: Offset(0, 8),
-            blurRadius: 5,
-            spreadRadius: -9,
+            color: context.colors.surface.withValues(alpha: 0.09),
+            blurRadius: 60,
+            spreadRadius: -8,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
             TextFormField(
-              style: TextStyle(
+              style: context.textTheme.bodyLarge?.copyWith(
                 fontStyle: FontStyle.italic,
                 overflow: TextOverflow.ellipsis,
               ),
               decoration: InputDecoration(
+                isCollapsed: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.transparent),
@@ -158,9 +160,9 @@ class _SendMessageState extends State<SendMessage> {
               controller: _messageController,
               textAlign: TextAlign.justify,
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 24),
             _shareMyLocation(),
-            const SizedBox(height: 10),
+            const SizedBox(height: 24),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -171,11 +173,17 @@ class _SendMessageState extends State<SendMessage> {
                   }),
                   label: Text('Edit'),
                   icon: Icon(Icons.edit),
+                  style: OutlinedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  ),
                 ),
                 ElevatedButton.icon(
                   onPressed: () => _sendMessageTo(widget.contact),
                   label: Text('Send message to ${widget.contact.name}'),
                   icon: Icon(Icons.send),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  ),
                 ),
               ],
             ),

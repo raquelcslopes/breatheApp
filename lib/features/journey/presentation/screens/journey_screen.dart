@@ -1,7 +1,6 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
-import 'package:breathe/core/models/moods.dart';
 import 'package:breathe/core/router/routes.dart';
-import 'package:breathe/core/theme/app_colors.dart';
+import 'package:breathe/core/widgets/drawer.dart';
 import 'package:breathe/features/journal/data/journal_entry.dart';
 import 'package:breathe/features/journey/domain/journey_provider.dart';
 import 'package:breathe/features/journey/presentation/widgets/factors_bar.dart';
@@ -80,13 +79,8 @@ class _JourneyScreenState extends ConsumerState<JourneyScreen> {
     return sorted;
   }
 
-  Color _getColorMood(JournalEntry entry) {
-    final match = moods.where((m) => m.key == entry.moodKey);
-    return match.isEmpty ? context.colors.tertiary : AppColors.background;
-  }
-
   //--------------------- WIDGETS ---------------------
-  Widget _appBar(BuildContext context) {
+  Widget _header(BuildContext context) {
     final today = DateTime.now();
     final weekStart = today.subtract(const Duration(days: 6));
 
@@ -107,7 +101,7 @@ class _JourneyScreenState extends ConsumerState<JourneyScreen> {
     final entries = ref.watch(watchEntriesProvider);
 
     return Scaffold(
-      appBar: AppBar(title: _appBar(context)),
+      drawer: CustomDrawer(),
       body: entries.when(
         loading: () => Center(child: CircularProgressIndicator()),
         error: (e, _) =>
@@ -154,82 +148,125 @@ class _JourneyScreenState extends ConsumerState<JourneyScreen> {
 
           final factors = _topFactors(entriesList);
           final maxCount = factors.isEmpty ? 1 : factors.first.value;
-          return SafeArea(
-            child: Padding(
-              padding: EdgeInsets.all(18),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    MoodChartCard(entries: entriesList),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Expanded(
-                          child: SimpleCard(
-                            title: 'Most days',
-                            text:
-                                _mostCommonMood(entriesList) ??
-                                'No mood recorded',
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: SimpleCard(
-                            title: 'Days logged',
-                            text: _daysLogged(entriesList),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 40),
-                    Text(
-                      'WHAT WEIGHED MOST',
-                      style: context.textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 10),
-                    FactorsBar(factors: factors, maxCount: maxCount),
-                    const SizedBox(height: 40),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'YOUR NOTES',
-                          style: context.textTheme.titleMedium,
-                        ),
-                        if (entriesList.length > 4)
-                          TextButton(
-                            onPressed: () => context.push(AppRoute.journalPath),
-                            child: Text(
-                              'View all ${entriesList.length} entries',
-                            ),
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    ...entriesList.take(4).map((entry) {
-                      return Column(
-                        children: [
-                          NoteCard(
-                            color: _getColorMood(entry),
-                            date: entry.createdAt,
-                            mood: entry.moodKey ?? '',
-                            text: entry.text,
-                            onTap: () => context.pushNamed(
-                              AppRoute.journalEntry,
-                              pathParameters: {'id': entry.id},
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                        ],
-                      );
-                    }),
-                    const SizedBox(height: 60),
-                  ],
+          return Stack(
+            children: [
+              Positioned.fill(
+                child: Image.asset(
+                  'lib/assets/background.png',
+                  fit: BoxFit.cover,
                 ),
               ),
-            ),
+
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: RadialGradient(
+                      center: Alignment.center,
+                      radius: 1.0,
+                      colors: [
+                        context.colors.surface.withAlpha(100),
+                        context.colors.surface.withAlpha(200),
+                      ],
+                      stops: const [0.0, 1.0],
+                    ),
+                  ),
+                ),
+              ),
+
+              SafeArea(
+                child: Padding(
+                  padding: EdgeInsets.all(18),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 35),
+                        _header(context),
+                        const SizedBox(height: 30),
+                        MoodChartCard(entries: entriesList),
+                        const SizedBox(height: 10),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              child: SimpleCard(
+                                title: 'Most days',
+                                text:
+                                    _mostCommonMood(entriesList) ??
+                                    'No mood recorded',
+                              ),
+                            ),
+                            const SizedBox(width: 20),
+                            Expanded(
+                              child: SimpleCard(
+                                title: 'Days logged',
+                                text: _daysLogged(entriesList),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 40),
+                        Text(
+                          'WHAT WEIGHED MOST',
+                          style: context.textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 10),
+                        FactorsBar(factors: factors, maxCount: maxCount),
+                        const SizedBox(height: 40),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'YOUR NOTES',
+                              style: context.textTheme.titleMedium,
+                            ),
+                            if (entriesList.length > 4)
+                              TextButton(
+                                onPressed: () =>
+                                    context.push(AppRoute.journalPath),
+                                child: Text(
+                                  'View all ${entriesList.length} entries',
+                                ),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        ...entriesList.take(4).map((entry) {
+                          return Column(
+                            children: [
+                              NoteCard(
+                                date: entry.createdAt,
+                                mood: entry.moodKey ?? '',
+                                text: entry.text,
+                                onTap: () => context.pushNamed(
+                                  AppRoute.journalEntry,
+                                  pathParameters: {'id': entry.id},
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                            ],
+                          );
+                        }),
+                        const SizedBox(height: 60),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              SafeArea(
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Builder(
+                    builder: (context) => IconButton(
+                      icon: const Icon(Icons.menu),
+                      color: context.colors.primary,
+                      onPressed: () => Scaffold.of(context).openDrawer(),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           );
         },
       ),

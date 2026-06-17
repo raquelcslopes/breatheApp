@@ -12,17 +12,11 @@ class SimpleCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: context.colors.surface,
-        border: Border.all(color: context.colors.outline, width: 0.5),
+        color: context.colors.surfaceContainer,
+        border: Border.all(
+          color: context.colors.outline.withValues(alpha: 0.05),
+        ),
         borderRadius: BorderRadius.circular(10),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x5728281C),
-            offset: Offset(0, 8),
-            blurRadius: 7,
-            spreadRadius: -9,
-          ),
-        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

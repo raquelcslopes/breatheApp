@@ -1,10 +1,8 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
-import 'package:breathe/core/extensions/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class NoteCard extends StatefulWidget {
-  final Color color;
   final DateTime date;
   final String mood;
   final String text;
@@ -12,7 +10,6 @@ class NoteCard extends StatefulWidget {
 
   const NoteCard({
     super.key,
-    required this.color,
     required this.date,
     required this.mood,
     required this.text,
@@ -51,17 +48,11 @@ class _NoteCardState extends State<NoteCard> {
       onTap: widget.onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: context.colors.surface,
-          border: Border.all(color: context.colors.outline),
+          color: context.colors.surfaceContainerLow.withValues(alpha: 0.4),
+          border: Border.all(
+            color: context.colors.outline.withValues(alpha: 0.05),
+          ),
           borderRadius: BorderRadius.circular(20),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x5728281C),
-              offset: Offset(0, 8),
-              blurRadius: 7,
-              spreadRadius: -9,
-            ),
-          ],
         ),
         child: Expanded(
           child: Padding(
@@ -71,8 +62,6 @@ class _NoteCardState extends State<NoteCard> {
               children: [
                 Row(
                   children: [
-                    CircleAvatar(backgroundColor: widget.color, minRadius: 6),
-                    const SizedBox(width: 5),
                     Text(
                       _getHour(widget.date),
                       style: context.textTheme.bodySmall?.copyWith(
@@ -91,7 +80,7 @@ class _NoteCardState extends State<NoteCard> {
                   widget.text,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.diaryHint,
+                  style: context.textTheme.bodySmall,
                 ),
               ],
             ),

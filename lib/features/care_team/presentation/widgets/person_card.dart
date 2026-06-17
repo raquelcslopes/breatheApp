@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +10,10 @@ class PersonCard extends StatelessWidget {
   final Function()? onTapCall;
   final Function()? onTapMessage;
   final Function()? onTapEmail;
+  final EdgeInsetsGeometry padding;
+  final double borderRadius;
+  final double blur;
+  final int fillAlpha;
 
   const PersonCard({
     super.key,
@@ -17,6 +23,10 @@ class PersonCard extends StatelessWidget {
     required this.onTapCall,
     required this.onTapMessage,
     required this.onTapEmail,
+    this.padding = const EdgeInsets.all(20),
+    this.borderRadius = 18,
+    this.blur = 12,
+    this.fillAlpha = 31,
   });
 
   String _getFirstLetters(String name) {
@@ -36,95 +46,170 @@ class PersonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: context.colors.surface,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x5728281C),
-            offset: Offset(0, 8),
-            blurRadius: 7,
-            spreadRadius: -9,
-          ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            top: 0,
-            right: 0,
-            child: InkWell(
-              onTap: onTapEdit,
-              child: Icon(Icons.edit_note_rounded, size: 20),
-            ),
-          ),
-
-          Column(
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 28,
-                    backgroundColor: context.colors.tertiary.withAlpha(40),
-                    child: Text(
-                      _getFirstLetters(name),
-                      style: context.textTheme.titleLarge?.copyWith(
-                        color: context.colors.tertiary,
+    final radius = BorderRadius.circular(borderRadius);
+    return ClipRRect(
+      borderRadius: radius,
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: radius,
+            splashColor: context.colors.surface.withAlpha(26),
+            highlightColor: context.colors.surface.withAlpha(13),
+            child: Container(
+              padding: padding,
+              decoration: BoxDecoration(
+                borderRadius: radius,
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    context.colors.surface.withAlpha(fillAlpha + 13),
+                    context.colors.surface.withAlpha((fillAlpha * 0.5).round()),
+                  ],
+                ),
+                border: Border.all(
+                  color: context.colors.surface.withAlpha(64),
+                  width: 1,
+                ),
+              ),
+              child: DefaultTextStyle.merge(
+                style: const TextStyle(fontWeight: FontWeight.w600),
+                child: Stack(
+                  children: [
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: InkWell(
+                        onTap: onTapEdit,
+                        child: Icon(Icons.edit_note_rounded, size: 20),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
+
+                    Column(
                       children: [
-                        Text(
-                          name,
-                          style: context.textTheme.titleMedium?.copyWith(
-                            color: context.colors.onSurface,
-                          ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 64,
+                              width: 64,
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: context.colors.primaryFixedDim
+                                      .withValues(alpha: 0.2),
+                                  width: 2,
+                                ),
+                              ),
+                              child: CircleAvatar(
+                                backgroundColor: context.colors.onPrimary,
+                                child: Text(
+                                  _getFirstLetters(name),
+                                  style: context.textTheme.headlineSmall,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 14),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    name,
+                                    style: context.textTheme.headlineSmall
+                                        ?.copyWith(fontSize: 20),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    doctorType.toUpperCase(),
+                                    style: context.textTheme.titleMedium
+                                        ?.copyWith(
+                                          letterSpacing: 1.2,
+                                          fontWeight: FontWeight.w100,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 2),
-                        Text(
-                          doctorType[0].toUpperCase() + doctorType.substring(1),
-                          style: context.textTheme.bodySmall?.copyWith(
-                            color: context.colors.tertiary,
-                          ),
+                        const SizedBox(height: 15),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            OutlinedButton.icon(
+                              onPressed: onTapCall,
+                              label: Text(
+                                'Call'.toUpperCase(),
+                                style: context.textTheme.bodyMedium?.copyWith(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              icon: Icon(Icons.phone_in_talk_outlined),
+                              style: OutlinedButton.styleFrom(
+                                side: BorderSide(
+                                  width: 1,
+                                  color: context.colors.outline.withValues(
+                                    alpha: 0.3,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            OutlinedButton.icon(
+                              onPressed: onTapMessage,
+                              style: OutlinedButton.styleFrom(
+                                side: BorderSide(
+                                  width: 1,
+                                  color: context.colors.outline.withValues(
+                                    alpha: 0.3,
+                                  ),
+                                ),
+                              ),
+                              label: Text(
+                                'Message'.toUpperCase(),
+                                style: context.textTheme.bodyMedium?.copyWith(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              icon: Icon(Icons.chat_bubble_outline_rounded),
+                            ),
+                            OutlinedButton.icon(
+                              onPressed: onTapEmail,
+                              style: OutlinedButton.styleFrom(
+                                side: BorderSide(
+                                  width: 1,
+                                  color: context.colors.outline.withValues(
+                                    alpha: 0.3,
+                                  ),
+                                ),
+                              ),
+                              label: Text(
+                                'Email'.toUpperCase(),
+                                style: context.textTheme.bodyMedium?.copyWith(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              icon: Icon(Icons.email_outlined),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              const SizedBox(height: 15),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  OutlinedButton.icon(
-                    onPressed: onTapCall,
-                    label: Text('Call'),
-                    icon: Icon(Icons.phone_in_talk_outlined),
-                  ),
-                  OutlinedButton.icon(
-                    onPressed: onTapMessage,
-                    label: Text('Message'),
-                    icon: Icon(Icons.chat_bubble_outline_rounded),
-                  ),
-                  OutlinedButton.icon(
-                    onPressed: onTapEmail,
-                    label: Text('Email'),
-                    icon: Icon(Icons.email_outlined),
-                  ),
-                ],
-              ),
-            ],
+            ),
           ),
-        ],
+        ),
       ),
     );
   }

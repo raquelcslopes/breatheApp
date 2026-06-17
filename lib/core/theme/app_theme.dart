@@ -23,10 +23,11 @@ abstract final class AppTheme {
       error: AppColorsLight.error,
       errorContainer: AppColorsLight.errorContainer,
 
-      surface: AppColorsLight.background,
+      surface: AppColorsLight.surface,
       onSurface: AppColorsLight.textPrimary,
-      surfaceContainer: AppColorsLight.surface,
+      surfaceContainer: AppColorsLight.surfaceContainer,
       surfaceDim: AppColorsLight.textMuted,
+      surfaceContainerHighest: AppColorsLight.surfaceContainerHighest,
 
       outline: AppColorsLight.outline,
       outlineVariant: AppColorsLight.outlineVariant,
@@ -144,6 +145,12 @@ abstract final class AppTheme {
         ),
       ),
 
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: AppColorsLight.primary,
+        foregroundColor: AppColorsLight.onPrimary,
+        shape: CircleBorder(),
+      ),
+
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(foregroundColor: AppColorsLight.primary),
       ),
@@ -156,31 +163,60 @@ abstract final class AppTheme {
           borderSide: BorderSide.none,
         ),
       ),
+
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return AppColorsLight.onPrimary;
+          }
+          return AppColorsLight.textMuted;
+        }),
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return AppColorsLight.primary;
+          }
+          return AppColorsLight.surfaceContainer;
+        }),
+        trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return Colors.transparent;
+          }
+          return AppColorsLight.outline;
+        }),
+      ),
     );
   }
 
   static ThemeData dark() {
     final scheme = ColorScheme.dark(
       brightness: Brightness.dark,
+      surfaceTint: Colors.transparent,
 
       primary: AppColors.primary,
       onPrimary: AppColors.onPrimary,
       onPrimaryContainer: AppColors.primary,
+      primaryFixedDim: AppColors.primaryFixedDim,
 
       secondary: AppColors.secondary,
       onSecondary: AppColors.onSecondary,
 
       tertiary: AppColors.tertiary,
       onTertiary: AppColors.onTertiary,
+      tertiaryFixed: AppColors.textSecondary,
 
-      error: AppColors.error,
+      error: AppColors.errorContainer,
 
       surface: AppColors.surface,
+      surfaceContainer: AppColors.surfaceContainer,
       onSurface: AppColors.textPrimary,
       surfaceDim: AppColors.textMuted,
       inversePrimary: AppColors.primary,
+      surfaceContainerHighest: AppColors.textMuted,
 
       outline: AppColors.outline,
+      outlineVariant: AppColors.outlineVariant,
+
+      errorContainer: AppColors.error,
     );
 
     return ThemeData(
@@ -292,17 +328,44 @@ abstract final class AppTheme {
         ),
       ),
 
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.onPrimary,
+        shape: CircleBorder(),
+      ),
+
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(foregroundColor: AppColors.primary),
       ),
 
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.surfaceContainerHigh,
+        fillColor: AppColors.surfaceContainer.withValues(alpha: 0.4),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
+      ),
+
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return AppColors.onPrimary;
+          }
+          return AppColors.textMuted;
+        }),
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return AppColors.primary;
+          }
+          return AppColors.surfaceContainer;
+        }),
+        trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return Colors.transparent;
+          }
+          return AppColors.outline;
+        }),
       ),
     );
   }

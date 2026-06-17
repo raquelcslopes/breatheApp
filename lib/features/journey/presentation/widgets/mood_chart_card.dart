@@ -13,17 +13,11 @@ class MoodChartCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.fromLTRB(5, 20, 15, 5),
       decoration: BoxDecoration(
-        color: context.colors.surface,
-        border: Border.all(color: Colors.transparent),
+        color: context.colors.surfaceContainer,
+        border: Border.all(
+          color: context.colors.outline.withValues(alpha: 0.05),
+        ),
         borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x5728281C),
-            offset: Offset(0, 8),
-            blurRadius: 7,
-            spreadRadius: -9,
-          ),
-        ],
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),

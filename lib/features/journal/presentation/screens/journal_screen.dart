@@ -1,6 +1,5 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/router/routes.dart';
-import 'package:breathe/core/theme/app_colors.dart';
 import 'package:breathe/core/widgets/drawer.dart';
 import 'package:breathe/features/journal/domain/journal_provider.dart';
 import 'package:breathe/features/journal/presentation/widgets/entry_card.dart';
@@ -57,7 +56,12 @@ class JournalScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 8),
-                  Text('Journal', style: context.textTheme.headlineLarge),
+                  Text(
+                    'Journal',
+                    style: context.textTheme.headlineSmall?.copyWith(
+                      fontSize: 22,
+                    ),
+                  ),
                   const SizedBox(height: 5),
                   Text(
                     'Reflect on your journey',
@@ -133,6 +137,10 @@ class JournalScreen extends ConsumerWidget {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.push(AppRoute.journalNewPath),
+        child: Icon(Icons.add),
       ),
     );
   }

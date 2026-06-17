@@ -115,27 +115,31 @@ class _MakePhoneCallState extends State<MakePhoneCall>
     return Container(
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: context.colors.primary,
+        color: context.colors.surfaceContainer,
+        border: Border.all(
+          color: context.colors.outlineVariant,
+          strokeAlign: BorderSide.strokeAlignInside,
+        ),
         borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: Color(0x5728281C),
-            offset: Offset(0, 8),
-            blurRadius: 7,
-            spreadRadius: -9,
+            color: context.colors.surface.withValues(alpha: 0.09),
+            blurRadius: 60,
+            spreadRadius: -8,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
       child: Row(
         children: [
           CircleAvatar(
-            backgroundColor: Colors.white.withAlpha(50),
-            maxRadius: 25,
+            backgroundColor: context.colors.primary,
+            radius: 22,
             child: Text(
               _getFirstLetters(widget.contact.name),
-              style: context.textTheme.titleLarge?.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+              style: context.textTheme.titleMedium?.copyWith(
+                fontSize: 18,
+                color: context.colors.surfaceContainer,
               ),
             ),
           ),
@@ -145,26 +149,35 @@ class _MakePhoneCallState extends State<MakePhoneCall>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.contact.name,
-                  style: context.textTheme.bodyLarge?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  'Call ${widget.contact.name}',
+                  style: context.textTheme.bodyLarge?.copyWith(fontSize: 18),
                 ),
                 const SizedBox(height: 3),
-                Text('Your trusted person', style: context.textTheme.bodySmall),
+                Text(
+                  'Your trusted person',
+                  style: context.textTheme.bodySmall?.copyWith(
+                    fontSize: 12,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
               ],
             ),
           ),
-          ElevatedButton(
-            onPressed: () =>
-                _callTrustedPerson(context, widget.contact.phoneNumber!),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: context.colors.outline,
-              iconColor: context.colors.primary,
-              shape: const CircleBorder(),
+          SizedBox(
+            width: 44,
+            height: 44,
+            child: ElevatedButton(
+              onPressed: () =>
+                  _callTrustedPerson(context, widget.contact.phoneNumber!),
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.zero,
+                backgroundColor: context.colors.primary,
+                iconColor: context.colors.surfaceContainer,
+                shape: const CircleBorder(),
+                minimumSize: const Size(44, 44),
+              ),
+              child: const Icon(Icons.phone_outlined, size: 22),
             ),
-            child: Icon(Icons.phone_outlined, size: 24),
           ),
         ],
       ),

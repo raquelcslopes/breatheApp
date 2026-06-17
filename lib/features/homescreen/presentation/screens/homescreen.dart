@@ -1,4 +1,5 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
+import 'package:breathe/core/router/routes.dart';
 import 'package:breathe/core/widgets/drawer.dart';
 import 'package:breathe/features/homescreen/presentation/widgets/horizontal_calendar.dart';
 import 'package:breathe/features/homescreen/presentation/widgets/last_entry_card.dart';
@@ -7,6 +8,7 @@ import 'package:breathe/features/homescreen/presentation/widgets/statistics_card
 import 'package:breathe/features/journey/domain/journey_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -94,11 +96,17 @@ class HomeScreen extends ConsumerWidget {
                                 return Row(
                                   children: [
                                     Expanded(
-                                      child: StatisticsCard(records: []),
+                                      child: StatisticsCard(
+                                        records: [],
+                                        onTap: () =>
+                                            context.push(AppRoute.journeyPath),
+                                      ),
                                     ),
                                     const SizedBox(width: 16),
-                                    const Expanded(
+                                    Expanded(
                                       child: LastEntryCard(
+                                        onTap: () =>
+                                            context.push(AppRoute.journalPath),
                                         lastEntry:
                                             'No records in the last 7 days',
                                       ),
@@ -110,11 +118,17 @@ class HomeScreen extends ConsumerWidget {
                               return Row(
                                 children: [
                                   Expanded(
-                                    child: StatisticsCard(records: data),
+                                    child: StatisticsCard(
+                                      records: data,
+                                      onTap: () =>
+                                          context.push(AppRoute.journeyPath),
+                                    ),
                                   ),
                                   const SizedBox(width: 16),
                                   Expanded(
                                     child: LastEntryCard(
+                                      onTap: () =>
+                                          context.push(AppRoute.journalPath),
                                       lastEntry: data.last.text,
                                     ),
                                   ),

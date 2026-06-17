@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 
 class StatisticsCard extends StatelessWidget {
   final List<JournalEntry> records;
+  final VoidCallback onTap;
 
-  const StatisticsCard({super.key, required this.records});
+  const StatisticsCard({super.key, required this.records, required this.onTap});
+
   String _capitalize(String text) {
     return text.isEmpty
         ? text
@@ -31,43 +33,46 @@ class StatisticsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1,
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: context.colors.primary,
-          borderRadius: BorderRadius.circular(24),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(
-              Icons.analytics_outlined,
-              color: context.colors.surfaceContainer,
-            ),
-            Text(
-              'WEEKLY INDEX',
-              style: context.textTheme.titleMedium?.copyWith(
-                color: context.colors.onPrimary,
+    return InkWell(
+      onTap: onTap,
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: context.colors.primary,
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                Icons.analytics_outlined,
+                color: context.colors.surfaceContainer,
               ),
-            ),
-            const SizedBox(height: 20),
+              Text(
+                'WEEKLY INDEX',
+                style: context.textTheme.titleMedium?.copyWith(
+                  color: context.colors.onPrimary,
+                ),
+              ),
+              const SizedBox(height: 20),
 
-            Text(
-              _mostCommonMood(records) ?? '',
-              style: context.textTheme.headlineMedium?.copyWith(
-                color: context.colors.onPrimary,
+              Text(
+                _mostCommonMood(records) ?? '',
+                style: context.textTheme.headlineMedium?.copyWith(
+                  color: context.colors.onPrimary,
+                ),
               ),
-            ),
 
-            Text(
-              "COMMON MOOD",
-              style: context.textTheme.bodyMedium?.copyWith(
-                color: context.colors.surfaceDim,
+              Text(
+                "COMMON MOOD",
+                style: context.textTheme.bodyMedium?.copyWith(
+                  color: context.colors.surfaceDim,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

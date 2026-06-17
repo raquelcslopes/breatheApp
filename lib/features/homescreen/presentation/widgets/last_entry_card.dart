@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 
 class LastEntryCard extends StatelessWidget {
   final String lastEntry;
+  final VoidCallback onTap;
 
-  const LastEntryCard({super.key, required this.lastEntry});
+  const LastEntryCard({
+    super.key,
+    required this.lastEntry,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
