@@ -1,4 +1,5 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
+import 'package:breathe/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class LastEntryCard extends StatelessWidget {
@@ -13,6 +14,7 @@ class LastEntryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AspectRatio(
       aspectRatio: 1,
       child: Container(
@@ -35,7 +37,7 @@ class LastEntryCard extends StatelessWidget {
                   color: context.colors.primary,
                 ),
                 Text(
-                  'Recent Entry',
+                  l10n.recentEntry,
                   style: TextStyle(
                     color: context.colors.surfaceDim,
                     fontSize: 12,

@@ -1,6 +1,7 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/theme/app_colors.dart';
 import 'package:breathe/features/emergency/data/emergency_contact.dart';
+import 'package:breathe/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -18,12 +19,14 @@ class EmergencyContactsWidget extends StatelessWidget {
     BuildContext context,
     EmergencyContact contact,
   ) async {
+    final l10n = AppLocalizations.of(context)!;
     try {
       await launchUrl(Uri(scheme: 'tel', path: '+351${contact.phoneNumber}'));
     } catch (e) {
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('An error has occurred'),
+          content: Text(l10n.anErrorOccurred),
           backgroundColor: AppColors.errorContainer,
         ),
       );

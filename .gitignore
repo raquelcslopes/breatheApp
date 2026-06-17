@@ -43,3 +43,10 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Localização gerada
+/lib/l10n/app_localizations*.dart
+
+# Firebase
+**/google-services.json
+**/GoogleService-Info.plist

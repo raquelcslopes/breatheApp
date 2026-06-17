@@ -1,5 +1,5 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
-import 'package:breathe/core/models/problems.dart';
+import 'package:breathe/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class FactorsBar extends StatelessWidget {
@@ -8,13 +8,12 @@ class FactorsBar extends StatelessWidget {
   final List<MapEntry<String, int>> factors;
   final int maxCount;
 
-  String _title(String key) =>
-      problemsList.firstWhere((p) => p.key == key).title;
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
-      padding: EdgeInsets.all(15),
+      padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
         color: context.colors.surfaceContainer,
         border: Border.all(
@@ -33,7 +32,7 @@ class FactorsBar extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(_title(f.key)),
+                    Text(l10n.problemLabel(f.key)),
                     Text(
                       '${f.value}',
                       style: TextStyle(color: context.colors.surfaceDim),
@@ -46,7 +45,7 @@ class FactorsBar extends StatelessWidget {
                   child: LinearProgressIndicator(
                     value: fraction,
                     minHeight: 9,
-                    backgroundColor: context.colors.primary,
+                    backgroundColor: context.colors.primary.withAlpha(40),
                     valueColor: AlwaysStoppedAnimation(context.colors.primary),
                   ),
                 ),

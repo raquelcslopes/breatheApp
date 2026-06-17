@@ -1,6 +1,7 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/theme/app_colors.dart';
 import 'package:breathe/features/care_team/data/care_team_contact.dart';
+import 'package:breathe/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:geolocator/geolocator.dart';
@@ -17,14 +18,23 @@ class SendMessage extends StatefulWidget {
 class _SendMessageState extends State<SendMessage> {
   late final TextEditingController _messageController;
   bool isReadOnly = true;
-  final String _message =
-      "Hi, I'm going through a really hard moment and could use some support. Could you reach out when you're able to?";
   bool _shareLocation = false;
+  bool _prefilled = false;
+
   //--------------------- FUNCTIONS ---------------------
   @override
   void initState() {
-    _messageController = TextEditingController(text: _message);
     super.initState();
+    _messageController = TextEditingController();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_prefilled) {
+      _messageController.text = AppLocalizations.of(context)!.presetMessage;
+      _prefilled = true;
+    }
   }
 
   @override
@@ -43,6 +53,7 @@ class _SendMessageState extends State<SendMessage> {
   }
 
   Future<void> _sendMessageTo(CareTeamContact contact) async {
+    final l10n = AppLocalizations.of(context)!;
     try {
       String message = _messageController.text;
 
@@ -51,7 +62,7 @@ class _SendMessageState extends State<SendMessage> {
 
         if (position != null) {
           message +=
-              '\n\nMy current location:\nhttps://maps.google.com/?q=${position.latitude},${position.longitude}';
+              '\n\n${l10n.myCurrentLocation}\nhttps://maps.google.com/?q=${position.latitude},${position.longitude}';
         }
       }
 
@@ -63,9 +74,10 @@ class _SendMessageState extends State<SendMessage> {
         ),
       );
     } catch (e) {
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error: $e'),
+          content: Text(l10n.errorWithDetails(e.toString())),
           backgroundColor: AppColors.errorContainer,
         ),
       );
@@ -90,6 +102,7 @@ class _SendMessageState extends State<SendMessage> {
   //--------------------- WIDGETS ---------------------
 
   Widget _shareMyLocation() {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -98,7 +111,7 @@ class _SendMessageState extends State<SendMessage> {
           children: [
             const Icon(Icons.location_on_outlined),
             const SizedBox(width: 10),
-            Text('Share my location', style: context.textTheme.bodyMedium),
+            Text(l10n.shareMyLocation, style: context.textTheme.bodyMedium),
           ],
         ),
 
@@ -114,6 +127,8 @@ class _SendMessageState extends State<SendMessage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       decoration: BoxDecoration(
         color: context.colors.surfaceContainer,
@@ -144,15 +159,15 @@ class _SendMessageState extends State<SendMessage> {
                 isCollapsed: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.transparent),
+                  borderSide: const BorderSide(color: Colors.transparent),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.transparent),
+                  borderSide: const BorderSide(color: Colors.transparent),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.transparent),
+                  borderSide: const BorderSide(color: Colors.transparent),
                 ),
               ),
               readOnly: isReadOnly,
@@ -171,18 +186,24 @@ class _SendMessageState extends State<SendMessage> {
                   onPressed: () => setState(() {
                     isReadOnly = false;
                   }),
-                  label: Text('Edit'),
-                  icon: Icon(Icons.edit),
+                  label: Text(l10n.edit),
+                  icon: const Icon(Icons.edit),
                   style: OutlinedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 5,
+                      horizontal: 10,
+                    ),
                   ),
                 ),
                 ElevatedButton.icon(
                   onPressed: () => _sendMessageTo(widget.contact),
-                  label: Text('Send message to ${widget.contact.name}'),
-                  icon: Icon(Icons.send),
+                  label: Text(l10n.sendMessageTo(widget.contact.name)),
+                  icon: const Icon(Icons.send),
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 5,
+                      horizontal: 10,
+                    ),
                   ),
                 ),
               ],

@@ -5,6 +5,7 @@ import 'package:breathe/core/widgets/drawer.dart';
 import 'package:breathe/features/care_team/domain/care_team_provider.dart';
 import 'package:breathe/features/care_team/presentation/widgets/add_edit_contact.dart';
 import 'package:breathe/features/care_team/presentation/widgets/person_card.dart';
+import 'package:breathe/l10n/app_localizations.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,12 +15,14 @@ class CareTeamScreen extends ConsumerWidget {
   const CareTeamScreen({super.key});
 
   Future<void> _makePhoneCall(BuildContext context, String contact) async {
+    final l10n = AppLocalizations.of(context)!;
     try {
       await launchUrl(Uri(scheme: 'tel', path: '+351$contact'));
     } catch (e) {
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error: $e'),
+          content: Text(l10n.errorWithDetails(e.toString())),
           backgroundColor: AppColors.errorContainer,
         ),
       );
@@ -54,13 +57,15 @@ class CareTeamScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final provider = ref.watch(contactsProvider);
 
     return Scaffold(
       drawer: CustomDrawer(),
       body: provider.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Error loading  your contacts $e')),
+        error: (e, _) =>
+            Center(child: Text(l10n.errorLoadingContacts(e.toString()))),
         data: (contacts) {
           if (contacts.isEmpty) {
             return Center(
@@ -76,13 +81,13 @@ class CareTeamScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 40),
                     Text(
-                      'Your people, in one place',
+                      l10n.yourPeopleTitle,
                       textAlign: TextAlign.center,
                       style: context.textTheme.titleLarge,
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      "Add the people who support you — a doctor, a therapist, a friend you trust.",
+                      l10n.yourPeopleSubtitle,
                       textAlign: TextAlign.center,
                       style: context.textTheme.bodyMedium?.copyWith(
                         color: context.colors.primary,
@@ -92,12 +97,12 @@ class CareTeamScreen extends ConsumerWidget {
                     const SizedBox(height: 24),
                     ElevatedButton.icon(
                       onPressed: () => AddEditContactSheet.show(context),
-                      icon: Icon(Icons.add),
-                      label: const Text('Add someone'),
+                      icon: const Icon(Icons.add),
+                      label: Text(l10n.addSomeone),
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      'One of them can be your trusted person — the one you reach first in a hard moment.',
+                      l10n.trustedPersonHint,
                       style: context.textTheme.bodySmall,
                       textAlign: TextAlign.center,
                     ),
@@ -140,14 +145,14 @@ class CareTeamScreen extends ConsumerWidget {
                     children: [
                       const SizedBox(height: 8),
                       Text(
-                        'Care Team',
+                        l10n.careTeamTitle,
                         style: context.textTheme.headlineSmall?.copyWith(
                           fontSize: 22,
                         ),
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        'Your support network, all in one place',
+                        l10n.careTeamSubtitle,
                         style: context.textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.normal,
                         ),
@@ -221,7 +226,7 @@ class CareTeamScreen extends ConsumerWidget {
                                       ),
                                       const SizedBox(height: 10),
                                       Text(
-                                        'Add someone'.toUpperCase(),
+                                        l10n.addSomeone.toUpperCase(),
                                         style: context.textTheme.bodyMedium
                                             ?.copyWith(
                                               letterSpacing: 4.8,

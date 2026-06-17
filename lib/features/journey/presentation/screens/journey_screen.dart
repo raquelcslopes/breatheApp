@@ -7,6 +7,7 @@ import 'package:breathe/features/journey/presentation/widgets/factors_bar.dart';
 import 'package:breathe/features/journey/presentation/widgets/mood_chart_card.dart';
 import 'package:breathe/features/journey/presentation/widgets/note_card.dart';
 import 'package:breathe/features/journey/presentation/widgets/simple_card.dart';
+import 'package:breathe/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -23,47 +24,28 @@ class JourneyScreen extends ConsumerStatefulWidget {
 
 class _JourneyScreenState extends ConsumerState<JourneyScreen> {
   //--------------------- FUNCTIONS ---------------------
-  String _formatDate(DateTime date) {
-    final formattedDate = DateFormat('d MMMM', 'en_US').format(date);
-
-    return formattedDate;
+  String _formatDate(BuildContext context, DateTime date) {
+    final locale = Localizations.localeOf(context).toString();
+    return DateFormat('d MMMM', locale).format(date);
   }
 
-  String _capitalize(String text) {
-    return text.isEmpty
-        ? text
-        : text[0].toUpperCase() + text.substring(1).toLowerCase();
-  }
-
-  String? _mostCommonMood(List<JournalEntry> list) {
+  String? _topMoodKey(List<JournalEntry> list) {
     final moodKeys = list.map((e) => e.moodKey).whereType<String>();
-
     if (moodKeys.isEmpty) return null;
-
     final counts = <String, int>{};
     for (final key in moodKeys) {
       counts[key] = (counts[key] ?? 0) + 1;
     }
-
-    final topKey = counts.entries
-        .reduce((a, b) => a.value >= b.value ? a : b)
-        .key;
-
-    return _capitalize(topKey);
+    return counts.entries.reduce((a, b) => a.value >= b.value ? a : b).key;
   }
 
-  String _daysLogged(List<JournalEntry> list) {
+  int _daysLoggedCount(List<JournalEntry> list) {
     final dates = list
         .map(
-          (entry) => DateTime(
-            entry.createdAt.year,
-            entry.createdAt.month,
-            entry.createdAt.day,
-          ),
+          (e) => DateTime(e.createdAt.year, e.createdAt.month, e.createdAt.day),
         )
         .toSet();
-
-    return '${dates.length} of 7 days';
+    return dates.length;
   }
 
   List<MapEntry<String, int>> _topFactors(List<JournalEntry> list) {
@@ -80,16 +62,15 @@ class _JourneyScreenState extends ConsumerState<JourneyScreen> {
   }
 
   //--------------------- WIDGETS ---------------------
-  Widget _header(BuildContext context) {
+  Widget _header(BuildContext context, AppLocalizations l10n) {
     final today = DateTime.now();
     final weekStart = today.subtract(const Duration(days: 6));
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('This week', style: context.textTheme.titleLarge),
+        Text(l10n.thisWeek, style: context.textTheme.titleLarge),
         Text(
-          '${_formatDate(weekStart)} - ${_formatDate(today)}',
+          '${_formatDate(context, weekStart)} - ${_formatDate(context, today)}',
           style: context.textTheme.bodySmall,
         ),
       ],
@@ -98,14 +79,14 @@ class _JourneyScreenState extends ConsumerState<JourneyScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final entries = ref.watch(watchEntriesProvider);
 
     return Scaffold(
       drawer: CustomDrawer(),
       body: entries.when(
-        loading: () => Center(child: CircularProgressIndicator()),
-        error: (e, _) =>
-            const Center(child: Text("Couldn't load your journey")),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, _) => Center(child: Text(l10n.couldntLoadJourney)),
         data: (entriesList) {
           if (entriesList.isEmpty) {
             return Center(
@@ -121,13 +102,13 @@ class _JourneyScreenState extends ConsumerState<JourneyScreen> {
                     ),
                     const SizedBox(height: 40),
                     Text(
-                      'A blank page, just for you',
+                      l10n.blankPageTitle,
                       textAlign: TextAlign.center,
                       style: context.textTheme.titleLarge,
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      "Whenever it feels right, write a few words about your day. Only you will ever see them",
+                      l10n.blankPageSubtitle,
                       textAlign: TextAlign.center,
                       style: context.textTheme.bodyMedium?.copyWith(
                         color: context.colors.primary,
@@ -137,8 +118,8 @@ class _JourneyScreenState extends ConsumerState<JourneyScreen> {
                     const SizedBox(height: 24),
                     ElevatedButton.icon(
                       onPressed: () => context.push(AppRoute.journalNewPath),
-                      icon: Icon(Icons.edit_outlined),
-                      label: const Text('Write your first entry'),
+                      icon: const Icon(Icons.edit_outlined),
+                      label: Text(l10n.writeFirstEntry),
                     ),
                   ],
                 ),
@@ -148,6 +129,7 @@ class _JourneyScreenState extends ConsumerState<JourneyScreen> {
 
           final factors = _topFactors(entriesList);
           final maxCount = factors.isEmpty ? 1 : factors.first.value;
+          final topMood = _topMoodKey(entriesList);
           return Stack(
             children: [
               Positioned.fill(
@@ -175,13 +157,13 @@ class _JourneyScreenState extends ConsumerState<JourneyScreen> {
 
               SafeArea(
                 child: Padding(
-                  padding: EdgeInsets.all(18),
+                  padding: const EdgeInsets.all(18),
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 35),
-                        _header(context),
+                        _header(context, l10n),
                         const SizedBox(height: 30),
                         MoodChartCard(entries: entriesList),
                         const SizedBox(height: 10),
@@ -190,24 +172,26 @@ class _JourneyScreenState extends ConsumerState<JourneyScreen> {
                           children: [
                             Expanded(
                               child: SimpleCard(
-                                title: 'Most days',
-                                text:
-                                    _mostCommonMood(entriesList) ??
-                                    'No mood recorded',
+                                title: l10n.mostDays,
+                                text: topMood == null
+                                    ? l10n.noMoodRecorded
+                                    : l10n.moodLabel(topMood),
                               ),
                             ),
                             const SizedBox(width: 20),
                             Expanded(
                               child: SimpleCard(
-                                title: 'Days logged',
-                                text: _daysLogged(entriesList),
+                                title: l10n.daysLogged,
+                                text: l10n.daysLoggedValue(
+                                  _daysLoggedCount(entriesList),
+                                ),
                               ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 40),
                         Text(
-                          'WHAT WEIGHED MOST',
+                          l10n.whatWeighedMost,
                           style: context.textTheme.titleMedium,
                         ),
                         const SizedBox(height: 10),
@@ -217,7 +201,7 @@ class _JourneyScreenState extends ConsumerState<JourneyScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'YOUR NOTES',
+                              l10n.yourNotes,
                               style: context.textTheme.titleMedium,
                             ),
                             if (entriesList.length > 4)
@@ -225,7 +209,7 @@ class _JourneyScreenState extends ConsumerState<JourneyScreen> {
                                 onPressed: () =>
                                     context.push(AppRoute.journalPath),
                                 child: Text(
-                                  'View all ${entriesList.length} entries',
+                                  l10n.viewAllEntries(entriesList.length),
                                 ),
                               ),
                           ],

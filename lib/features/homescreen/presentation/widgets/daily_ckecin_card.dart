@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/router/routes.dart';
 import 'package:breathe/core/widgets/custom_elevated_button.dart';
+import 'package:breathe/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,6 +23,7 @@ class DailyCheckInCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final radius = BorderRadius.circular(borderRadius);
 
     return ClipRRect(
@@ -58,18 +60,18 @@ class DailyCheckInCard extends StatelessWidget {
                   children: [
                     Icon(Icons.dark_mode_outlined),
                     Text(
-                      'How are you feeling?',
+                      l10n.checkInTitle,
                       style: context.textTheme.headlineSmall,
                     ),
                     Text(
-                      'A gentle pause for yourself',
+                      l10n.checkInSubtitle,
                       style: context.textTheme.bodyMedium,
                     ),
                     const SizedBox(height: 15),
                     Align(
                       alignment: Alignment.bottomRight,
                       child: CustomElevatedButton(
-                        label: 'Write something',
+                        label: l10n.writeSomething,
                         onTap: () => context.push(AppRoute.journalNewPath),
                       ),
                     ),

@@ -1,6 +1,7 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/theme/app_colors.dart';
 import 'package:breathe/features/care_team/data/care_team_contact.dart';
+import 'package:breathe/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -36,15 +37,17 @@ class _MakePhoneCallState extends State<MakePhoneCall>
     BuildContext context,
     String phoneNumber,
   ) async {
+    final l10n = AppLocalizations.of(context)!;
     try {
       await launchUrl(Uri(scheme: 'tel', path: '+351$phoneNumber'));
       setState(() {
         _callInProgress = true;
       });
     } catch (e) {
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error: $e'),
+          content: Text(l10n.errorWithDetails(e.toString())),
           backgroundColor: AppColors.errorContainer,
         ),
       );
@@ -68,6 +71,8 @@ class _MakePhoneCallState extends State<MakePhoneCall>
     if (state == AppLifecycleState.resumed && _callInProgress) {
       if (!mounted) return;
 
+      final l10n = AppLocalizations.of(context)!;
+
       showDialog(
         context: context,
         builder: (_) => Dialog(
@@ -85,12 +90,12 @@ class _MakePhoneCallState extends State<MakePhoneCall>
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'You are not alone',
+                  l10n.youAreNotAlone,
                   style: context.textTheme.titleLarge,
                   textAlign: TextAlign.center,
                 ),
                 Text(
-                  "If ${widget.contact.name} didn't pick up — that's okay. Someone is ready to talk with you right now.",
+                  l10n.didntPickUp(widget.contact.name),
                   style: context.textTheme.bodyLarge,
                   textAlign: TextAlign.center,
                 ),
@@ -100,7 +105,7 @@ class _MakePhoneCallState extends State<MakePhoneCall>
                 ElevatedButton(
                   onPressed: () =>
                       _callTrustedPerson(context, widget.contact.phoneNumber!),
-                  child: Text('Try ${widget.contact.name} again'),
+                  child: Text(l10n.tryAgain(widget.contact.name)),
                 ),
               ],
             ),
@@ -112,8 +117,10 @@ class _MakePhoneCallState extends State<MakePhoneCall>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: context.colors.surfaceContainer,
         border: Border.all(
@@ -149,12 +156,12 @@ class _MakePhoneCallState extends State<MakePhoneCall>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Call ${widget.contact.name}',
+                  l10n.callContact(widget.contact.name),
                   style: context.textTheme.bodyLarge?.copyWith(fontSize: 18),
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  'Your trusted person',
+                  l10n.yourTrustedPerson,
                   style: context.textTheme.bodySmall?.copyWith(
                     fontSize: 12,
                     fontWeight: FontWeight.normal,

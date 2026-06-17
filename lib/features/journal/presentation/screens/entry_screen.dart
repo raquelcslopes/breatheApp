@@ -1,11 +1,11 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/theme/app_colors.dart';
-import 'package:breathe/core/utils/capitalize.dart';
 import 'package:breathe/core/widgets/custom_elevated_button.dart';
 import 'package:breathe/core/widgets/drawer.dart';
 import 'package:breathe/features/journal/data/journal_entry.dart';
 import 'package:breathe/features/journal/domain/journal_provider.dart';
 import 'package:breathe/features/journal/presentation/widgets/entry_preview.dart';
+import 'package:breathe/l10n/app_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,24 +35,24 @@ class _EntryScreenState extends ConsumerState<EntryScreen> {
   }
 
   Future<void> _deleteEntry(String entryId) async {
+    final l10n = AppLocalizations.of(context)!;
+
     final shouldDelete = await showDialog<bool>(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Delete entry?'),
-          content: const Text(
-            'This action cannot be undone. Do you want to continue?',
-          ),
+          title: Text(l10n.deleteEntryTitle),
+          content: Text(l10n.actionCannotBeUndone),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancel'),
+              child: Text(l10n.cancel),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
-              child: const Text(
-                'Delete',
-                style: TextStyle(color: AppColors.errorContainer),
+              child: Text(
+                l10n.delete,
+                style: const TextStyle(color: AppColors.errorContainer),
               ),
             ),
           ],
@@ -71,21 +71,22 @@ class _EntryScreenState extends ConsumerState<EntryScreen> {
 
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Entry deleted successfully')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.entryDeleted)));
 
       context.pop();
     } catch (e) {
       if (!mounted) return;
 
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.errorWithDetails(e.toString()))),
+      );
     }
   }
 
   Future<void> _saveChanges(JournalEntry originalEntry) async {
+    final l10n = AppLocalizations.of(context)!;
     final uid = FirebaseAuth.instance.currentUser?.uid;
 
     if (uid == null) return;
@@ -105,22 +106,23 @@ class _EntryScreenState extends ConsumerState<EntryScreen> {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Entry changed succssefully')));
+        ).showSnackBar(SnackBar(content: Text(l10n.entryChanged)));
         context.pop();
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.errorWithDetails(e.toString()))),
+      );
     }
   }
 
   //--------------------- WIDGETS ---------------------
   Widget _date(BuildContext context, JournalEntry entry) {
+    final locale = Localizations.localeOf(context).toString();
     final formattedDate = DateFormat(
       'EEEE, d MMMM, HH:mm',
-      'en_US',
+      locale,
     ).format(entry.createdAt);
 
     return Text(
@@ -132,15 +134,22 @@ class _EntryScreenState extends ConsumerState<EntryScreen> {
     );
   }
 
-  Widget _title(BuildContext context, JournalEntry entry) {
+  Widget _title(
+    BuildContext context,
+    JournalEntry entry,
+    AppLocalizations l10n,
+  ) {
+    final moodKey = entry.moodKey;
+    final mood = moodKey == null ? '-' : l10n.moodLabel(moodKey);
     return Text(
-      'Feeling ${capitalize(entry.moodKey ?? '-')}',
+      l10n.feelingMood(mood),
       style: context.textTheme.headlineMedium?.copyWith(fontSize: 40),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final entryAsync = ref.watch(entryProvider(widget.entryId));
 
     return Scaffold(
@@ -177,7 +186,7 @@ class _EntryScreenState extends ConsumerState<EntryScreen> {
                 child: entryAsync.when(
                   data: (data) {
                     if (data == null) {
-                      return Center(child: Text('isempty'));
+                      return Center(child: Text(l10n.entryNotFound));
                     }
                     if (!_prefilled) {
                       _writtingSpace.text = data.text;
@@ -187,7 +196,7 @@ class _EntryScreenState extends ConsumerState<EntryScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _date(context, data),
-                        _title(context, data),
+                        _title(context, data, l10n),
                         const SizedBox(height: 20),
                         Expanded(
                           child: EntryPreview(
@@ -199,7 +208,7 @@ class _EntryScreenState extends ConsumerState<EntryScreen> {
                         const SizedBox(height: 10),
                         RichText(
                           text: TextSpan(
-                            text: 'On my mind this day: ',
+                            text: l10n.onMyMind,
                             style: context.textTheme.bodySmall?.copyWith(
                               color: context.colors.surfaceDim,
                               fontSize: 14,
@@ -207,7 +216,7 @@ class _EntryScreenState extends ConsumerState<EntryScreen> {
                             ),
                             children: <TextSpan>[
                               TextSpan(
-                                text: data.problemKeys.join('• '),
+                                text: data.problemKeys.join('  •  '),
                                 style: context.textTheme.bodySmall?.copyWith(
                                   color: context.colors.surfaceDim,
                                   fontSize: 14,
@@ -228,7 +237,7 @@ class _EntryScreenState extends ConsumerState<EntryScreen> {
                                 context.colors.outline,
                                 Colors.transparent,
                               ],
-                              stops: [0.0, 0.2, 0.8, 1.0],
+                              stops: const [0.0, 0.2, 0.8, 1.0],
                             ),
                           ),
                         ),
@@ -243,7 +252,7 @@ class _EntryScreenState extends ConsumerState<EntryScreen> {
                                         isReadOnly = false;
                                       }),
                                       child: Text(
-                                        'Edit'.toUpperCase(),
+                                        l10n.edit.toUpperCase(),
                                         style: context.textTheme.bodyMedium
                                             ?.copyWith(
                                               fontWeight: FontWeight.normal,
@@ -251,12 +260,12 @@ class _EntryScreenState extends ConsumerState<EntryScreen> {
                                             ),
                                       ),
                                     )
-                                  : SizedBox.shrink(),
+                                  : const SizedBox.shrink(),
                               const SizedBox(width: 20),
                               TextButton(
                                 onPressed: () => _deleteEntry(widget.entryId),
                                 child: Text(
-                                  'Delete'.toUpperCase(),
+                                  l10n.delete.toUpperCase(),
                                   style: context.textTheme.bodyMedium?.copyWith(
                                     fontWeight: FontWeight.normal,
                                     letterSpacing: 1.4,
@@ -267,9 +276,9 @@ class _EntryScreenState extends ConsumerState<EntryScreen> {
                               const SizedBox(width: 20),
 
                               isReadOnly
-                                  ? SizedBox.shrink()
+                                  ? const SizedBox.shrink()
                                   : CustomElevatedButton(
-                                      label: 'Save'.toUpperCase(),
+                                      label: l10n.save.toUpperCase(),
                                       onTap: () => _saveChanges(data),
                                     ),
                             ],
@@ -278,7 +287,8 @@ class _EntryScreenState extends ConsumerState<EntryScreen> {
                       ],
                     );
                   },
-                  error: (e, _) => Center(child: Text('Error: $e')),
+                  error: (e, _) =>
+                      Center(child: Text(l10n.errorWithDetails(e.toString()))),
                   loading: () =>
                       const Center(child: CircularProgressIndicator()),
                 ),

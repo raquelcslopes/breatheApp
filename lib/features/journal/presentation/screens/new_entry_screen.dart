@@ -9,6 +9,7 @@ import 'package:breathe/features/journal/data/journal_entry.dart';
 import 'package:breathe/features/journal/domain/journal_provider.dart';
 import 'package:breathe/features/journal/presentation/widgets/problem_picker_sheet.dart';
 import 'package:breathe/features/journal/presentation/widgets/mood_picker_sheet.dart';
+import 'package:breathe/l10n/app_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -49,11 +50,12 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
     }
   }
 
-  String _showProblems() {
-    return _problemsSelected.map((p) => p.title).join(', ');
+  String _showProblems(AppLocalizations l10n) {
+    return _problemsSelected.map((p) => l10n.problemLabel(p.key)).join(', ');
   }
 
   Future<void> _saveEntry() async {
+    final l10n = AppLocalizations.of(context)!;
     final uid = FirebaseAuth.instance.currentUser?.uid;
     final text = _writtingSpace.text.trim();
 
@@ -76,7 +78,7 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("Couldn't save your entry."),
+          content: Text(l10n.couldntSaveEntry),
           backgroundColor: AppColors.errorContainer,
         ),
       );
@@ -84,18 +86,17 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
   }
 
   //--------------------- WIDGETS ---------------------
-  Widget _date(BuildContext context) {
-    final formattedDate = DateFormat(
-      'EEEE, d MMMM, HH:mm',
-      'en_US',
-    ).format(DateTime.now());
-
+  Widget _date(BuildContext context, AppLocalizations l10n) {
+    final locale = Localizations.localeOf(context).toString();
     final now = DateTime.now();
+
+    final formattedDate = DateFormat('EEEE, d MMMM, HH:mm', locale).format(now);
+    final weekday = DateFormat('EEEE', locale).format(now);
+
     final hour = now.hour;
-    final partOfDay = hour < 12
+    final partKey = hour < 12
         ? 'morning'
         : (hour < 18 ? 'afternoon' : 'evening');
-    final weekday = DateFormat('EEEE').format(now);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,7 +109,7 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
           ),
         ),
         Text(
-          '$weekday, $partOfDay',
+          '$weekday, ${l10n.partOfDayLabel(partKey)}',
           style: context.textTheme.headlineMedium?.copyWith(fontSize: 40),
         ),
       ],
@@ -117,6 +118,8 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       drawer: CustomDrawer(),
       body: Stack(
@@ -150,7 +153,7 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _date(context),
+                  _date(context, l10n),
                   const SizedBox(height: 8),
                   Container(
                     height: 0.5,
@@ -164,7 +167,7 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
                           context.colors.outline,
                           Colors.transparent,
                         ],
-                        stops: [0.0, 0.2, 0.8, 1.0],
+                        stops: const [0.0, 0.2, 0.8, 1.0],
                       ),
                     ),
                   ),
@@ -179,7 +182,9 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
                         child: OutlinedButton(
                           onPressed: _pickMood,
                           child: Text(
-                            _moodSelected?.title ?? 'MOOD',
+                            _moodSelected == null
+                                ? l10n.moodPickerLabel
+                                : l10n.moodLabel(_moodSelected!.key),
                             style: context.textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.normal,
                             ),
@@ -192,8 +197,8 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
                           onPressed: _pickProblem,
                           child: Text(
                             _problemsSelected.isEmpty
-                                ? 'PROBLEMS'
-                                : _showProblems(),
+                                ? l10n.problemsPickerLabel
+                                : _showProblems(l10n),
                             style: context.textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.normal,
                             ),
@@ -203,7 +208,7 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
                       const SizedBox(width: 10),
                       Expanded(
                         child: CustomElevatedButton(
-                          label: 'SAVE',
+                          label: l10n.save.toUpperCase(),
                           onTap: () => _saveEntry(),
                         ),
                       ),

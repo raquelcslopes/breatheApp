@@ -1,0 +1,188 @@
+{
+  "@@locale": "en",
+  "greeting": "{partOfDay, select, morning{Good morning} afternoon{Good afternoon} evening{Good evening} other{Hello}}",
+  "@greeting": {
+    "placeholders": {
+      "partOfDay": { "type": "String" }
+    }
+  },
+  "homeSubtitle": "A safe place for your thoughts, feelings, and experiences. Write honestly, reflect gently, and be yourself.",
+  "noRecentRecords": "No records in the last 7 days",
+  "errorWithDetails": "Error: {message}",
+  "@errorWithDetails": {
+    "placeholders": {
+      "message": { "type": "String" }
+    }
+  },
+  "journalTitle": "Journal",
+  "journalSubtitle": "Reflect on your journey",
+  "dayLabel": "{when, select, today{Today} yesterday{Yesterday} earlier{Earlier} other{Earlier}}",
+  "@dayLabel": {
+    "placeholders": {
+      "when": { "type": "String" }
+    }
+  },
+  "checkInTitle": "How are you feeling?",
+  "checkInSubtitle": "A gentle pause for yourself",
+    "checkInTitleLong": "How are you truly feeling?",
+  "checkInStorySubtitle": "Each entry helps tell the story of your journey",
+  "writeSomething": "Write something",
+    "recentEntry": "Recent entry",
+      "weeklyIndex": "WEEKLY INDEX",
+  "commonMood": "COMMON MOOD",
+   "weeklyIndex": "WEEKLY INDEX",
+  "commonMood": "COMMON MOOD",
+  "moodLabel": "{mood, select, okay{Okay} good{Good} low{Low} other{{mood}}}",
+  "@moodLabel": {
+    "placeholders": {
+      "mood": { "type": "String" }
+    }
+  },
+  "deleteEntryTitle": "Delete entry?",
+  "actionCannotBeUndone": "This action cannot be undone. Do you want to continue?",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "edit": "Edit",
+  "save": "Save",
+  "entryDeleted": "Entry deleted successfully",
+  "entryChanged": "Entry changed successfully",
+  "feelingMood": "Feeling {mood}",
+  "@feelingMood": {
+    "placeholders": {
+      "mood": { "type": "String" }
+    }
+  },
+  "onMyMind": "On my mind this day: ",
+  "entryNotFound": "Entry not found",
+   "moodPickerLabel": "MOOD",
+  "problemsPickerLabel": "PROBLEMS",
+  "couldntSaveEntry": "Couldn't save your entry.",
+   "problemLabel": "{problem, select, sleep{Sleep} work{Work} family{Family} health{Health} grief{Grief} finances{Finances} studies{Studies} other{Other}}",
+  "@problemLabel": {
+    "placeholders": {
+      "problem": { "type": "String" }
+    }
+  },
+  "partOfDayLabel": "{part, select, morning{morning} afternoon{afternoon} evening{evening} other{day}}",
+  "@partOfDayLabel": {
+    "placeholders": { "part": { "type": "String" } }
+  },
+   "confirm": "Confirm",
+    "couldntLoadJourney": "Couldn't load your journey",
+  "blankPageTitle": "A blank page, just for you",
+  "blankPageSubtitle": "Whenever it feels right, write a few words about your day. Only you will ever see them.",
+  "writeFirstEntry": "Write your first entry",
+  "thisWeek": "This week",
+  "mostDays": "Most days",
+  "noMoodRecorded": "No mood recorded",
+  "daysLogged": "Days logged",
+  "daysLoggedValue": "{count} of 7 days",
+  "@daysLoggedValue": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "whatWeighedMost": "WHAT WEIGHED MOST",
+  "yourNotes": "YOUR NOTES",
+  "viewAllEntries": "{count, plural, one{View 1 entry} other{View all {count} entries}}",
+  "@viewAllEntries": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+   "errorLoadingContacts": "Error loading your contacts: {message}",
+  "@errorLoadingContacts": {
+    "placeholders": {
+      "message": { "type": "String" }
+    }
+  },
+  "yourPeopleTitle": "Your people, in one place",
+  "yourPeopleSubtitle": "Add the people who support you — a doctor, a therapist, a friend you trust.",
+  "addSomeone": "Add someone",
+  "trustedPersonHint": "One of them can be your trusted person — the one you reach first in a hard moment.",
+  "careTeamTitle": "Care Team",
+  "careTeamSubtitle": "Your support network, all in one place",
+
+  "createContact": "Create contact",
+  "editContactTitle": "Edit contact",
+  "contactCreated": "Contact created successfully",
+  "contactChanged": "Contact changed successfully",
+  "contactDeleted": "Contact deleted successfully",
+  "couldntSaveContact": "Couldn't save the contact: {message}",
+  "@couldntSaveContact": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "couldntSaveChanges": "Couldn't save changes: {message}",
+  "@couldntSaveChanges": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "deleteContactTitle": "Delete contact?",
+  "fieldName": "Name",
+  "fieldRole": "Role",
+  "fieldPhone": "Phone number",
+  "fieldEmail": "Email",
+  "trustedPersonTitle": "Trusted person",
+  "trustedPersonDescription": "First contact in an emergency",
+  "shareSummariesTitle": "Share my summaries",
+  "shareSummariesDescription": "Allow sending check-ins",
+  "saveChanges": "Save changes",
+  "removeFromCareTeam": "Remove from care team",
+    "actionCall": "Call",
+  "actionMessage": "Message",
+  "actionEmail": "Email",
+   "roleLabel": "{role, select, psychiatrist{Psychiatrist} psychologist{Psychologist} gp{GP} friend{Friend} family{Family} other{{role}}}",
+  "@roleLabel": {
+    "placeholders": {
+      "role": { "type": "String" }
+    }
+  },
+    "errorTrustedNumbers": "Error getting your trusted numbers: {message}",
+  "@errorTrustedNumbers": {
+    "placeholders": { "message": { "type": "String" } }
+  },
+  "noTrustedPersonYet": "No trusted person yet",
+  "chooseTrustedPerson": "Choose someone from your care team to reach first in a hard moment",
+  "addFromCareTeam": "Add someone from care team",
+  "emergencyTitle": "EMERGENCY",
+  "emergencySubtitle": "You don't have to face this alone",
+  "reachTrustedPerson": "Reach your trusted person",
+  "orSendMessage": "Or send a message",
+  "messageReadyToSend": "Not sure what to say? This is ready to send",
+  "talkToSomeone": "Talk to someone now",
+  "anErrorOccurred": "An error has occurred",
+    "savedAsTrustedPerson": "Contact saved as trusted person",
+  "chooseTrustedPersonTitle": "Choose your trusted person",
+  "trustedPersonSubtitle": "The one Breathe helps you reach first. You can change this anytime.",
+  "addNewContact": "Add a new contact",
+  "setAsTrustedPerson": "Set as trusted person",
+  "noContactsToChoose": "You don't have any contacts yet",
+    "youAreNotAlone": "You are not alone",
+  "didntPickUp": "If {name} didn't pick up — that's okay. Someone is ready to talk with you right now.",
+  "@didntPickUp": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "tryAgain": "Try {name} again",
+  "@tryAgain": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "callContact": "Call {name}",
+  "@callContact": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "yourTrustedPerson": "Your trusted person",
+  "presetMessage": "Hi, I'm going through a really hard moment and could use some support. Could you reach out when you're able to?",
+  "shareMyLocation": "Share my location",
+  "myCurrentLocation": "My current location:",
+  "sendMessageTo": "Send message to {name}",
+  "@sendMessageTo": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  }
+}

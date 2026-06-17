@@ -3,12 +3,11 @@ import 'package:breathe/core/theme/app_colors.dart';
 import 'package:breathe/features/care_team/data/care_team_contact.dart';
 import 'package:breathe/features/care_team/domain/care_team_provider.dart';
 import 'package:breathe/features/care_team/presentation/widgets/add_edit_contact.dart';
+import 'package:breathe/l10n/app_localizations.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class AddTrustedPerson extends ConsumerStatefulWidget {
   final List<CareTeamContact> list;
@@ -54,6 +53,7 @@ class _AddTrustedPersonState extends ConsumerState<AddTrustedPerson> {
   }
 
   Future<void> _setAsTrustedPerson(CareTeamContact contact) async {
+    final l10n = AppLocalizations.of(context)!;
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) return;
 
@@ -64,16 +64,16 @@ class _AddTrustedPersonState extends ConsumerState<AddTrustedPerson> {
           .read(careTeamProvider)
           .editContact(uid, contact.id, changedContact);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: const Text('Contacted saved as trusted person')),
-        );
-        context.pop();
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.savedAsTrustedPerson)));
+        Navigator.of(context).pop();
       }
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error: $e'),
+          content: Text(l10n.errorWithDetails(e.toString())),
           backgroundColor: AppColors.errorContainer,
         ),
       );
@@ -82,12 +82,20 @@ class _AddTrustedPersonState extends ConsumerState<AddTrustedPerson> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final contacts = ref.watch(contactsProvider);
 
     return contacts.when(
       data: (contacts) {
         if (contacts.isEmpty) {
-          return Text('data');
+          return Padding(
+            padding: const EdgeInsets.all(20),
+            child: Text(
+              l10n.noContactsToChoose,
+              textAlign: TextAlign.center,
+              style: context.textTheme.bodyMedium,
+            ),
+          );
         }
 
         return SafeArea(
@@ -98,12 +106,12 @@ class _AddTrustedPersonState extends ConsumerState<AddTrustedPerson> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Choose your trusted person',
+                    l10n.chooseTrustedPersonTitle,
                     style: context.textTheme.titleLarge,
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    'The one Breathe helps you reach first. You can change this anytime.',
+                    l10n.trustedPersonSubtitle,
                     style: context.textTheme.bodySmall,
                   ),
                   const SizedBox(height: 10),
@@ -128,8 +136,7 @@ class _AddTrustedPersonState extends ConsumerState<AddTrustedPerson> {
                             style: context.textTheme.titleMedium,
                           ),
                           subtitle: Text(
-                            contact.role[0].toUpperCase() +
-                                contact.role.substring(1),
+                            l10n.roleLabel(contact.role),
                             style: context.textTheme.bodySmall,
                           ),
                           leading: CircleAvatar(
@@ -171,21 +178,21 @@ class _AddTrustedPersonState extends ConsumerState<AddTrustedPerson> {
                         ),
                       ),
                     );
-                  }).toList(),
+                  }),
 
                   SizedBox(
                     width: double.infinity,
                     child: DottedBorder(
                       color: context.colors.outlineVariant.withAlpha(80),
                       strokeWidth: 0.5,
-                      dashPattern: [6, 3],
+                      dashPattern: const [6, 3],
                       borderType: BorderType.RRect,
                       radius: const Radius.circular(8),
                       child: Center(
                         child: TextButton.icon(
                           onPressed: () => AddEditContactSheet.show(context),
                           label: Text(
-                            'Add a new contact',
+                            l10n.addNewContact,
                             style: TextStyle(
                               color: context.colors.outlineVariant,
                             ),
@@ -211,7 +218,7 @@ class _AddTrustedPersonState extends ConsumerState<AddTrustedPerson> {
 
                               _setAsTrustedPerson(selectedContact);
                             },
-                      child: Text('Set as trusted person'),
+                      child: Text(l10n.setAsTrustedPerson),
                     ),
                   ),
                 ],
@@ -220,7 +227,8 @@ class _AddTrustedPersonState extends ConsumerState<AddTrustedPerson> {
           ),
         );
       },
-      error: (e, _) => Center(child: Text('Error loading your contacts:$e')),
+      error: (e, _) =>
+          Center(child: Text(l10n.errorLoadingContacts(e.toString()))),
       loading: () => const Center(child: CircularProgressIndicator()),
     );
   }

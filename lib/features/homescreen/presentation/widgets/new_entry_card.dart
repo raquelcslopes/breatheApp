@@ -1,4 +1,5 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
+import 'package:breathe/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class DailyCheckInCard extends StatelessWidget {
@@ -6,6 +7,8 @@ class DailyCheckInCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       height: 260,
       padding: const EdgeInsets.all(24),
@@ -22,17 +25,11 @@ class DailyCheckInCard extends StatelessWidget {
 
           const SizedBox(height: 16),
 
-          Text(
-            "How are you truly feeling?",
-            style: context.textTheme.headlineSmall,
-          ),
+          Text(l10n.checkInTitleLong, style: context.textTheme.headlineSmall),
 
           const SizedBox(height: 8),
 
-          Text(
-            "Each entry helps tell the story of your journey",
-            style: context.textTheme.bodyMedium,
-          ),
+          Text(l10n.checkInStorySubtitle, style: context.textTheme.bodyMedium),
 
           const Spacer(),
 

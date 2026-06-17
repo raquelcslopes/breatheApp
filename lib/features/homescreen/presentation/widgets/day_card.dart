@@ -1,5 +1,6 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class DayCard extends StatelessWidget {
   const DayCard({super.key, required this.date, required this.selected});
@@ -7,10 +8,12 @@ class DayCard extends StatelessWidget {
   final DateTime date;
   final bool selected;
 
-  String get weekday {
-    const names = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
-
-    return names[date.weekday - 1];
+  String weekdayLabel(BuildContext context) {
+    final locale = Localizations.localeOf(context).toString();
+    return DateFormat(
+      'EEE',
+      locale,
+    ).format(date).replaceAll('.', '').toUpperCase();
   }
 
   @override
@@ -31,7 +34,7 @@ class DayCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            weekday,
+            weekdayLabel(context),
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
               color: selected
                   ? context.colors.onPrimary

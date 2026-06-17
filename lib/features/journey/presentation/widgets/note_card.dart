@@ -1,4 +1,5 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
+import 'package:breathe/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -25,21 +26,15 @@ class NoteCard extends StatefulWidget {
 class _NoteCardState extends State<NoteCard> {
   double _scale = 1.0;
 
-  String _capitalize(String text) {
-    return text.isEmpty
-        ? text
-        : text[0].toUpperCase() + text.substring(1).toLowerCase();
-  }
-
-  String _getHour(DateTime date) {
-    final formatted = DateFormat('EE, d MMMM', 'en_US').format(date);
-
-    return formatted;
+  String _getHour(BuildContext context, DateTime date) {
+    final locale = Localizations.localeOf(context).toString();
+    return DateFormat('EE, d MMMM', locale).format(date);
   }
 
   @override
   Widget build(BuildContext context) {
-    final m = _capitalize(widget.mood);
+    final l10n = AppLocalizations.of(context)!;
+    final m = widget.mood.isEmpty ? '' : l10n.moodLabel(widget.mood);
 
     return GestureDetector(
       onTapDown: (_) => setState(() => _scale = 0.96),
@@ -54,36 +49,34 @@ class _NoteCardState extends State<NoteCard> {
           ),
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Expanded(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(14, 14, 16, 14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      _getHour(widget.date),
-                      style: context.textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(14, 14, 16, 14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    _getHour(context, widget.date),
+                    style: context.textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
-                    Text(
-                      ' • $m',
-                      style: context.textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  ),
+                  Text(
+                    ' • $m',
+                    style: context.textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
-                ),
-                Text(
-                  widget.text,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: context.textTheme.bodySmall,
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+              Text(
+                widget.text,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: context.textTheme.bodySmall,
+              ),
+            ],
           ),
         ),
       ),

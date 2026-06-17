@@ -1,5 +1,6 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/features/journal/data/journal_entry.dart';
+import 'package:breathe/l10n/app_localizations.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -10,11 +11,9 @@ class MoodChart extends StatelessWidget {
   final DateTime weekStart;
   final List<JournalEntry> entries;
 
-  static const _labels = {0: 'Low', 1: 'Okay', 2: 'Good'};
-
-  String _dayLabel(int i) {
+  String _dayLabel(int i, String locale) {
     final date = weekStart.add(Duration(days: i));
-    return DateFormat('EEE').format(date);
+    return DateFormat('EEE', locale).format(date);
   }
 
   double? _moodToY(String? key) {
@@ -25,6 +24,19 @@ class MoodChart extends StatelessWidget {
         return 1;
       case 'good':
         return 2;
+      default:
+        return null;
+    }
+  }
+
+  String? _moodKeyForIndex(int i) {
+    switch (i) {
+      case 0:
+        return 'low';
+      case 1:
+        return 'okay';
+      case 2:
+        return 'good';
       default:
         return null;
     }
@@ -50,8 +62,8 @@ class MoodChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final spots = _buildSpots();
-
     final gradientColors = [context.colors.primary, context.colors.tertiary];
 
     return SizedBox(
@@ -65,7 +77,7 @@ class MoodChart extends StatelessWidget {
           gridData: FlGridData(
             show: true,
             drawVerticalLine:
-                false, // muda para true para ficar igual ao sample
+                false, // mudar para true para ficar igual ao sample
             horizontalInterval: 1,
             getDrawingHorizontalLine: (_) =>
                 FlLine(color: context.colors.outline, strokeWidth: 1),
@@ -83,10 +95,13 @@ class MoodChart extends StatelessWidget {
                 showTitles: true,
                 interval: 1,
                 reservedSize: 44,
-                getTitlesWidget: (value, _) => Text(
-                  _labels[value.toInt()] ?? '',
-                  style: context.textTheme.bodySmall,
-                ),
+                getTitlesWidget: (value, _) {
+                  final key = _moodKeyForIndex(value.toInt());
+                  return Text(
+                    key == null ? '' : l10n.moodLabel(key),
+                    style: context.textTheme.bodySmall,
+                  );
+                },
               ),
             ),
             bottomTitles: AxisTitles(
@@ -96,10 +111,11 @@ class MoodChart extends StatelessWidget {
                 getTitlesWidget: (value, _) {
                   final i = value.toInt();
                   if (i < 0 || i > 6) return const SizedBox.shrink();
+                  final locale = Localizations.localeOf(context).toString();
                   return Padding(
                     padding: const EdgeInsets.only(top: 6),
                     child: Text(
-                      _dayLabel(i),
+                      _dayLabel(i, locale),
                       style: context.textTheme.bodySmall,
                     ),
                   );
@@ -111,8 +127,9 @@ class MoodChart extends StatelessWidget {
             touchTooltipData: LineTouchTooltipData(
               getTooltipColor: (_) => context.colors.surface,
               getTooltipItems: (touched) => touched.map((s) {
+                final key = _moodKeyForIndex(s.y.toInt());
                 return LineTooltipItem(
-                  _labels[s.y.toInt()] ?? '',
+                  key == null ? '' : l10n.moodLabel(key),
                   context.textTheme.bodyMedium!.copyWith(
                     fontWeight: FontWeight.w700,
                   ),

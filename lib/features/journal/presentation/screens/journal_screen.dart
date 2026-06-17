@@ -3,6 +3,7 @@ import 'package:breathe/core/router/routes.dart';
 import 'package:breathe/core/widgets/drawer.dart';
 import 'package:breathe/features/journal/domain/journal_provider.dart';
 import 'package:breathe/features/journal/presentation/widgets/entry_card.dart';
+import 'package:breathe/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -21,8 +22,17 @@ class JournalScreen extends ConsumerWidget {
     return 'Earlier';
   }
 
+  String _dayKey(DateTime d) {
+    final now = DateTime.now();
+    final yesterday = now.subtract(const Duration(days: 1));
+    if (_isSameDay(d, now)) return 'today';
+    if (_isSameDay(d, yesterday)) return 'yesterday';
+    return 'earlier';
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final entriesAsync = ref.watch(entriesProvider);
 
     return Scaffold(
@@ -57,14 +67,14 @@ class JournalScreen extends ConsumerWidget {
                 children: [
                   const SizedBox(height: 8),
                   Text(
-                    'Journal',
+                    l10n.journalTitle,
                     style: context.textTheme.headlineSmall?.copyWith(
-                      fontSize: 22,
+                      fontSize: 18,
                     ),
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    'Reflect on your journey',
+                    l10n.journalSubtitle,
                     style: context.textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.normal,
                     ),
@@ -81,9 +91,9 @@ class JournalScreen extends ConsumerWidget {
                           itemBuilder: (context, i) {
                             final e = data[i];
                             final label = _dayLabel(e.createdAt);
+                            final key = _dayKey(e.createdAt);
                             final showHeader =
-                                i == 0 ||
-                                _dayLabel(data[i - 1].createdAt) != label;
+                                i == 0 || _dayKey(data[i - 1].createdAt) != key;
 
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,7 +106,7 @@ class JournalScreen extends ConsumerWidget {
                                       left: 4,
                                     ),
                                     child: Text(
-                                      label.toUpperCase(),
+                                      l10n.dayLabel(key).toUpperCase(),
                                       style: context.textTheme.labelLarge
                                           ?.copyWith(
                                             color: context.colors.surfaceDim,

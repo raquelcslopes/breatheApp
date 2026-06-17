@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:breathe/core/extensions/context_extensions.dart';
+import 'package:breathe/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class PersonCard extends StatelessWidget {
@@ -46,7 +47,9 @@ class PersonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final radius = BorderRadius.circular(borderRadius);
+
     return ClipRRect(
       borderRadius: radius,
       child: BackdropFilter(
@@ -126,7 +129,7 @@ class PersonCard extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
-                                    doctorType.toUpperCase(),
+                                    l10n.roleLabel(doctorType).toUpperCase(),
                                     style: context.textTheme.titleMedium
                                         ?.copyWith(
                                           letterSpacing: 1.2,
@@ -146,7 +149,7 @@ class PersonCard extends StatelessWidget {
                             OutlinedButton.icon(
                               onPressed: onTapCall,
                               label: Text(
-                                'Call'.toUpperCase(),
+                                l10n.actionCall.toUpperCase(),
                                 style: context.textTheme.bodyMedium?.copyWith(
                                   fontWeight: FontWeight.normal,
                                   fontSize: 12,
@@ -173,7 +176,7 @@ class PersonCard extends StatelessWidget {
                                 ),
                               ),
                               label: Text(
-                                'Message'.toUpperCase(),
+                                l10n.actionMessage.toUpperCase(),
                                 style: context.textTheme.bodyMedium?.copyWith(
                                   fontWeight: FontWeight.normal,
                                   fontSize: 12,
@@ -192,7 +195,7 @@ class PersonCard extends StatelessWidget {
                                 ),
                               ),
                               label: Text(
-                                'Email'.toUpperCase(),
+                                l10n.actionEmail.toUpperCase(),
                                 style: context.textTheme.bodyMedium?.copyWith(
                                   fontWeight: FontWeight.normal,
                                   fontSize: 12,

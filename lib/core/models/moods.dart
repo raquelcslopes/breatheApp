@@ -1,12 +1,6 @@
 class Moods {
   final String key;
-  final String title;
-
-  const Moods({required this.key, required this.title});
+  const Moods({required this.key});
 }
 
-List<Moods> moods = [
-  Moods(key: 'low', title: 'Low'),
-  Moods(key: 'okay', title: 'Okay'),
-  Moods(key: 'good', title: 'Good'),
-];
+List<Moods> moods = [Moods(key: 'low'), Moods(key: 'okay'), Moods(key: 'good')];

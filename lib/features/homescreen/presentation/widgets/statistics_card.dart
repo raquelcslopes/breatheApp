@@ -1,5 +1,6 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/features/journal/data/journal_entry.dart';
+import 'package:breathe/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class StatisticsCard extends StatelessWidget {
@@ -8,13 +9,7 @@ class StatisticsCard extends StatelessWidget {
 
   const StatisticsCard({super.key, required this.records, required this.onTap});
 
-  String _capitalize(String text) {
-    return text.isEmpty
-        ? text
-        : text[0].toUpperCase() + text.substring(1).toLowerCase();
-  }
-
-  String? _mostCommonMood(List<JournalEntry> list) {
+  String? _topMoodKey(List<JournalEntry> list) {
     final moodKeys = list.map((e) => e.moodKey).whereType<String>();
 
     if (moodKeys.isEmpty) return null;
@@ -24,15 +19,14 @@ class StatisticsCard extends StatelessWidget {
       counts[key] = (counts[key] ?? 0) + 1;
     }
 
-    final topKey = counts.entries
-        .reduce((a, b) => a.value >= b.value ? a : b)
-        .key;
-
-    return _capitalize(topKey);
+    return counts.entries.reduce((a, b) => a.value >= b.value ? a : b).key;
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final topKey = _topMoodKey(records);
+
     return InkWell(
       onTap: onTap,
       child: AspectRatio(
@@ -51,7 +45,7 @@ class StatisticsCard extends StatelessWidget {
                 color: context.colors.surfaceContainer,
               ),
               Text(
-                'WEEKLY INDEX',
+                l10n.weeklyIndex,
                 style: context.textTheme.titleMedium?.copyWith(
                   color: context.colors.onPrimary,
                 ),
@@ -59,14 +53,14 @@ class StatisticsCard extends StatelessWidget {
               const SizedBox(height: 20),
 
               Text(
-                _mostCommonMood(records) ?? '',
+                topKey == null ? '' : l10n.moodLabel(topKey),
                 style: context.textTheme.headlineMedium?.copyWith(
                   color: context.colors.onPrimary,
                 ),
               ),
 
               Text(
-                "COMMON MOOD",
+                l10n.commonMood,
                 style: context.textTheme.bodyMedium?.copyWith(
                   color: context.colors.surfaceDim,
                 ),

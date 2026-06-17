@@ -1,5 +1,6 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/models/moods.dart';
+import 'package:breathe/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class MoodPickerSheet extends StatefulWidget {
@@ -32,6 +33,8 @@ class _MoodPickerSheetState extends State<MoodPickerSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return SafeArea(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -53,7 +56,7 @@ class _MoodPickerSheetState extends State<MoodPickerSheet> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              title: Text(mood.title),
+              title: Text(l10n.moodLabel(mood.key)),
               trailing: mood.key == _current?.key
                   ? Icon(Icons.check_rounded)
                   : null,

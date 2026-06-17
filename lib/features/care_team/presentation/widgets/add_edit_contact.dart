@@ -6,10 +6,10 @@ import 'package:breathe/core/theme/app_colors.dart';
 import 'package:breathe/core/widgets/custom_elevated_button.dart';
 import 'package:breathe/features/care_team/data/care_team_contact.dart';
 import 'package:breathe/features/care_team/domain/care_team_provider.dart';
+import 'package:breathe/l10n/app_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class AddEditContactSheet extends ConsumerStatefulWidget {
   final CareTeamContact? contact;
@@ -58,22 +58,12 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(
-      text: widget.contact?.name ?? widget.contact?.name,
-    );
-
-    _phoneController = TextEditingController(
-      text: widget.contact?.phoneNumber ?? widget.contact?.phoneNumber,
-    );
-
-    _emailController = TextEditingController(
-      text: widget.contact?.email ?? widget.contact?.email,
-    );
+    _nameController = TextEditingController(text: widget.contact?.name);
+    _phoneController = TextEditingController(text: widget.contact?.phoneNumber);
+    _emailController = TextEditingController(text: widget.contact?.email);
 
     _selectedRole = widget.contact?.role;
-
     _isTrusted = widget.contact?.isTrustedPerson ?? false;
-
     _hasConsent = widget.contact?.hasPermissionToAcessInfo ?? false;
   }
 
@@ -86,6 +76,7 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
   }
 
   Future<void> _saveContact() async {
+    final l10n = AppLocalizations.of(context)!;
     final uid = FirebaseAuth.instance.currentUser?.uid;
     final isEmpty =
         _nameController.text.trim().isEmpty || _selectedRole == null;
@@ -106,18 +97,18 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Contact created successfully"),
+            content: Text(l10n.contactCreated),
             backgroundColor: AppColors.primary,
             showCloseIcon: true,
           ),
         );
-        context.pop();
+        Navigator.of(context).pop();
       }
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Couldn't save the contact: $e"),
+          content: Text(l10n.couldntSaveContact(e.toString())),
           backgroundColor: AppColors.errorContainer,
         ),
       );
@@ -125,6 +116,7 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
   }
 
   Future<void> _changeContact(CareTeamContact oldContact) async {
+    final l10n = AppLocalizations.of(context)!;
     final uid = FirebaseAuth.instance.currentUser?.uid;
     final isEmpty =
         _nameController.text.trim().isEmpty || _selectedRole == null;
@@ -147,18 +139,18 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Contact changed successfully"),
+            content: Text(l10n.contactChanged),
             backgroundColor: AppColors.primary,
             showCloseIcon: true,
           ),
         );
-        context.pop();
+        Navigator.of(context).pop();
       }
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Couldn't save changes: $e"),
+          content: Text(l10n.couldntSaveChanges(e.toString())),
           backgroundColor: AppColors.errorContainer,
         ),
       );
@@ -166,24 +158,24 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
   }
 
   Future<void> _deleteContact(String contactId) async {
+    final l10n = AppLocalizations.of(context)!;
+
     final shouldDelete = await showDialog<bool>(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Delete contact?'),
-          content: const Text(
-            'This action cannot be undone. Do you want to continue?',
-          ),
+          title: Text(l10n.deleteContactTitle),
+          content: Text(l10n.actionCannotBeUndone),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancel'),
+              child: Text(l10n.cancel),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
-              child: const Text(
-                'Delete',
-                style: TextStyle(color: AppColors.errorContainer),
+              child: Text(
+                l10n.delete,
+                style: const TextStyle(color: AppColors.errorContainer),
               ),
             ),
           ],
@@ -198,24 +190,25 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
       try {
         await ref.read(careTeamProvider).deleteContact(uid, contactId);
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Contact deleted succssefully')),
-          );
-          context.pop();
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(l10n.contactDeleted)));
+          Navigator.of(context).pop();
         }
       } catch (e) {
         if (!mounted) return;
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.errorWithDetails(e.toString()))),
+        );
       }
     }
   }
 
   //--------------------- WIDGETS ---------------------
   Widget _trustPerson() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
-      padding: EdgeInsets.all(15),
+      padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
         color: context.colors.surfaceContainer.withValues(alpha: 0.4),
         border: Border.all(
@@ -224,7 +217,6 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
         ),
         borderRadius: BorderRadius.circular(15),
       ),
-
       child: Row(
         children: [
           Icon(Icons.star_outline, color: context.colors.tertiaryFixed),
@@ -233,9 +225,12 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Trusted person', style: context.textTheme.bodyLarge),
                 Text(
-                  'First contact in an emergency',
+                  l10n.trustedPersonTitle,
+                  style: context.textTheme.bodyLarge,
+                ),
+                Text(
+                  l10n.trustedPersonDescription,
                   style: context.textTheme.bodySmall,
                 ),
               ],
@@ -253,8 +248,9 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
   }
 
   Widget _consent() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
-      padding: EdgeInsets.all(15),
+      padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
         color: context.colors.surfaceContainer.withValues(alpha: 0.4),
         border: Border.all(
@@ -263,7 +259,6 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
         ),
         borderRadius: BorderRadius.circular(15),
       ),
-
       child: Row(
         children: [
           Icon(Icons.share, color: context.colors.tertiaryFixed),
@@ -272,9 +267,12 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Share my summaries', style: context.textTheme.bodyLarge),
                 Text(
-                  'Allow sending check-ins',
+                  l10n.shareSummariesTitle,
+                  style: context.textTheme.bodyLarge,
+                ),
+                Text(
+                  l10n.shareSummariesDescription,
                   style: context.textTheme.bodySmall,
                 ),
               ],
@@ -293,6 +291,7 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final radius = BorderRadius.circular(widget.borderRadius);
     final hasNoContact = widget.contact == null;
 
@@ -340,21 +339,24 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
                             children: [
                               Text(
                                 hasNoContact
-                                    ? ' Create contact'
-                                    : 'Edit contact',
+                                    ? l10n.createContact
+                                    : l10n.editContactTitle,
                                 style: context.textTheme.headlineSmall
                                     ?.copyWith(fontStyle: FontStyle.italic),
                               ),
                               TextButton(
                                 onPressed: () => Navigator.of(context).pop(),
-                                child: Icon(Icons.close_rounded),
+                                child: const Icon(Icons.close_rounded),
                               ),
                             ],
                           ),
 
                           const SizedBox(height: 32),
 
-                          Text('Name', style: context.textTheme.bodySmall),
+                          Text(
+                            l10n.fieldName,
+                            style: context.textTheme.bodySmall,
+                          ),
                           const SizedBox(height: 13),
                           TextField(
                             controller: _nameController,
@@ -366,12 +368,15 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
                                   alpha: 0.6,
                                 ),
                               ),
-                              hint: Text('Name'),
+                              hint: Text(l10n.fieldName),
                             ),
                           ),
                           const SizedBox(height: 32),
 
-                          Text('Role', style: context.textTheme.bodySmall),
+                          Text(
+                            l10n.fieldRole,
+                            style: context.textTheme.bodySmall,
+                          ),
                           const SizedBox(height: 13),
                           Wrap(
                             runSpacing: 5,
@@ -380,7 +385,7 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
                               final isSelected = _selectedRole == role.key;
                               return ChoiceChip(
                                 label: Text(
-                                  role.name,
+                                  l10n.roleLabel(role.key),
                                   style: context.textTheme.bodySmall,
                                 ),
                                 selected: isSelected,
@@ -407,7 +412,7 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
                           const SizedBox(height: 32),
 
                           Text(
-                            'Phone number',
+                            l10n.fieldPhone,
                             style: context.textTheme.labelLarge,
                           ),
                           const SizedBox(height: 13),
@@ -422,12 +427,15 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
                                   alpha: 0.6,
                                 ),
                               ),
-                              hint: Text('000 000 000'),
+                              hint: const Text('000 000 000'),
                             ),
                           ),
                           const SizedBox(height: 32),
 
-                          Text('Email', style: context.textTheme.bodySmall),
+                          Text(
+                            l10n.fieldEmail,
+                            style: context.textTheme.bodySmall,
+                          ),
                           const SizedBox(height: 13),
                           TextField(
                             controller: _emailController,
@@ -440,7 +448,7 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
                                   alpha: 0.6,
                                 ),
                               ),
-                              hint: Text('email@example.com'),
+                              hint: const Text('email@example.com'),
                             ),
                           ),
                           const SizedBox(height: 48),
@@ -462,14 +470,14 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
                                     ? _saveContact
                                     : () => _changeContact(widget.contact!),
                                 label: hasNoContact
-                                    ? 'Create contact'
-                                    : 'Save changes',
+                                    ? l10n.createContact
+                                    : l10n.saveChanges,
                               ),
                             ),
                           ),
 
                           hasNoContact
-                              ? SizedBox.shrink()
+                              ? const SizedBox.shrink()
                               : Align(
                                   alignment: Alignment.center,
                                   child: TextButton.icon(
@@ -477,7 +485,7 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
                                       widget.contact?.id ?? '',
                                     ),
                                     label: Text(
-                                      'Remove from care team',
+                                      l10n.removeFromCareTeam,
                                       style: TextStyle(
                                         color: context.colors.error,
                                       ),

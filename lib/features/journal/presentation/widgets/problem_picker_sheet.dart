@@ -1,5 +1,6 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/models/problems.dart';
+import 'package:breathe/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class ProblemPicker extends StatefulWidget {
@@ -35,11 +36,12 @@ class _ProblemPickerState extends State<ProblemPicker> {
   }
 
   Widget _problemTile(Problems problem) {
+    final l10n = AppLocalizations.of(context)!;
     final isSelected = _current.any((p) => p.key == problem.key);
     return ListTile(
       tileColor: isSelected ? context.colors.primary.withAlpha(80) : null,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      title: Text(problem.title),
+      title: Text(l10n.problemLabel(problem.key)), // <-- era problem.key
       trailing: isSelected ? const Icon(Icons.check_rounded) : null,
       onTap: () => setState(() {
         if (isSelected) {
@@ -53,6 +55,8 @@ class _ProblemPickerState extends State<ProblemPicker> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.only(
@@ -83,7 +87,7 @@ class _ProblemPickerState extends State<ProblemPicker> {
               padding: const EdgeInsets.all(16),
               child: ElevatedButton(
                 onPressed: () => Navigator.pop(context, _current),
-                child: const Text('Confirm'),
+                child: Text(l10n.confirm),
               ),
             ),
           ],

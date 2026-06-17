@@ -6,6 +6,7 @@ import 'package:breathe/features/homescreen/presentation/widgets/last_entry_card
 import 'package:breathe/features/homescreen/presentation/widgets/daily_ckecin_card.dart';
 import 'package:breathe/features/homescreen/presentation/widgets/statistics_card.dart';
 import 'package:breathe/features/journey/domain/journey_provider.dart';
+import 'package:breathe/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,7 +16,7 @@ class HomeScreen extends ConsumerWidget {
 
   // --------------------- WIDGETS ---------------------
 
-  Widget _date(BuildContext context) {
+  Widget _date(BuildContext context, AppLocalizations l10n) {
     final now = DateTime.now();
     final hour = now.hour;
     final partOfDay = hour < 12
@@ -25,9 +26,9 @@ class HomeScreen extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Good $partOfDay', style: context.textTheme.headlineMedium),
+        Text(l10n.greeting(partOfDay), style: context.textTheme.headlineMedium),
         Text(
-          'A safe place for your thoughts, feelings, and experiences. Write honestly, reflect gently, and be yourself',
+          l10n.homeSubtitle,
           style: context.textTheme.bodyLarge,
           textAlign: TextAlign.justify,
         ),
@@ -37,6 +38,7 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final providerMood = ref.watch(watchEntriesProvider);
 
     return Scaffold(
@@ -81,7 +83,7 @@ class HomeScreen extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _date(context),
+                          _date(context, l10n),
                           const SizedBox(height: 20),
                           const HorizontalCalendar(),
                           const SizedBox(height: 40),
@@ -107,8 +109,7 @@ class HomeScreen extends ConsumerWidget {
                                       child: LastEntryCard(
                                         onTap: () =>
                                             context.push(AppRoute.journalPath),
-                                        lastEntry:
-                                            'No records in the last 7 days',
+                                        lastEntry: l10n.noRecentRecords,
                                       ),
                                     ),
                                   ],
@@ -135,7 +136,9 @@ class HomeScreen extends ConsumerWidget {
                                 ],
                               );
                             },
-                            error: (e, _) => Center(child: Text('Error: $e')),
+                            error: (e, _) => Center(
+                              child: Text(l10n.errorWithDetails(e.toString())),
+                            ),
                             loading: () => const Center(
                               child: CircularProgressIndicator(),
                             ),
