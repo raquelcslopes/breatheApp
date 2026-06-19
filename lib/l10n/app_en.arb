@@ -24,13 +24,11 @@
   },
   "checkInTitle": "How are you feeling?",
   "checkInSubtitle": "A gentle pause for yourself",
-    "checkInTitleLong": "How are you truly feeling?",
+  "checkInTitleLong": "How are you truly feeling?",
   "checkInStorySubtitle": "Each entry helps tell the story of your journey",
   "writeSomething": "Write something",
-    "recentEntry": "Recent entry",
-      "weeklyIndex": "WEEKLY INDEX",
-  "commonMood": "COMMON MOOD",
-   "weeklyIndex": "WEEKLY INDEX",
+  "recentEntry": "Recent entry",
+  "weeklyIndex": "WEEKLY INDEX",
   "commonMood": "COMMON MOOD",
   "moodLabel": "{mood, select, okay{Okay} good{Good} low{Low} other{{mood}}}",
   "@moodLabel": {
@@ -54,10 +52,10 @@
   },
   "onMyMind": "On my mind this day: ",
   "entryNotFound": "Entry not found",
-   "moodPickerLabel": "MOOD",
+  "moodPickerLabel": "MOOD",
   "problemsPickerLabel": "PROBLEMS",
   "couldntSaveEntry": "Couldn't save your entry.",
-   "problemLabel": "{problem, select, sleep{Sleep} work{Work} family{Family} health{Health} grief{Grief} finances{Finances} studies{Studies} other{Other}}",
+  "problemLabel": "{problem, select, sleep{Sleep} work{Work} family{Family} health{Health} grief{Grief} finances{Finances} studies{Studies} other{Other}}",
   "@problemLabel": {
     "placeholders": {
       "problem": { "type": "String" }
@@ -67,8 +65,8 @@
   "@partOfDayLabel": {
     "placeholders": { "part": { "type": "String" } }
   },
-   "confirm": "Confirm",
-    "couldntLoadJourney": "Couldn't load your journey",
+  "confirm": "Confirm",
+  "couldntLoadJourney": "Couldn't load your journey",
   "blankPageTitle": "A blank page, just for you",
   "blankPageSubtitle": "Whenever it feels right, write a few words about your day. Only you will ever see them.",
   "writeFirstEntry": "Write your first entry",
@@ -90,7 +88,7 @@
       "count": { "type": "int" }
     }
   },
-   "errorLoadingContacts": "Error loading your contacts: {message}",
+  "errorLoadingContacts": "Error loading your contacts: {message}",
   "@errorLoadingContacts": {
     "placeholders": {
       "message": { "type": "String" }
@@ -102,7 +100,6 @@
   "trustedPersonHint": "One of them can be your trusted person — the one you reach first in a hard moment.",
   "careTeamTitle": "Care Team",
   "careTeamSubtitle": "Your support network, all in one place",
-
   "createContact": "Create contact",
   "editContactTitle": "Edit contact",
   "contactCreated": "Contact created successfully",
@@ -127,16 +124,16 @@
   "shareSummariesDescription": "Allow sending check-ins",
   "saveChanges": "Save changes",
   "removeFromCareTeam": "Remove from care team",
-    "actionCall": "Call",
+  "actionCall": "Call",
   "actionMessage": "Message",
   "actionEmail": "Email",
-   "roleLabel": "{role, select, psychiatrist{Psychiatrist} psychologist{Psychologist} gp{GP} friend{Friend} family{Family} other{{role}}}",
+  "roleLabel": "{role, select, psychiatrist{Psychiatrist} psychologist{Psychologist} gp{GP} friend{Friend} family{Family} other{{role}}}",
   "@roleLabel": {
     "placeholders": {
       "role": { "type": "String" }
     }
   },
-    "errorTrustedNumbers": "Error getting your trusted numbers: {message}",
+  "errorTrustedNumbers": "Error getting your trusted numbers: {message}",
   "@errorTrustedNumbers": {
     "placeholders": { "message": { "type": "String" } }
   },
@@ -146,43 +143,31 @@
   "emergencyTitle": "EMERGENCY",
   "emergencySubtitle": "You don't have to face this alone",
   "reachTrustedPerson": "Reach your trusted person",
+  "reachHelpLine": "Immediate support line",
   "orSendMessage": "Or send a message",
   "messageReadyToSend": "Not sure what to say? This is ready to send",
   "talkToSomeone": "Talk to someone now",
   "anErrorOccurred": "An error has occurred",
-    "savedAsTrustedPerson": "Contact saved as trusted person",
+  "savedAsTrustedPerson": "Contact saved as trusted person",
   "chooseTrustedPersonTitle": "Choose your trusted person",
   "trustedPersonSubtitle": "The one Breathe helps you reach first. You can change this anytime.",
   "addNewContact": "Add a new contact",
   "setAsTrustedPerson": "Set as trusted person",
   "noContactsToChoose": "You don't have any contacts yet",
-    "youAreNotAlone": "You are not alone",
-  "didntPickUp": "If {name} didn't pick up — that's okay. Someone is ready to talk with you right now.",
-  "@didntPickUp": {
-    "placeholders": {
-      "name": { "type": "String" }
-    }
-  },
-  "tryAgain": "Try {name} again",
-  "@tryAgain": {
-    "placeholders": {
-      "name": { "type": "String" }
-    }
-  },
-  "callContact": "Call {name}",
-  "@callContact": {
-    "placeholders": {
-      "name": { "type": "String" }
-    }
-  },
-  "yourTrustedPerson": "Your trusted person",
+  "youAreNotAlone": "You are not alone",
+  "confSubtitle": "Someone to talk to, anytime",
+  "yourTrustedPerson": "Suicide prevention line",
   "presetMessage": "Hi, I'm going through a really hard moment and could use some support. Could you reach out when you're able to?",
   "shareMyLocation": "Share my location",
   "myCurrentLocation": "My current location:",
-  "sendMessageTo": "Send message to {name}",
-  "@sendMessageTo": {
-    "placeholders": {
-      "name": { "type": "String" }
-    }
-  }
+  "sendMessageTo": "Send message to",
+  "navHome": "Home",
+  "navJournal": "Journal",
+  "navJourney": "Journey",
+  "navCareTeam": "Care Team",
+  "navEmergency": "Emergency",
+  "weeklySummary": "Weekly Summary",
+  "sendMessage": "Send message",
+  "chooseRecipient": "Who do you want to reach?",
+  "noContactsYet": "You haven't added anyone to your Care Team yet."
 }

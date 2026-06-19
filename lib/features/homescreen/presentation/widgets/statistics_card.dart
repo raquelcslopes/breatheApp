@@ -36,6 +36,13 @@ class StatisticsCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: context.colors.primary,
             borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF302826).withValues(alpha: 0.10),
+                blurRadius: 36,
+                offset: const Offset(0, 16),
+              ),
+            ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

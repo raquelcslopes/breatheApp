@@ -21,7 +21,7 @@ class EmergencyContactsWidget extends StatelessWidget {
   ) async {
     final l10n = AppLocalizations.of(context)!;
     try {
-      await launchUrl(Uri(scheme: 'tel', path: '+351${contact.phoneNumber}'));
+      await launchUrl(Uri(scheme: 'tel', path: contact.phoneNumber));
     } catch (e) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -35,60 +35,38 @@ class EmergencyContactsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: context.colors.surfaceContainer,
-        border: Border.all(
-          color: context.colors.outlineVariant,
-          strokeAlign: BorderSide.strokeAlignInside,
-        ),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: context.colors.surface.withValues(alpha: 0.09),
-            blurRadius: 60,
-            spreadRadius: -8,
-            offset: const Offset(0, 10),
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Row(
+        children: [
+          CircleAvatar(
+            backgroundColor: isINEM
+                ? context.colors.error
+                : context.colors.primary.withAlpha(40),
+            child: isINEM
+                ? Icon(Icons.sos_rounded, color: context.colors.errorContainer)
+                : Icon(Icons.favorite_border, color: context.colors.primary),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(contact.name, style: context.textTheme.bodyLarge),
+                const SizedBox(height: 5),
+                Text(contact.description, style: context.textTheme.bodySmall),
+              ],
+            ),
+          ),
+          TextButton.icon(
+            onPressed: () => _makePhoneCall(context, contact),
+            label: Icon(
+              Icons.phone_outlined,
+              color: isINEM ? context.colors.error : context.colors.primary,
+              size: 25,
+            ),
           ),
         ],
-      ),
-
-      child: Padding(
-        padding: EdgeInsets.all(20),
-        child: Row(
-          children: [
-            CircleAvatar(
-              backgroundColor: isINEM
-                  ? context.colors.error
-                  : context.colors.primary.withAlpha(40),
-              child: isINEM
-                  ? Icon(
-                      Icons.sos_rounded,
-                      color: context.colors.errorContainer,
-                    )
-                  : Icon(Icons.favorite_border, color: context.colors.primary),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(contact.name, style: context.textTheme.bodyLarge),
-                  const SizedBox(height: 5),
-                  Text(contact.description, style: context.textTheme.bodySmall),
-                ],
-              ),
-            ),
-            TextButton.icon(
-              onPressed: () => _makePhoneCall(context, contact),
-              label: Icon(
-                Icons.phone_outlined,
-                color: isINEM ? context.colors.error : context.colors.primary,
-                size: 25,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

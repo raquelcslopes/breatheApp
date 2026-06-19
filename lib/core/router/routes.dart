@@ -34,9 +34,6 @@ class AppRoute {
   static const calendar = 'calendar';
   static const calendarPath = '/calendar';
 
-  static const chat = 'chat';
-  static const chatPath = '/chat';
-
   static const settings = 'settings';
   static const settingsPath = '/settings';
 }

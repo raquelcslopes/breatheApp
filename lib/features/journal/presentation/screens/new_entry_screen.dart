@@ -3,7 +3,6 @@ import 'package:breathe/core/models/moods.dart';
 import 'package:breathe/core/models/problems.dart';
 import 'package:breathe/core/theme/app_colors.dart';
 import 'package:breathe/core/widgets/custom_elevated_button.dart';
-import 'package:breathe/core/widgets/drawer.dart';
 import 'package:breathe/core/widgets/text_area.dart';
 import 'package:breathe/features/journal/data/journal_entry.dart';
 import 'package:breathe/features/journal/domain/journal_provider.dart';
@@ -110,7 +109,7 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
         ),
         Text(
           '$weekday, ${l10n.partOfDayLabel(partKey)}',
-          style: context.textTheme.headlineMedium?.copyWith(fontSize: 40),
+          style: context.textTheme.headlineMedium?.copyWith(fontSize: 36),
         ),
       ],
     );
@@ -120,118 +119,84 @@ class _NewEntryScreenState extends ConsumerState<NewEntryScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      drawer: CustomDrawer(),
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset('lib/assets/journal.png', fit: BoxFit.cover),
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: Container(
+            decoration: BoxDecoration(color: context.colors.surface),
           ),
+        ),
 
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: const [0.0, 0.22, 0.55, 0.88, 1.0],
-                  colors: [
-                    context.colors.surface.withValues(alpha: 0.55),
-                    context.colors.surface.withValues(alpha: 0.05),
-                    context.colors.surface.withValues(alpha: 0.15),
-                    context.colors.surface.withValues(alpha: 0.60),
-                    context.colors.surface.withValues(alpha: 0.80),
-                  ],
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _date(context, l10n),
+              const SizedBox(height: 8),
+              Container(
+                height: 0.5,
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.transparent,
+                      context.colors.outline,
+                      context.colors.outline,
+                      Colors.transparent,
+                    ],
+                    stops: const [0.0, 0.2, 0.8, 1.0],
+                  ),
                 ),
               ),
-            ),
-          ),
+              const SizedBox(height: 20),
+              Expanded(child: CustomTextArea(controller: _writtingSpace)),
+              const SizedBox(height: 20),
 
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 35, 24, 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _date(context, l10n),
-                  const SizedBox(height: 8),
-                  Container(
-                    height: 0.5,
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      gradient: LinearGradient(
-                        colors: [
-                          Colors.transparent,
-                          context.colors.outline,
-                          context.colors.outline,
-                          Colors.transparent,
-                        ],
-                        stops: const [0.0, 0.2, 0.8, 1.0],
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: _pickMood,
+                      child: Text(
+                        _moodSelected == null
+                            ? l10n.moodPickerLabel
+                            : l10n.moodLabel(_moodSelected!.key),
+                        style: context.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.normal,
+                        ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  Expanded(child: CustomTextArea(controller: _writtingSpace)),
-                  const SizedBox(height: 20),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: _pickMood,
-                          child: Text(
-                            _moodSelected == null
-                                ? l10n.moodPickerLabel
-                                : l10n.moodLabel(_moodSelected!.key),
-                            style: context.textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: _pickProblem,
+                      child: Text(
+                        _problemsSelected.isEmpty
+                            ? l10n.problemsPickerLabel
+                            : _showProblems(l10n),
+                        style: context.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.normal,
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: _pickProblem,
-                          child: Text(
-                            _problemsSelected.isEmpty
-                                ? l10n.problemsPickerLabel
-                                : _showProblems(l10n),
-                            style: context.textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: CustomElevatedButton(
-                          label: l10n.save.toUpperCase(),
-                          onTap: () => _saveEntry(),
-                        ),
-                      ),
-                    ],
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: CustomElevatedButton(
+                      label: l10n.save.toUpperCase(),
+                      onTap: () => _saveEntry(),
+                    ),
                   ),
                 ],
               ),
-            ),
+            ],
           ),
-          SafeArea(
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Builder(
-                builder: (context) => IconButton(
-                  icon: const Icon(Icons.menu),
-                  color: context.colors.primary,
-                  onPressed: () => Scaffold.of(context).openDrawer(),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

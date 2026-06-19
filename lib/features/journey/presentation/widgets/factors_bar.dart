@@ -16,10 +16,12 @@ class FactorsBar extends StatelessWidget {
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
         color: context.colors.surfaceContainer,
-        border: Border.all(
-          color: context.colors.outline.withValues(alpha: 0.05),
-        ),
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: context.colors.outline,
+          width: 0.05,
+          strokeAlign: BorderSide.strokeAlignInside,
+        ),
       ),
       child: Column(
         children: factors.map((f) {

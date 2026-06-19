@@ -57,4 +57,7 @@ abstract final class AppColors {
   static const inversePrimary = Color(0xFF5A614D);
 
   static const shadow = Color(0x99000000);
+
+  static const danger = Color(0xFFA53A28);
+  static const dangerDeep = Color(0xFF8C2F20);
 }

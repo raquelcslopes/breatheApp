@@ -22,9 +22,9 @@ class AddEditContactSheet extends ConsumerStatefulWidget {
     super.key,
     this.contact,
     this.padding = const EdgeInsets.all(20),
-    this.borderRadius = 18,
-    this.blur = 12,
-    this.fillAlpha = 31,
+    this.borderRadius = 8,
+    this.blur = 5,
+    this.fillAlpha = 15,
   });
 
   static Future<void> show(BuildContext context, {CareTeamContact? contact}) {
@@ -210,7 +210,7 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
     return Container(
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: context.colors.surfaceContainer.withValues(alpha: 0.4),
+        color: context.colors.surfaceContainer,
         border: Border.all(
           color: const Color(0xFF464840).withValues(alpha: 0.3),
           strokeAlign: BorderSide.strokeAlignInside,
@@ -252,7 +252,7 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
     return Container(
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: context.colors.surfaceContainer.withValues(alpha: 0.4),
+        color: context.colors.surfaceContainer,
         border: Border.all(
           color: const Color(0xFF464840).withValues(alpha: 0.3),
           strokeAlign: BorderSide.strokeAlignInside,
@@ -342,11 +342,17 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
                                     ? l10n.createContact
                                     : l10n.editContactTitle,
                                 style: context.textTheme.headlineSmall
-                                    ?.copyWith(fontStyle: FontStyle.italic),
+                                    ?.copyWith(
+                                      fontStyle: FontStyle.italic,
+                                      color: Colors.white70,
+                                    ),
                               ),
                               TextButton(
                                 onPressed: () => Navigator.of(context).pop(),
-                                child: const Icon(Icons.close_rounded),
+                                child: const Icon(
+                                  Icons.close_rounded,
+                                  color: Colors.white70,
+                                ),
                               ),
                             ],
                           ),
@@ -355,7 +361,9 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
 
                           Text(
                             l10n.fieldName,
-                            style: context.textTheme.bodySmall,
+                            style: context.textTheme.bodySmall?.copyWith(
+                              color: Colors.white70,
+                            ),
                           ),
                           const SizedBox(height: 13),
                           TextField(
@@ -375,7 +383,9 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
 
                           Text(
                             l10n.fieldRole,
-                            style: context.textTheme.bodySmall,
+                            style: context.textTheme.bodySmall?.copyWith(
+                              color: Colors.white70,
+                            ),
                           ),
                           const SizedBox(height: 13),
                           Wrap(
@@ -386,16 +396,20 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
                               return ChoiceChip(
                                 label: Text(
                                   l10n.roleLabel(role.key),
-                                  style: context.textTheme.bodySmall,
+                                  style: context.textTheme.bodySmall?.copyWith(
+                                    color: isSelected
+                                        ? context.colors.surfaceContainer
+                                        : context.colors.onSurface,
+                                  ),
                                 ),
                                 selected: isSelected,
                                 onSelected: (_) =>
                                     setState(() => _selectedRole = role.key),
                                 labelStyle: TextStyle(
-                                  color: context.colors.primary,
+                                  color: context.colors.onPrimary,
                                   fontWeight: FontWeight.w600,
                                 ),
-                                selectedColor: context.colors.onPrimary,
+                                selectedColor: context.colors.primary,
                                 backgroundColor: Colors.transparent,
                                 shape: StadiumBorder(
                                   side: BorderSide(
@@ -413,7 +427,9 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
 
                           Text(
                             l10n.fieldPhone,
-                            style: context.textTheme.labelLarge,
+                            style: context.textTheme.bodySmall?.copyWith(
+                              color: Colors.white70,
+                            ),
                           ),
                           const SizedBox(height: 13),
                           TextField(
@@ -434,7 +450,9 @@ class _AddEditContactSheetState extends ConsumerState<AddEditContactSheet> {
 
                           Text(
                             l10n.fieldEmail,
-                            style: context.textTheme.bodySmall,
+                            style: context.textTheme.bodySmall?.copyWith(
+                              color: Colors.white70,
+                            ),
                           ),
                           const SizedBox(height: 13),
                           TextField(

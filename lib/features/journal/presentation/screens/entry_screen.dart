@@ -157,153 +157,121 @@ class _EntryScreenState extends ConsumerState<EntryScreen> {
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset('lib/assets/journal.png', fit: BoxFit.cover),
-          ),
-
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: const [0.0, 0.22, 0.55, 0.88, 1.0],
-                  colors: [
-                    context.colors.surface.withValues(alpha: 0.55),
-                    context.colors.surface.withValues(alpha: 0.05),
-                    context.colors.surface.withValues(alpha: 0.15),
-                    context.colors.surface.withValues(alpha: 0.60),
-                    context.colors.surface.withValues(alpha: 0.80),
-                  ],
-                ),
-              ),
+            child: Container(
+              decoration: BoxDecoration(color: context.colors.surface),
             ),
           ),
 
-          SafeArea(
-            child: SizedBox.expand(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(24, 35, 24, 24),
-                child: entryAsync.when(
-                  data: (data) {
-                    if (data == null) {
-                      return Center(child: Text(l10n.entryNotFound));
-                    }
-                    if (!_prefilled) {
-                      _writtingSpace.text = data.text;
-                      _prefilled = true;
-                    }
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _date(context, data),
-                        _title(context, data, l10n),
-                        const SizedBox(height: 20),
-                        Expanded(
-                          child: EntryPreview(
-                            entry: data,
-                            isReadOnly: isReadOnly,
-                            controller: _writtingSpace,
-                          ),
+          SizedBox.expand(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 35, 24, 24),
+              child: entryAsync.when(
+                data: (data) {
+                  if (data == null) {
+                    return Center(child: Text(l10n.entryNotFound));
+                  }
+                  if (!_prefilled) {
+                    _writtingSpace.text = data.text;
+                    _prefilled = true;
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _date(context, data),
+                      _title(context, data, l10n),
+                      const SizedBox(height: 20),
+                      Expanded(
+                        child: EntryPreview(
+                          entry: data,
+                          isReadOnly: isReadOnly,
+                          controller: _writtingSpace,
                         ),
-                        const SizedBox(height: 10),
-                        RichText(
-                          text: TextSpan(
-                            text: l10n.onMyMind,
-                            style: context.textTheme.bodySmall?.copyWith(
-                              color: context.colors.surfaceDim,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: data.problemKeys.join('  •  '),
-                                style: context.textTheme.bodySmall?.copyWith(
-                                  color: context.colors.surfaceDim,
-                                  fontSize: 14,
-                                ),
+                      ),
+                      const SizedBox(height: 10),
+                      RichText(
+                        text: TextSpan(
+                          text: l10n.onMyMind,
+                          style: context.textTheme.bodySmall?.copyWith(
+                            color: context.colors.surfaceDim,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: data.problemKeys.join('  •  '),
+                              style: context.textTheme.bodySmall?.copyWith(
+                                color: context.colors.surfaceDim,
+                                fontSize: 14,
                               ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 0.5,
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.transparent,
+                              context.colors.outline,
+                              context.colors.outline,
+                              Colors.transparent,
                             ],
+                            stops: const [0.0, 0.2, 0.8, 1.0],
                           ),
                         ),
-                        Container(
-                          height: 0.5,
-                          margin: const EdgeInsets.symmetric(vertical: 8),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.transparent,
-                                context.colors.outline,
-                                context.colors.outline,
-                                Colors.transparent,
-                              ],
-                              stops: const [0.0, 0.2, 0.8, 1.0],
-                            ),
-                          ),
-                        ),
+                      ),
 
-                        Center(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              isReadOnly
-                                  ? TextButton(
-                                      onPressed: () => setState(() {
-                                        isReadOnly = false;
-                                      }),
-                                      child: Text(
-                                        l10n.edit.toUpperCase(),
-                                        style: context.textTheme.bodyMedium
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.normal,
-                                              letterSpacing: 1.4,
-                                            ),
-                                      ),
-                                    )
-                                  : const SizedBox.shrink(),
-                              const SizedBox(width: 20),
-                              TextButton(
-                                onPressed: () => _deleteEntry(widget.entryId),
-                                child: Text(
-                                  l10n.delete.toUpperCase(),
-                                  style: context.textTheme.bodyMedium?.copyWith(
-                                    fontWeight: FontWeight.normal,
-                                    letterSpacing: 1.4,
-                                    color: AppColors.errorContainer,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 20),
-
-                              isReadOnly
-                                  ? const SizedBox.shrink()
-                                  : CustomElevatedButton(
-                                      label: l10n.save.toUpperCase(),
-                                      onTap: () => _saveChanges(data),
+                      Center(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            isReadOnly
+                                ? TextButton(
+                                    onPressed: () => setState(() {
+                                      isReadOnly = false;
+                                    }),
+                                    child: Text(
+                                      l10n.edit.toUpperCase(),
+                                      style: context.textTheme.bodyMedium
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.normal,
+                                            letterSpacing: 1.4,
+                                          ),
                                     ),
-                            ],
-                          ),
+                                  )
+                                : const SizedBox.shrink(),
+                            const SizedBox(width: 20),
+                            TextButton(
+                              onPressed: () => _deleteEntry(widget.entryId),
+                              child: Text(
+                                l10n.delete.toUpperCase(),
+                                style: context.textTheme.bodyMedium?.copyWith(
+                                  fontWeight: FontWeight.normal,
+                                  letterSpacing: 1.4,
+                                  color: AppColors.errorContainer,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 20),
+
+                            isReadOnly
+                                ? const SizedBox.shrink()
+                                : CustomElevatedButton(
+                                    label: l10n.save.toUpperCase(),
+                                    onTap: () => _saveChanges(data),
+                                  ),
+                          ],
                         ),
-                      ],
-                    );
-                  },
-                  error: (e, _) =>
-                      Center(child: Text(l10n.errorWithDetails(e.toString()))),
-                  loading: () =>
-                      const Center(child: CircularProgressIndicator()),
-                ),
-              ),
-            ),
-          ),
-          SafeArea(
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Builder(
-                builder: (context) => IconButton(
-                  icon: const Icon(Icons.arrow_back_rounded),
-                  color: context.colors.primary,
-                  onPressed: () => context.pop(),
-                ),
+                      ),
+                    ],
+                  );
+                },
+                error: (e, _) =>
+                    Center(child: Text(l10n.errorWithDetails(e.toString()))),
+                loading: () => const Center(child: CircularProgressIndicator()),
               ),
             ),
           ),

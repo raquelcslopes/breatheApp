@@ -21,10 +21,17 @@ class LastEntryCard extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: context.colors.surfaceContainer,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(26),
           border: Border.all(
-            color: context.colors.outline.withValues(alpha: 0.05),
+            color: const Color(0xFF302826).withValues(alpha: 0.12),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF302826).withValues(alpha: 0.10),
+              blurRadius: 36,
+              offset: const Offset(0, 16),
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

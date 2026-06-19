@@ -335,6 +335,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get reachTrustedPerson => 'Contacta a tua pessoa de confiança';
 
   @override
+  String get reachHelpLine => 'Immediate support line';
+
+  @override
   String get orSendMessage => 'Ou envia uma mensagem';
 
   @override
@@ -371,22 +374,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get youAreNotAlone => 'Não estás sozinha';
 
   @override
-  String didntPickUp(String name) {
-    return 'Se $name não atendeu — tudo bem. Há alguém pronto para falar contigo agora mesmo.';
-  }
+  String get confSubtitle => 'Alguém com quem falar, a qualquer hora';
 
   @override
-  String tryAgain(String name) {
-    return 'Tentar $name novamente';
-  }
-
-  @override
-  String callContact(String name) {
-    return 'Ligar a $name';
-  }
-
-  @override
-  String get yourTrustedPerson => 'A tua pessoa de confiança';
+  String get yourTrustedPerson => 'Linha de prevenção do suicídio';
 
   @override
   String get presetMessage =>
@@ -399,7 +390,32 @@ class AppLocalizationsPt extends AppLocalizations {
   String get myCurrentLocation => 'A minha localização atual:';
 
   @override
-  String sendMessageTo(String name) {
-    return 'Enviar mensagem a $name';
-  }
+  String get sendMessageTo => 'Enviar mensagem a';
+
+  @override
+  String get navHome => 'Início';
+
+  @override
+  String get navJournal => 'Diário';
+
+  @override
+  String get navJourney => 'Percurso';
+
+  @override
+  String get navCareTeam => 'Equipa';
+
+  @override
+  String get navEmergency => 'Emergência';
+
+  @override
+  String get weeklySummary => 'Sumário da Semana';
+
+  @override
+  String get sendMessage => 'Enviar mensagem';
+
+  @override
+  String get chooseRecipient => 'A quem queres enviar?';
+
+  @override
+  String get noContactsYet => 'Ainda não adicionaste ninguém à tua Care Team.';
 }

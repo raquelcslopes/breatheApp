@@ -1,4 +1,4 @@
-import 'package:breathe/core/theme/app_colors.dart';
+import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -83,8 +83,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       body: Stack(
         fit: StackFit.expand,
         children: [
-          const ColoredBox(color: AppColors.background),
-          Image.asset('lib/assets/bg_splash.png', fit: BoxFit.cover),
+          ColoredBox(color: context.colors.surface),
           Center(
             child: FadeTransition(
               opacity: _fade,
@@ -92,10 +91,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 scale: _breath,
                 child: Text(
                   'BREATHE',
-                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                     fontSize: 40,
                     letterSpacing: 8,
-                    color: AppColors.surface,
+                    color: context.colors.onSurface,
                   ),
                 ),
               ),

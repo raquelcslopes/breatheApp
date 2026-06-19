@@ -1,6 +1,5 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/router/routes.dart';
-import 'package:breathe/core/widgets/drawer.dart';
 import 'package:breathe/features/homescreen/presentation/widgets/horizontal_calendar.dart';
 import 'package:breathe/features/homescreen/presentation/widgets/last_entry_card.dart';
 import 'package:breathe/features/homescreen/presentation/widgets/daily_ckecin_card.dart';
@@ -41,131 +40,109 @@ class HomeScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final providerMood = ref.watch(watchEntriesProvider);
 
-    return Scaffold(
-      drawer: CustomDrawer(),
-      backgroundColor: context.colors.surface,
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset('lib/assets/background.png', fit: BoxFit.cover),
-          ),
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: Image.asset('lib/assets/background.png', fit: BoxFit.cover),
+        ),
 
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: const [0.0, 0.22, 0.55, 0.88, 1.0],
-                  colors: [
-                    context.colors.surface.withValues(alpha: 0.55),
-                    context.colors.surface.withValues(alpha: 0.05),
-                    context.colors.surface.withValues(alpha: 0.15),
-                    context.colors.surface.withValues(alpha: 0.60),
-                    context.colors.surface.withValues(alpha: 0.80),
-                  ],
-                ),
+        Positioned.fill(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: const [0.0, 0.22, 0.55, 0.88, 1.0],
+                colors: [
+                  context.colors.surface.withValues(alpha: 0.55),
+                  context.colors.surface.withValues(alpha: 0.05),
+                  context.colors.surface.withValues(alpha: 0.15),
+                  context.colors.surface.withValues(alpha: 0.60),
+                  context.colors.surface.withValues(alpha: 0.80),
+                ],
               ),
             ),
           ),
+        ),
 
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 35, 20, 28),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  return SingleChildScrollView(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minHeight: constraints.maxHeight,
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _date(context, l10n),
+                      const SizedBox(height: 20),
+                      const HorizontalCalendar(),
+                      const SizedBox(height: 40),
+                      SizedBox(
+                        width: double.infinity,
+                        child: const DailyCheckInCard(),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _date(context, l10n),
-                          const SizedBox(height: 20),
-                          const HorizontalCalendar(),
-                          const SizedBox(height: 40),
-                          SizedBox(
-                            width: double.infinity,
-                            child: const DailyCheckInCard(),
-                          ),
-                          const SizedBox(height: 40),
-                          providerMood.when(
-                            data: (data) {
-                              if (data.isEmpty) {
-                                return Row(
-                                  children: [
-                                    Expanded(
-                                      child: StatisticsCard(
-                                        records: [],
-                                        onTap: () =>
-                                            context.push(AppRoute.journeyPath),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 16),
-                                    Expanded(
-                                      child: LastEntryCard(
-                                        onTap: () =>
-                                            context.push(AppRoute.journalPath),
-                                        lastEntry: l10n.noRecentRecords,
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              }
+                      const SizedBox(height: 40),
+                      providerMood.when(
+                        data: (data) {
+                          if (data.isEmpty) {
+                            return Row(
+                              children: [
+                                Expanded(
+                                  child: StatisticsCard(
+                                    records: [],
+                                    onTap: () =>
+                                        context.push(AppRoute.journeyPath),
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: LastEntryCard(
+                                    onTap: () =>
+                                        context.push(AppRoute.journalPath),
+                                    lastEntry: l10n.noRecentRecords,
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
 
-                              return Row(
-                                children: [
-                                  Expanded(
-                                    child: StatisticsCard(
-                                      records: data,
-                                      onTap: () =>
-                                          context.push(AppRoute.journeyPath),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 16),
-                                  Expanded(
-                                    child: LastEntryCard(
-                                      onTap: () =>
-                                          context.push(AppRoute.journalPath),
-                                      lastEntry: data.last.text,
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                            error: (e, _) => Center(
-                              child: Text(l10n.errorWithDetails(e.toString())),
-                            ),
-                            loading: () => const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          ),
-                        ],
+                          return Row(
+                            children: [
+                              Expanded(
+                                child: StatisticsCard(
+                                  records: data,
+                                  onTap: () =>
+                                      context.push(AppRoute.journeyPath),
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: LastEntryCard(
+                                  onTap: () =>
+                                      context.push(AppRoute.journalPath),
+                                  lastEntry: data.last.text,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                        error: (e, _) => Center(
+                          child: Text(l10n.errorWithDetails(e.toString())),
+                        ),
+                        loading: () =>
+                            const Center(child: CircularProgressIndicator()),
                       ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-
-          SafeArea(
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Builder(
-                builder: (context) => IconButton(
-                  icon: const Icon(Icons.menu),
-                  color: context.colors.primary,
-                  onPressed: () => Scaffold.of(context).openDrawer(),
+                    ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

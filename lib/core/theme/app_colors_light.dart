@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 /// Same field names so it drops into the theme in parallel with the dark set.
 abstract final class AppColorsLight {
   // Backgrounds
-  static const background = Color(0xFFF9F8F4);
+  static const background = Color(0xFFEDEBE2);
 
-  static const surface = Color(0xFFF4F3ED);
+  static const surface = Color(0xFFEDEBE2);
   static const surfaceDim = Color(0xFFF2F1E9);
 
-  static const surfaceContainerLowest = Color(0xFFFFFFFF);
+  static const surfaceContainerLowest = Color.fromARGB(255, 248, 247, 238);
   static const surfaceContainerLow = Color(0xFFF6F4EC);
-  static const surfaceContainer = Color(0xFFF0EFE7);
+  static const surfaceContainer = Color(0xFFF3F1E9);
   static const surfaceContainerHigh = Color(0xFFF0EFE7);
   static const surfaceContainerHighest = Color(0xFFE4E3DB);
 
@@ -59,4 +59,7 @@ abstract final class AppColorsLight {
   static const inversePrimary = Color(0xFFC3C9B1);
 
   static const shadow = Color(0x26302826);
+
+  static const danger = Color(0xFFA53A28);
+  static const dangerDeep = Color(0xFF8C2F20);
 }

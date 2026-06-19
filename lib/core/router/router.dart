@@ -1,3 +1,4 @@
+import 'package:breathe/core/widgets/nav_bar.dart';
 import 'package:breathe/features/care_team/presentation/screens/care_team_screen.dart';
 import 'package:breathe/features/emergency/presentation/screens/emergency_screen.dart';
 import 'package:breathe/features/journal/presentation/screens/entry_screen.dart';
@@ -56,50 +57,57 @@ GoRouter createRouter() {
         builder: (context, state) => const OnboardingScreen(),
       ),
 
-      GoRoute(
-        name: AppRoute.home,
-        path: AppRoute.homePath,
-        builder: (context, state) => const HomeScreen(),
-      ),
-
-      GoRoute(
-        name: AppRoute.journal,
-        path: AppRoute.journalPath,
-        builder: (context, state) => const JournalScreen(),
+      ShellRoute(
+        builder: (context, state, child) {
+          return MainScaffold(child: child);
+        },
         routes: [
           GoRoute(
-            name: AppRoute.journalEntry,
+            name: AppRoute.home,
+            path: AppRoute.homePath,
+            builder: (context, state) => const HomeScreen(),
+          ),
 
-            path: 'entry/:id',
-            builder: (context, state) {
-              final id = state.pathParameters['id'] ?? '';
-              return EntryScreen(entryId: id);
-            },
+          GoRoute(
+            name: AppRoute.journal,
+            path: AppRoute.journalPath,
+            builder: (context, state) => const JournalScreen(),
+            routes: [
+              GoRoute(
+                name: AppRoute.journalEntry,
+
+                path: 'entry/:id',
+                builder: (context, state) {
+                  final id = state.pathParameters['id'] ?? '';
+                  return EntryScreen(entryId: id);
+                },
+              ),
+              GoRoute(
+                name: AppRoute.journalNew,
+                path: 'new',
+                builder: (context, state) => const NewEntryScreen(),
+              ),
+            ],
+          ),
+
+          GoRoute(
+            name: AppRoute.journey,
+            path: AppRoute.journeyPath,
+            builder: (context, state) => const JourneyScreen(),
+          ),
+
+          GoRoute(
+            name: AppRoute.careTeam,
+            path: AppRoute.careTeamPath,
+            builder: (context, state) => const CareTeamScreen(),
+          ),
+
+          GoRoute(
+            name: AppRoute.emergency,
+            path: AppRoute.emergencyPath,
+            builder: (context, state) => const EmergencyScreen(),
           ),
         ],
-      ),
-      GoRoute(
-        name: AppRoute.journalNew,
-        path: AppRoute.journalNewPath,
-        builder: (context, state) => const NewEntryScreen(),
-      ),
-
-      GoRoute(
-        name: AppRoute.journey,
-        path: AppRoute.journeyPath,
-        builder: (context, state) => const JourneyScreen(),
-      ),
-
-      GoRoute(
-        name: AppRoute.careTeam,
-        path: AppRoute.careTeamPath,
-        builder: (context, state) => const CareTeamScreen(),
-      ),
-
-      GoRoute(
-        name: AppRoute.emergency,
-        path: AppRoute.emergencyPath,
-        builder: (context, state) => const EmergencyScreen(),
       ),
     ],
     errorBuilder: (context, state) =>

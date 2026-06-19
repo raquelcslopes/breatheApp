@@ -47,11 +47,13 @@ class _EntryCardState extends State<EntryCard> {
       onTap: widget.onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: context.colors.surfaceContainerLow.withValues(alpha: 0.4),
-          border: Border.all(
-            color: context.colors.outline.withValues(alpha: 0.05),
-          ),
+          color: context.colors.surfaceContainer,
           borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: context.colors.outline,
+            width: 0.05,
+            strokeAlign: BorderSide.strokeAlignInside,
+          ),
           boxShadow: [
             BoxShadow(
               color: Color.fromARGB(255, 0, 0, 0).withValues(alpha: 0.1),

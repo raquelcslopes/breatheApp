@@ -584,6 +584,12 @@ abstract class AppLocalizations {
   /// **'Reach your trusted person'**
   String get reachTrustedPerson;
 
+  /// No description provided for @reachHelpLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Immediate support line'**
+  String get reachHelpLine;
+
   /// No description provided for @orSendMessage.
   ///
   /// In en, this message translates to:
@@ -650,28 +656,16 @@ abstract class AppLocalizations {
   /// **'You are not alone'**
   String get youAreNotAlone;
 
-  /// No description provided for @didntPickUp.
+  /// No description provided for @confSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'If {name} didn\'t pick up — that\'s okay. Someone is ready to talk with you right now.'**
-  String didntPickUp(String name);
-
-  /// No description provided for @tryAgain.
-  ///
-  /// In en, this message translates to:
-  /// **'Try {name} again'**
-  String tryAgain(String name);
-
-  /// No description provided for @callContact.
-  ///
-  /// In en, this message translates to:
-  /// **'Call {name}'**
-  String callContact(String name);
+  /// **'Someone to talk to, anytime'**
+  String get confSubtitle;
 
   /// No description provided for @yourTrustedPerson.
   ///
   /// In en, this message translates to:
-  /// **'Your trusted person'**
+  /// **'Suicide prevention line'**
   String get yourTrustedPerson;
 
   /// No description provided for @presetMessage.
@@ -695,8 +689,62 @@ abstract class AppLocalizations {
   /// No description provided for @sendMessageTo.
   ///
   /// In en, this message translates to:
-  /// **'Send message to {name}'**
-  String sendMessageTo(String name);
+  /// **'Send message to'**
+  String get sendMessageTo;
+
+  /// No description provided for @navHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get navHome;
+
+  /// No description provided for @navJournal.
+  ///
+  /// In en, this message translates to:
+  /// **'Journal'**
+  String get navJournal;
+
+  /// No description provided for @navJourney.
+  ///
+  /// In en, this message translates to:
+  /// **'Journey'**
+  String get navJourney;
+
+  /// No description provided for @navCareTeam.
+  ///
+  /// In en, this message translates to:
+  /// **'Care Team'**
+  String get navCareTeam;
+
+  /// No description provided for @navEmergency.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency'**
+  String get navEmergency;
+
+  /// No description provided for @weeklySummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly Summary'**
+  String get weeklySummary;
+
+  /// No description provided for @sendMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Send message'**
+  String get sendMessage;
+
+  /// No description provided for @chooseRecipient.
+  ///
+  /// In en, this message translates to:
+  /// **'Who do you want to reach?'**
+  String get chooseRecipient;
+
+  /// No description provided for @noContactsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t added anyone to your Care Team yet.'**
+  String get noContactsYet;
 }
 
 class _AppLocalizationsDelegate

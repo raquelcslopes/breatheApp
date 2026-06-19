@@ -22,12 +22,15 @@ abstract final class AppTheme {
 
       error: AppColorsLight.error,
       errorContainer: AppColorsLight.errorContainer,
+      onError: AppColors.danger,
+      onErrorContainer: AppColors.dangerDeep,
 
       surface: AppColorsLight.surface,
       onSurface: AppColorsLight.textPrimary,
       surfaceContainer: AppColorsLight.surfaceContainer,
       surfaceDim: AppColorsLight.textMuted,
       surfaceContainerHighest: AppColorsLight.surfaceContainerHighest,
+      surfaceContainerLowest: AppColorsLight.surfaceContainerLowest,
 
       outline: AppColorsLight.outline,
       outlineVariant: AppColorsLight.outlineVariant,
@@ -205,6 +208,8 @@ abstract final class AppTheme {
       tertiaryFixed: AppColors.textSecondary,
 
       error: AppColors.errorContainer,
+      onError: AppColors.danger,
+      onErrorContainer: AppColors.dangerDeep,
 
       surface: AppColors.surface,
       surfaceContainer: AppColors.surfaceContainer,

@@ -30,54 +30,44 @@ class EntryPreview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final radius = BorderRadius.circular(borderRadius);
-    return ClipRRect(
-      borderRadius: radius,
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: radius,
-            splashColor: context.colors.surface.withAlpha(26),
-            highlightColor: context.colors.surface.withAlpha(13),
-            child: Container(
-              padding: padding,
-              decoration: BoxDecoration(
-                borderRadius: radius,
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    context.colors.surface.withAlpha(fillAlpha + 13),
-                    context.colors.surface.withAlpha((fillAlpha * 0.5).round()),
-                  ],
-                ),
-                border: Border.all(
-                  color: context.colors.surface.withAlpha(64),
-                  width: 1,
-                ),
-              ),
-              child: DefaultTextStyle.merge(
-                style: context.textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w300,
-                ),
-                child: TextFormField(
-                  readOnly: isReadOnly,
-                  controller: controller,
-                  autofocus: true,
-                  minLines: 1,
-                  maxLines: null,
-                  keyboardType: TextInputType.multiline,
-                  textAlignVertical: TextAlignVertical.top,
-                  textInputAction: TextInputAction.newline,
-                  style: context.textTheme.bodyLarge,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    fillColor: Colors.transparent,
-                  ),
-                ),
-              ),
-            ),
+    return Container(
+      padding: padding,
+      decoration: BoxDecoration(
+        borderRadius: radius,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            context.colors.surface.withAlpha(fillAlpha + 13),
+            context.colors.surface.withAlpha((fillAlpha * 0.5).round()),
+          ],
+        ),
+        border: Border.all(
+          color: context.colors.surface.withAlpha(64),
+          width: 1,
+        ),
+      ),
+      child: DefaultTextStyle.merge(
+        style: context.textTheme.bodyLarge?.copyWith(
+          fontWeight: FontWeight.w300,
+        ),
+        child: TextFormField(
+          readOnly: isReadOnly,
+          controller: controller,
+          autofocus: true,
+          minLines: 1,
+          maxLines: null,
+          keyboardType: TextInputType.multiline,
+          textAlignVertical: TextAlignVertical.top,
+          textInputAction: TextInputAction.newline,
+          style: context.textTheme.bodyLarge,
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            fillColor: Colors.transparent,
+            isDense: true,
+            contentPadding: EdgeInsets.zero,
+
+            filled: false,
           ),
         ),
       ),

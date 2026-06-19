@@ -43,11 +43,13 @@ class _NoteCardState extends State<NoteCard> {
       onTap: widget.onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: context.colors.surfaceContainerLow.withValues(alpha: 0.4),
-          border: Border.all(
-            color: context.colors.outline.withValues(alpha: 0.05),
-          ),
+          color: context.colors.surfaceContainer,
           borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: context.colors.outline,
+            width: 0.05,
+            strokeAlign: BorderSide.strokeAlignInside,
+          ),
         ),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(14, 14, 16, 14),

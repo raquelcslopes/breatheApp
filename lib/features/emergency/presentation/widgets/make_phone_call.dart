@@ -1,48 +1,16 @@
 import 'package:breathe/core/extensions/context_extensions.dart';
 import 'package:breathe/core/theme/app_colors.dart';
-import 'package:breathe/features/care_team/data/care_team_contact.dart';
 import 'package:breathe/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MakePhoneCall extends StatefulWidget {
-  final CareTeamContact contact;
+class MakePhoneCall extends StatelessWidget {
+  const MakePhoneCall({super.key});
 
-  const MakePhoneCall({super.key, required this.contact});
-
-  @override
-  State<StatefulWidget> createState() => _MakePhoneCallState();
-}
-
-class _MakePhoneCallState extends State<MakePhoneCall>
-    with WidgetsBindingObserver {
-  bool _callInProgress = false;
-
-  String _getFirstLetters(String name) {
-    final cleaned = name.trim().replaceFirst(
-      RegExp(r'^(dr|dra|sr|sra|prof|enf|enfª|enf)\.?\s+', caseSensitive: false),
-      '',
-    );
-
-    final parts = cleaned
-        .split(RegExp(r'\s+'))
-        .where((p) => p.isNotEmpty)
-        .toList();
-    if (parts.isEmpty) return '';
-    if (parts.length == 1) return parts.first[0].toUpperCase();
-    return (parts.first[0] + parts.last[0]).toUpperCase();
-  }
-
-  Future<void> _callTrustedPerson(
-    BuildContext context,
-    String phoneNumber,
-  ) async {
+  Future<void> _callHelpLine(BuildContext context) async {
     final l10n = AppLocalizations.of(context)!;
     try {
-      await launchUrl(Uri(scheme: 'tel', path: '+351$phoneNumber'));
-      setState(() {
-        _callInProgress = true;
-      });
+      await launchUrl(Uri(scheme: 'tel', path: '1411'));
     } catch (e) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -55,138 +23,75 @@ class _MakePhoneCallState extends State<MakePhoneCall>
   }
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed && _callInProgress) {
-      if (!mounted) return;
-
-      final l10n = AppLocalizations.of(context)!;
-
-      showDialog(
-        context: context,
-        builder: (_) => Dialog(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-            child: Column(
-              children: [
-                CircleAvatar(
-                  backgroundColor: context.colors.primary.withAlpha(80),
-                  child: Icon(
-                    Icons.handshake_rounded,
-                    color: context.colors.primary,
-                    size: 26,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  l10n.youAreNotAlone,
-                  style: context.textTheme.titleLarge,
-                  textAlign: TextAlign.center,
-                ),
-                Text(
-                  l10n.didntPickUp(widget.contact.name),
-                  style: context.textTheme.bodyLarge,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 10),
-
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () =>
-                      _callTrustedPerson(context, widget.contact.phoneNumber!),
-                  child: Text(l10n.tryAgain(widget.contact.name)),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: context.colors.surfaceContainer,
-        border: Border.all(
-          color: context.colors.outlineVariant,
-          strokeAlign: BorderSide.strokeAlignInside,
+    return GestureDetector(
+      onTap: () => _callHelpLine(context),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFFA53A28), Color(0xFF8C2F20)],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF8C2F20).withValues(alpha: 0.28),
+              offset: const Offset(0, 10),
+              blurRadius: 24,
+            ),
+          ],
+          borderRadius: BorderRadius.circular(20),
         ),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: context.colors.surface.withValues(alpha: 0.09),
-            blurRadius: 60,
-            spreadRadius: -8,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundColor: context.colors.primary,
-            radius: 22,
-            child: Text(
-              _getFirstLetters(widget.contact.name),
-              style: context.textTheme.titleMedium?.copyWith(
-                fontSize: 18,
-                color: context.colors.surfaceContainer,
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.callContact(widget.contact.name),
-                  style: context.textTheme.bodyLarge?.copyWith(fontSize: 18),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  l10n.yourTrustedPerson,
-                  style: context.textTheme.bodySmall?.copyWith(
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            width: 44,
-            height: 44,
-            child: ElevatedButton(
-              onPressed: () =>
-                  _callTrustedPerson(context, widget.contact.phoneNumber!),
+        child: Row(
+          children: [
+            ElevatedButton(
+              onPressed: () => _callHelpLine(context),
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.zero,
-                backgroundColor: context.colors.primary,
-                iconColor: context.colors.surfaceContainer,
+                backgroundColor: const Color(
+                  0xFFFEFAE0,
+                ).withValues(alpha: 0.16),
+                foregroundColor: const Color(0xFFFEFAE0),
+                elevation: 0,
+                shadowColor: Colors.transparent,
                 shape: const CircleBorder(),
-                minimumSize: const Size(44, 44),
+                minimumSize: const Size(54, 54),
               ),
-              child: const Icon(Icons.phone_outlined, size: 22),
+              child: const Icon(Icons.phone_outlined, size: 26),
             ),
-          ),
-        ],
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '1411',
+                    style: context.textTheme.bodyLarge?.copyWith(
+                      fontSize: 18,
+                      color: const Color(0xFFFEFAE0),
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    l10n.confSubtitle,
+                    style: context.textTheme.bodySmall?.copyWith(
+                      fontSize: 12,
+                      fontWeight: FontWeight.normal,
+                      color: const Color(0xFFFEFAE0),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios_rounded,
+              color: context.colors.surfaceContainer.withValues(alpha: 0.4),
+            ),
+          ],
+        ),
       ),
     );
   }
